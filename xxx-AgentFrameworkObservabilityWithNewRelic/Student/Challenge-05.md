@@ -1,99 +1,382 @@
-# Challenge 05 - <Title of Challenge>
+# Challenge 05 - Monitoring Best Practices
 
 [< Previous Challenge](./Challenge-04.md) - **[Home](../README.md)** - [Next Challenge >](./Challenge-06.md)
 
-***This is a template for a single challenge. The italicized text provides hints & examples of what should or should NOT go in each section.  You should remove all italicized & sample text and replace with your content.***
+## 🎯 Objective
 
-## Pre-requisites (Optional)
+Level up your observability game! Learn industry best practices for monitoring AI-driven applications.
 
-*Your hack's "Challenge 0" should cover pre-requisites for the entire hack, and thus this section is optional and may be omitted.  If you wish to spell out specific previous challenges that must be completed before starting this challenge, you may do so here.*
+By the end of this challenge:
 
-## Introduction
+- ✅ Custom dashboards tailored to travel planning
+- ✅ Alerts that notify you when things go wrong
+- ✅ Key metrics tracked (latency, errors, token usage)
+- ✅ Smart analysis of agent behavior
+- ✅ Actionable insights from your data
 
-*This section should provide an overview of the technologies or tasks that will be needed to complete the this challenge.  This includes the technical context for the challenge, as well as any new "lessons" the attendees should learn before completing the challenge.*
+---
 
-*Optionally, the coach or event host is encouraged to present a mini-lesson (with a PPT or video) to set up the context & introduction to each challenge. A summary of the content of that mini-lesson is a good candidate for this Introduction section*
+## 🤔 Why This Matters
 
-*For example:*
+You're now sending telemetry to New Relic, but without **dashboards** and **alerts**:
 
-When setting up an IoT device, it is important to understand how 'thingamajigs' work. Thingamajigs are a key part of every IoT device and ensure they are able to communicate properly with edge servers. Thingamajigs require IP addresses to be assigned to them by a server and thus must have unique MAC addresses. In this challenge, you will get hands on with a thingamajig and learn how one is configured.
+- ❌ You're manually checking traces all the time
+- ❌ You don't notice problems until customers complain
+- ❌ You can't track performance trends over time
+- ❌ You don't know which agents are slow/fast
 
-## Description
+Best practices turn raw telemetry into **actionable intelligence**!
 
-*This section should clearly state the goals of the challenge and any high-level instructions you want the students to follow. You may provide a list of specifications required to meet the goals. If this is more than 2-3 paragraphs, it is likely you are not doing it right.*
+---
 
-***NOTE:** Do NOT use ordered lists as that is an indicator of 'step-by-step' instructions. Instead, use bullet lists to list out goals and/or specifications.*
+## 📚 Key Concepts
 
-***NOTE:** You may use Markdown sub-headers to organize key sections of your challenge description.*
+### 1. Dashboards
 
-*Optionally, you may provide resource files such as a sample application, code snippets, or templates as learning aids for the students. These files are stored in the hack's `Student/Resources` folder. It is the coach's responsibility to package these resources into a Resources.zip file and provide it to the students at the start of the hack.*
+A **dashboard** is a visual summary of your system's health:
 
-***NOTE:** Do NOT provide direct links to files or folders in the What The Hack repository from the student guide. Instead, you should refer to the Resource.zip file provided by the coach.*
+- Response time trends
+- Error rates
+- Tool usage patterns
+- Customer satisfaction metrics
 
-***NOTE:** As an exception, you may provide a GitHub 'raw' link to an individual file such as a PDF or Office document, so long as it does not open the contents of the file in the What The Hack repo on the GitHub website.*
+### 2. Alerts
 
-***NOTE:** Any direct links to the What The Hack repo will be flagged for review during the review process by the WTH V-Team, including exception cases.*
+An **alert** notifies you when something is wrong:
 
-*Sample challenge text for the IoT Hack Of The Century:*
+- Average response time exceeds threshold
+- Error rate spikes
+- Tool fails repeatedly
+- LLM token usage is high
 
-In this challenge, you will properly configure the thingamajig for your IoT device so that it can communicate with the mother ship.
+### 3. Metrics Worth Tracking
 
-You can find a sample `thingamajig.config` file in the `/ChallengeXX` folder of the Resources.zip file provided by your coach. This is a good starting reference, but you will need to discover how to set exact settings.
+For a travel planning agent, you want to know:
 
-Please configure the thingamajig with the following specifications:
-- Use dynamic IP addresses
-- Only trust the following whitelisted servers: "mothership", "IoTQueenBee" 
-- Deny access to "IoTProxyShip"
+- **Latency** - Is the agent responding fast?
+- **Errors** - What's failing and why?
+- **Tool Usage** - Which tools are most called?
+- **Token Usage** - How expensive are we?
+- **Quality** - Are responses good? (we'll improve this in Challenge 6)
 
-You can view an architectural diagram of an IoT thingamajig here: [Thingamajig.PDF](/Student/Resources/Architecture.PDF?raw=true).
+---
 
-## Success Criteria
+## 🛠️ Part 1: Create a Dashboard
 
-*Success criteria goes here. The success criteria should be a list of checks so a student knows they have completed the challenge successfully. These should be things that can be demonstrated to a coach.* 
+### Step 1: Add More Instrumentation
 
-*The success criteria should not be a list of instructions.*
+Before building dashboards, enhance your metrics collection:
 
-*Success criteria should always start with language like: "Validate XXX..." or "Verify YYY..." or "Show ZZZ..." or "Demonstrate you understand VVV..."*
+```python
+# In your web_app.py, after tracer setup:
 
-*Sample success criteria for the IoT sample challenge:*
+meter = get_meter()
 
-To complete this challenge successfully, you should be able to:
-- Verify that the IoT device boots properly after its thingamajig is configured.
-- Verify that the thingamajig can connect to the mothership.
-- Demonstrate that the thingamajic will not connect to the IoTProxyShip
+# Create custom counters and histograms
+request_counter = meter.create_counter(
+    name="travel_plan.requests.total",
+    description="Total number of travel plan requests",
+    unit="1"
+)
 
-## Learning Resources
+error_counter = meter.create_counter(
+    name="travel_plan.errors.total",
+    description="Total number of errors",
+    unit="1"
+)
 
-_List of relevant links and online articles that should give the attendees the knowledge needed to complete the challenge._
+response_time_histogram = meter.create_histogram(
+    name="travel_plan.response_time_ms",
+    description="Travel plan response time in milliseconds",
+    unit="ms"
+)
 
-*Think of this list as giving the students a head start on some easy Internet searches. However, try not to include documentation links that are the literal step-by-step answer of the challenge's scenario.*
+tool_call_counter = meter.create_counter(
+    name="travel_plan.tool_calls.total",
+    description="Number of tool calls by tool name",
+    unit="1"
+)
+```
 
-***Note:** Use descriptive text for each link instead of just URLs.*
+### Step 2: Emit Metrics from Your Code
 
-*Sample IoT resource links:*
+```python
+import time
 
-- [What is a Thingamajig?](https://www.bing.com/search?q=what+is+a+thingamajig)
-- [10 Tips for Never Forgetting Your Thingamajic](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
-- [IoT & Thingamajigs: Together Forever](https://www.youtube.com/watch?v=yPYZpwSpKmA)
+@app.route('/plan', methods=['POST'])
+def plan_trip():
+    start_time = time.time()
+    request_counter.add(1, {"destination": destination})
+    
+    with tracer.start_as_current_span("travel_plan_request") as span:
+        try:
+            # ... your agent code ...
+            
+            # Track successful request
+            elapsed_ms = (time.time() - start_time) * 1000
+            response_time_histogram.record(elapsed_ms)
+            
+            return render_template('result.html', travel_plan=text_content)
+            
+        except Exception as e:
+            error_counter.add(1, {"error_type": type(e).__name__})
+            return render_template('error.html', error=str(e)), 500
 
-## Tips
+def get_weather(location: str) -> str:
+    with tracer.start_as_current_span("get_weather") as span:
+        tool_call_counter.add(1, {"tool_name": "get_weather"})
+        # ... your weather code ...
+        return result
+```
 
-*This section is optional and may be omitted.*
+### Step 3: Create a New Relic Dashboard
 
-*Add tips and hints here to give students food for thought. Sample IoT tips:*
+1. Go to **New Relic** → **Dashboards** → **Create Dashboard**
+2. Name it: "WanderAI Agent Performance"
+3. Add widgets for:
 
-- IoTDevices can fail from a broken heart if they are not together with their thingamajig. Your device will display a broken heart emoji on its screen if this happens.
-- An IoTDevice can have one or more thingamajigs attached which allow them to connect to multiple networks.
+**Widget 1: Request Rate**
 
-## Advanced Challenges (Optional)
+```
+SELECT rate(count(*), 1 minute) FROM Metric 
+WHERE metricName = 'travel_plan.requests.total'
+TIMESERIES
+```
 
-*If you want, you may provide additional goals to this challenge for folks who are eager.*
+**Widget 2: Error Rate**
 
-*This section is optional and may be omitted.*
+```
+SELECT rate(count(*), 1 minute) FROM Metric 
+WHERE metricName = 'travel_plan.errors.total'
+TIMESERIES
+```
 
-*Sample IoT advanced challenges:*
+**Widget 3: Average Response Time**
 
-Too comfortable?  Eager to do more?  Try these additional challenges!
+```
+SELECT average(travel_plan.response_time_ms) 
+FROM Metric 
+TIMESERIES
+```
 
-- Observe what happens if your IoTDevice is separated from its thingamajig.
-- Configure your IoTDevice to connect to BOTH the mothership and IoTQueenBee at the same time.
+**Widget 4: Tool Usage Breakdown**
+
+```
+SELECT count('travel_plan.tool_calls.total') FROM Metric 
+WHERE metricName = 'travel_plan.tool_calls.total'
+FACET tool_name
+```
+
+**Widget 5: Trace Count by Service**
+
+```
+SELECT count(*) FROM Span 
+WHERE entity.name like '%travel-planner%'
+FACET name 
+TIMESERIES
+```
+
+---
+
+## 🛠️ Part 2: Set Up Alerts
+
+### Alert 1: High Error Rate
+
+```
+ALERT "High Error Rate in Travel Planner"
+
+Trigger when:
+SELECT count(*) FROM Metric
+WHERE metricName = 'travel_plan.errors.total'
+
+Is above 5 in 5 minutes
+
+Notify: #ops-team in Slack
+```
+
+### Alert 2: Slow Response Times
+
+```
+ALERT "Slow Travel Plan Response"
+
+Trigger when:
+SELECT percentile(travel_plan.response_time_ms, 95) 
+FROM Metric
+
+Is above 25,000 (milliseconds)
+
+Notify: #ops-team in Slack
+```
+
+### Alert 3: Tool Failures
+
+```
+ALERT "Weather Tool Failing"
+
+Trigger when:
+SELECT count(*) FROM Span 
+WHERE gen_ai.tool.name = 'get_weather' AND error = true 
+
+Is above 3 in 10 minutes
+
+Notify: #backend-team in Slack
+```
+
+---
+
+## 📊 Part 3: Analysis & Insights
+
+### Key Metrics to Monitor
+
+| Metric | Why It Matters | Target |
+|--------|---|---|
+| Response Time (p95) | Speed affects UX | < 3 seconds |
+| Error Rate | Reliability | < 1% |
+| Token Usage (avg) | Cost per request | < 500 tokens |
+| Tool Success Rate | Accuracy | > 95% |
+| Destination Diversity | Is agent varied? | > 8 different destinations |
+
+### Custom NRQL Queries
+
+**Query 1: Average token usage by model**
+
+```
+SELECT 
+    average(gen_ai.usage.input_tokens) as 'Input tokens', 
+    average(gen_ai.usage.output_tokens) as 'Output tokens', 
+    average(gen_ai.usage.input_tokens+gen_ai.usage.output_tokens) as 'Total tokens'
+FROM Span
+facet gen_ai.response.model
+```
+
+**Query 2: Slowest tools**
+
+```
+SELECT average(duration.ms)
+FROM Span
+WHERE name IN  ('execute_tool get_weather','execute_tool get_datetime', 'execute_tool get_random_destination')
+FACET name
+TIMESERIES
+```
+
+**Query 3: Error breakdown**
+
+```
+SELECT count(*)
+FROM Log
+WHERE service.name like '%travel-planner%' 
+AND message like '%error%'
+SINCE 1 week ago
+FACET message 
+```
+
+---
+
+## ✅ Best Practices Checklist
+
+### Instrumentation
+
+- [ ] Counter metrics for requests
+- [ ] Histogram metrics for timing
+- [ ] Error tracking
+- [ ] Tool-level instrumentation
+
+### Dashboards
+
+- [ ] Service overview (requests, errors, latency)
+- [ ] Tool performance breakdown
+- [ ] Error trends
+- [ ] Resource usage (tokens, API calls)
+
+### Alerts
+
+- [ ] Alert for high error rate
+- [ ] Alert for slow responses
+- [ ] Alert for tool failures
+- [ ] Alerts route to appropriate team (Slack/PagerDuty)
+
+### Analysis
+
+- [ ] Regular review of metrics
+- [ ] Identify slow/problematic tools
+- [ ] Track improvement over time
+- [ ] Share insights with team
+
+---
+
+## 💡 Pro Tips
+
+1. **Naming** - Use consistent, hierarchical names (travel_plan.*)
+2. **Baselines** - Know what "normal" looks like before problems occur
+3. **Alerts** - Start conservative, tune as you learn
+4. **Dashboards** - Keep them focused; don't overwhelm with too many charts
+
+---
+
+## 🎯 Real-World Example
+
+Let's say your dashboard shows:
+
+- ✅ Request rate: 50/min (growing!)
+- ❌ p95 latency: 4.2 seconds (was 2.5s yesterday)
+- ⚠️ Error rate: 0.8% (threshold is 1%)
+
+**Action Items:**
+
+1. Check which tool is slow (dashboard shows `get_weather` is 3.0s)
+2. Review `get_weather` traces in New Relic
+3. Maybe the weather API is slow? Rate-limited?
+4. Consider caching or a different API
+5. Monitor the fix over the next hour
+
+**This is production monitoring in action!** 🎯
+
+---
+
+## 🚀 Advanced (Optional)
+
+### Service Level Indicators (SLIs)
+
+Define what "good performance" means:
+
+```
+Travel Plan SLI:
+- Latency: p95 < 3s
+- Error: < 0.5%  
+- Availability: > 99.5%
+```
+
+### Service Level Objectives (SLOs)
+
+```
+SLO: 99% of requests respond in < 3s
+SLO: 99.5% of requests succeed
+```
+
+Create alerts for SLO violations to catch issues early!
+
+---
+
+## ✅ Challenge Checklist
+
+- [ ] Enhanced metrics collection in code
+- [ ] Metrics exported to New Relic
+- [ ] Dashboard created with 5+ widgets
+- [ ] At least 3 alerts configured
+- [ ] Alerts connected to Slack/notification system
+- [ ] Dashboards reviewed with team
+- [ ] Custom NRQL queries written
+- [ ] Team trained on dashboard usage
+
+---
+
+## 🎉 You're Now Production-Ready
+
+With dashboards and alerts:
+
+- ✅ Your team sees system health at a glance
+- ✅ Problems are caught automatically
+- ✅ You can correlate issues to root causes
+- ✅ You're ready for customers!
+
+**Next:** Challenge 6 - Quality gates to ensure AI outputs meet standards! ✅

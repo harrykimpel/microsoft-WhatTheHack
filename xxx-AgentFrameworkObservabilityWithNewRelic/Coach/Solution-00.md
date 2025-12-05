@@ -1,20 +1,11 @@
-# Challenge 00 - <Title of Challenge> - Coach's Guide 
+# Challenge 00 - Prerequisites - Ready, Set, GO! - Coach's Guide
 
 **[Home](./README.md)** - [Next Solution >](./Solution-01.md)
 
 ## Notes & Guidance
 
-This is the only section you need to include.
+A GitHub account, GitHub Copilot, and VS Code is all that is needed for this hack.  All are free and GitHub Copilot if needed has a free 30 day trial.
 
-Use general non-bulleted text for the beginning of a solution area for this challenge
-
-- Then move into bullets
-  - And sub-bullets and even
-    - sub-sub-bullets
-
-Break things apart with more than one bullet list
-
-- Like this
-- One
-- Right
-- Here
+- [Create GitHub Account](https://github.com/join)
+- [Install Visual Studio Code](../../000-HowToHack/WTH-Common-Prerequisites.md#visual-studio-code)
+- [Install GitHub Copilot in VS Code](https://docs.github.com/en/copilot/quickstart?tool=vscode)

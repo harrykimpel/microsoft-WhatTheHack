@@ -1,99 +1,160 @@
-# Challenge 01 - <Title of Challenge>
+# 🌱 Challenge 1: Master the Foundations
 
 [< Previous Challenge](./Challenge-00.md) - **[Home](../README.md)** - [Next Challenge >](./Challenge-02.md)
 
-***This is a template for a single challenge. The italicized text provides hints & examples of what should or should NOT go in each section.  You should remove all italicized & sample text and replace with your content.***
+## 🎯 Objective
 
-## Pre-requisites (Optional)
+Understand how Microsoft Agent Framework works and the core concepts that will power WanderAI's AI agents.
 
-*Your hack's "Challenge 0" should cover pre-requisites for the entire hack, and thus this section is optional and may be omitted.  If you wish to spell out specific previous challenges that must be completed before starting this challenge, you may do so here.*
+By the end of this challenge, you should be able to:
 
-## Introduction
+- ✅ Explain what an AI agent is and how it differs from a simple LLM API call
+- ✅ Understand "tool calling" and why agents need tools
+- ✅ Describe the agent-tool lifecycle
+- ✅ Know what OpenTelemetry is and why observability matters for AI
+- ✅ Identify the key components of the complete solution
 
-*This section should provide an overview of the technologies or tasks that will be needed to complete the this challenge.  This includes the technical context for the challenge, as well as any new "lessons" the attendees should learn before completing the challenge.*
+---
 
-*Optionally, the coach or event host is encouraged to present a mini-lesson (with a PPT or video) to set up the context & introduction to each challenge. A summary of the content of that mini-lesson is a good candidate for this Introduction section*
+## 📚 Learning Path
 
-*For example:*
+### Part 1: Understand AI Agents (30 mins)
 
-When setting up an IoT device, it is important to understand how 'thingamajigs' work. Thingamajigs are a key part of every IoT device and ensure they are able to communicate properly with edge servers. Thingamajigs require IP addresses to be assigned to them by a server and thus must have unique MAC addresses. In this challenge, you will get hands on with a thingamajig and learn how one is configured.
+**Read these resources:**
 
-## Description
+1. [Microsoft Agent Framework GitHub](https://github.com/microsoft/agent-framework)
+2. [Agent Framework Documentation](https://learn.microsoft.com/en-us/agent-framework/overview/agent-framework-overview)
+3. [ChatAgent Concepts](https://learn.microsoft.com/en-us/agent-framework/tutorials/agents/run-agent?pivots=programming-language-python#create-the-agent-1)
 
-*This section should clearly state the goals of the challenge and any high-level instructions you want the students to follow. You may provide a list of specifications required to meet the goals. If this is more than 2-3 paragraphs, it is likely you are not doing it right.*
+**Key Questions to Answer:**
 
-***NOTE:** Do NOT use ordered lists as that is an indicator of 'step-by-step' instructions. Instead, use bullet lists to list out goals and/or specifications.*
+- What is a `ChatAgent`?
+- What does "tool calling" mean?
+- How does an agent decide when to call a tool vs. respond to the user?
+- What's the relationship between instructions, tools, and responses?
 
-***NOTE:** You may use Markdown sub-headers to organize key sections of your challenge description.*
+### Part 2: Agent Application Architecture (30 mins)
 
-*Optionally, you may provide resource files such as a sample application, code snippets, or templates as learning aids for the students. These files are stored in the hack's `Student/Resources` folder. It is the coach's responsibility to package these resources into a Resources.zip file and provide it to the students at the start of the hack.*
+In the next challenge, you will build your own Flask web app from scratch using the Microsoft Agent Framework. For now, focus on understanding the following concepts:
 
-***NOTE:** Do NOT provide direct links to files or folders in the What The Hack repository from the student guide. Instead, you should refer to the Resource.zip file provided by the coach.*
+- How a Flask app is structured (see [Flask Quickstart](https://flask.palletsprojects.com/en/3.0.x/quickstart/))
+- How agents are created and configured using the [Microsoft Agent Framework documentation](https://learn.microsoft.com/en-us/agent-framework/overview/agent-framework-overview)
+- What "tool calling" means and how tools are registered with an agent
+- The typical flow of a user request through a Flask route, agent logic, and response
 
-***NOTE:** As an exception, you may provide a GitHub 'raw' link to an individual file such as a PDF or Office document, so long as it does not open the contents of the file in the What The Hack repo on the GitHub website.*
+**Questions to consider:**
 
-***NOTE:** Any direct links to the What The Hack repo will be flagged for review during the review process by the WTH V-Team, including exception cases.*
+- At what point can the agent call tools?
+- How does the agent decide which tool to use?
+- What happens if a tool fails?
 
-*Sample challenge text for the IoT Hack Of The Century:*
+### Part 4: Introduction to Observability (20 mins)
 
-In this challenge, you will properly configure the thingamajig for your IoT device so that it can communicate with the mother ship.
+**Read:**
 
-You can find a sample `thingamajig.config` file in the `/ChallengeXX` folder of the Resources.zip file provided by your coach. This is a good starting reference, but you will need to discover how to set exact settings.
+- [OpenTelemetry Concepts](https://opentelemetry.io/docs/concepts/)
+- [Why Observability Matters](https://docs.newrelic.com/docs/using-new-relic/welcome-new-relic/get-started/introduction-new-relic/#observability)
 
-Please configure the thingamajig with the following specifications:
-- Use dynamic IP addresses
-- Only trust the following whitelisted servers: "mothership", "IoTQueenBee" 
-- Deny access to "IoTProxyShip"
+**Key Concepts:**
 
-You can view an architectural diagram of an IoT thingamajig here: [Thingamajig.PDF](/Student/Resources/Architecture.PDF?raw=true).
+**Traces** = A record of all the work done to fulfill a user request
 
-## Success Criteria
+- Shows the full journey from request to response
+- Includes every step, tool call, and decision
+- Example: "User asked for travel plan → agent decided → called get_weather → tool returned → agent formatted response"
 
-*Success criteria goes here. The success criteria should be a list of checks so a student knows they have completed the challenge successfully. These should be things that can be demonstrated to a coach.* 
+**Metrics** = Measurements over time (numbers that change)
 
-*The success criteria should not be a list of instructions.*
+- Example: "Average response time was 2.5 seconds"
+- Example: "3 requests per second"
 
-*Success criteria should always start with language like: "Validate XXX..." or "Verify YYY..." or "Show ZZZ..." or "Demonstrate you understand VVV..."*
+**Logs** = Text records of events
 
-*Sample success criteria for the IoT sample challenge:*
+- Example: "Tool get_weather() called for Barcelona"
+- Example: "Error: API returned 500 status"
 
-To complete this challenge successfully, you should be able to:
-- Verify that the IoT device boots properly after its thingamajig is configured.
-- Verify that the thingamajig can connect to the mothership.
-- Demonstrate that the thingamajic will not connect to the IoTProxyShip
+**Why AI agents need observability:**
 
-## Learning Resources
+- AI is non-deterministic (same input might give different outputs)
+- Tool calling adds complexity (is the right tool being called?)
+- Latency can come from multiple sources (LLM, tools, network)
+- Debugging production AI failures requires understanding the full trace
 
-_List of relevant links and online articles that should give the attendees the knowledge needed to complete the challenge._
+---
 
-*Think of this list as giving the students a head start on some easy Internet searches. However, try not to include documentation links that are the literal step-by-step answer of the challenge's scenario.*
+## 📝 Knowledge Check
 
-***Note:** Use descriptive text for each link instead of just URLs.*
+Answer these questions to validate your learning:
 
-*Sample IoT resource links:*
+### Question 1: Agent vs. Simple LLM
 
-- [What is a Thingamajig?](https://www.bing.com/search?q=what+is+a+thingamajig)
-- [10 Tips for Never Forgetting Your Thingamajic](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
-- [IoT & Thingamajigs: Together Forever](https://www.youtube.com/watch?v=yPYZpwSpKmA)
+**What's the difference between calling an LLM API directly vs. using an agent?**
 
-## Tips
+*Hint: Think about who decides when to call tools.*
 
-*This section is optional and may be omitted.*
+### Question 2: Tool Calling
 
-*Add tips and hints here to give students food for thought. Sample IoT tips:*
+**Why does an agent need tools like `get_weather()`?**
 
-- IoTDevices can fail from a broken heart if they are not together with their thingamajig. Your device will display a broken heart emoji on its screen if this happens.
-- An IoTDevice can have one or more thingamajigs attached which allow them to connect to multiple networks.
+*Hint: What information does the LLM model have access to?*
 
-## Advanced Challenges (Optional)
+### Question 3: Observability Value
 
-*If you want, you may provide additional goals to this challenge for folks who are eager.*
+**Why can't you just use print() statements to debug an AI agent in production?**
 
-*This section is optional and may be omitted.*
+*Hint: Think about multiple concurrent requests.*
 
-*Sample IoT advanced challenges:*
+### Question 4: Application Architecture
 
-Too comfortable?  Eager to do more?  Try these additional challenges!
+**Describe the basic architecture of an agent-powered Flask app:**
 
-- Observe what happens if your IoTDevice is separated from its thingamajig.
-- Configure your IoTDevice to connect to BOTH the mothership and IoTQueenBee at the same time.
+- The Flask application setup
+- The tool functions
+- The agent creation
+- The main request handler
+
+*Draw a simple diagram of how requests flow through the system, based on your understanding from the docs.*
+
+### Question 5: Observability Layers
+
+**Match each concept to its use case:**
+
+| Concept | Use Case |
+|---------|----------|
+| Traces | Understanding every decision an agent made |
+| Metrics | Detecting when response times slow down |
+| Logs | Finding the exact line of code that failed |
+
+---
+
+## 🎬 What's Next?
+
+Once you've studied the concepts and answered the knowledge check questions:
+
+1. **Challenge 2** - You'll build your first agent application from scratch
+2. You'll create a Flask web app that serves travel plans
+3. You'll implement the same tools but understand them deeply
+
+---
+
+## 💡 Tips
+
+- 📖 Don't skip reading the docs—they answer most questions
+- 🤔 Ask "why?" for every design decision you see
+- 📝 Take notes on concepts you find unclear
+- 💬 Ask mentors for clarification on tricky parts
+
+---
+
+## ✅ Challenge Complete When
+
+You can answer all the knowledge check questions and explain:
+
+1. How Microsoft Agent Framework works
+2. What tool calling is and why it matters
+3. Why observability is critical for AI systems
+4. The overall architecture of an agent-powered Flask app
+
+**No code to write yet—this is learning!** 🧠
+
+Move to Challenge 2 when you're ready to start building! 🚀

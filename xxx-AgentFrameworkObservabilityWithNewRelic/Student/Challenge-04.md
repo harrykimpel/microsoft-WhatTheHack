@@ -1,99 +1,307 @@
-# Challenge 04 - <Title of Challenge>
+# Challenge 04 - New Relic Integration
 
 [< Previous Challenge](./Challenge-03.md) - **[Home](../README.md)** - [Next Challenge >](./Challenge-05.md)
 
-***This is a template for a single challenge. The italicized text provides hints & examples of what should or should NOT go in each section.  You should remove all italicized & sample text and replace with your content.***
+## 🎯 Objective
 
-## Pre-requisites (Optional)
+Connect your OpenTelemetry traces to New Relic so your team can see and analyze agent behavior in real-time!
 
-*Your hack's "Challenge 0" should cover pre-requisites for the entire hack, and thus this section is optional and may be omitted.  If you wish to spell out specific previous challenges that must be completed before starting this challenge, you may do so here.*
+By the end of this challenge:
 
-## Introduction
+- ✅ Traces flow from your app to New Relic
+- ✅ You can view traces in the New Relic UI
+- ✅ You can search and filter traces
+- ✅ You understand service maps and dependencies
+- ✅ Your entire team can see what your agents are doing
 
-*This section should provide an overview of the technologies or tasks that will be needed to complete the this challenge.  This includes the technical context for the challenge, as well as any new "lessons" the attendees should learn before completing the challenge.*
+---
 
-*Optionally, the coach or event host is encouraged to present a mini-lesson (with a PPT or video) to set up the context & introduction to each challenge. A summary of the content of that mini-lesson is a good candidate for this Introduction section*
+## 🤔 Why This Matters
 
-*For example:*
+Console output is great for development, but in production:
 
-When setting up an IoT device, it is important to understand how 'thingamajigs' work. Thingamajigs are a key part of every IoT device and ensure they are able to communicate properly with edge servers. Thingamajigs require IP addresses to be assigned to them by a server and thus must have unique MAC addresses. In this challenge, you will get hands on with a thingamajig and learn how one is configured.
+- ❌ You can't search 1 million traces
+- ❌ You can't correlate across services
+- ❌ You lose data after you restart the app
+- ❌ Your team can't collaborate on debugging
 
-## Description
+New Relic is a **backend** that stores and analyzes your telemetry at scale!
 
-*This section should clearly state the goals of the challenge and any high-level instructions you want the students to follow. You may provide a list of specifications required to meet the goals. If this is more than 2-3 paragraphs, it is likely you are not doing it right.*
+---
 
-***NOTE:** Do NOT use ordered lists as that is an indicator of 'step-by-step' instructions. Instead, use bullet lists to list out goals and/or specifications.*
+## 📚 Background
 
-***NOTE:** You may use Markdown sub-headers to organize key sections of your challenge description.*
+Read these first:
 
-*Optionally, you may provide resource files such as a sample application, code snippets, or templates as learning aids for the students. These files are stored in the hack's `Student/Resources` folder. It is the coach's responsibility to package these resources into a Resources.zip file and provide it to the students at the start of the hack.*
+1. **[New Relic OTLP Ingest](https://docs.newrelic.com/docs/opentelemetry/opentelemetry-introduction/)**
+   - How New Relic receives OpenTelemetry data
 
-***NOTE:** Do NOT provide direct links to files or folders in the What The Hack repository from the student guide. Instead, you should refer to the Resource.zip file provided by the coach.*
+2. **[Configuring OTLP Endpoint](https://docs.newrelic.com/docs/opentelemetry/best-practices/opentelemetry-otlp/)**
+   - How to point your app to New Relic
 
-***NOTE:** As an exception, you may provide a GitHub 'raw' link to an individual file such as a PDF or Office document, so long as it does not open the contents of the file in the What The Hack repo on the GitHub website.*
+3. **[New Relic AI Monitoring](https://docs.newrelic.com/docs/ai-monitoring/intro-to-ai-monitoring/)**
+   - Special features for AI observability
 
-***NOTE:** Any direct links to the What The Hack repo will be flagged for review during the review process by the WTH V-Team, including exception cases.*
+---
 
-*Sample challenge text for the IoT Hack Of The Century:*
+## 🔑 Prerequisites
 
-In this challenge, you will properly configure the thingamajig for your IoT device so that it can communicate with the mother ship.
+You'll need:
 
-You can find a sample `thingamajig.config` file in the `/ChallengeXX` folder of the Resources.zip file provided by your coach. This is a good starting reference, but you will need to discover how to set exact settings.
+1. A New Relic account (free tier works fine)
+2. Your **License Key** (found in Account Settings)
+3. The New Relic OTLP endpoint (US: `https://otlp.nr-data.net`, EU: `https://otlp.eu01.nr-data.net`)
 
-Please configure the thingamajig with the following specifications:
-- Use dynamic IP addresses
-- Only trust the following whitelisted servers: "mothership", "IoTQueenBee" 
-- Deny access to "IoTProxyShip"
+---
 
-You can view an architectural diagram of an IoT thingamajig here: [Thingamajig.PDF](/Student/Resources/Architecture.PDF?raw=true).
+## 🛠️ Implementation Steps
 
-## Success Criteria
+### Step 1: Configure Environment Variables
 
-*Success criteria goes here. The success criteria should be a list of checks so a student knows they have completed the challenge successfully. These should be things that can be demonstrated to a coach.* 
+Add to your `.env`:
 
-*The success criteria should not be a list of instructions.*
+```bash
+# New Relic OTLP Configuration
+# US region
+OTEL_EXPORTER_OTLP_ENDPOINT=https://otlp.nr-data.net
+# EU region
+#OTEL_EXPORTER_OTLP_ENDPOINT='https://otlp.eu01.nr-data.net'
+OTEL_EXPORTER_OTLP_HEADERS="api-key=YOUR_LICENSE_KEY_HERE"
 
-*Success criteria should always start with language like: "Validate XXX..." or "Verify YYY..." or "Show ZZZ..." or "Demonstrate you understand VVV..."*
+# Service identification
+OTEL_SERVICE_NAME=travel-planner
+OTEL_SERVICE_VERSION=0.1.0
+```
 
-*Sample success criteria for the IoT sample challenge:*
+Replace `YOUR_LICENSE_KEY_HERE` with your actual [New Relic License Key](https://one.newrelic.com/launcher/api-keys-ui.api-keys-launcher).
 
-To complete this challenge successfully, you should be able to:
-- Verify that the IoT device boots properly after its thingamajig is configured.
-- Verify that the thingamajig can connect to the mothership.
-- Demonstrate that the thingamajic will not connect to the IoTProxyShip
+### Step 2: Update Your OpenTelemetry Initialization
 
-## Learning Resources
+Replace the default console exporter with the OTLP exporter:
 
-_List of relevant links and online articles that should give the attendees the knowledge needed to complete the challenge._
+```python
+from opentelemetry.semconv._incubating.attributes.service_attributes import SERVICE_NAME, SERVICE_VERSION
+from opentelemetry._logs import set_logger_provider
+from opentelemetry.sdk._logs.export import BatchLogRecordProcessor
+from opentelemetry.sdk._logs import LoggerProvider, LoggingHandler
+from opentelemetry.sdk.resources import Resource
+from opentelemetry.exporter.otlp.proto.grpc._log_exporter import OTLPLogExporter
+from opentelemetry.exporter.otlp.proto.grpc.metric_exporter import OTLPMetricExporter
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 
-*Think of this list as giving the students a head start on some easy Internet searches. However, try not to include documentation links that are the literal step-by-step answer of the challenge's scenario.*
+# Microsoft Agent Framework
+from agent_framework import ChatAgent
+from agent_framework.openai import OpenAIChatClient
+from agent_framework.observability import setup_observability, get_tracer, get_meter
 
-***Note:** Use descriptive text for each link instead of just URLs.*
+# Create a resource identifying your service
+resource = Resource.create({
+    SERVICE_NAME: "travel-planner",
+    SERVICE_VERSION: "0.1.0",
+    "environment": "production"  # Add any custom attributes
+})
 
-*Sample IoT resource links:*
+# Create OTLP exporters that will auto-read endpoint and headers from environment
+# (OTEL_EXPORTER_OTLP_ENDPOINT and OTEL_EXPORTER_OTLP_HEADERS)
+otlp_exporters = [
+    OTLPSpanExporter(),  # Reads from OTEL_EXPORTER_OTLP_* env vars
+    OTLPMetricExporter(),  # Reads from OTEL_EXPORTER_OTLP_* env vars
+    OTLPLogExporter(),  # Reads from OTEL_EXPORTER_OTLP_* env vars
+]
 
-- [What is a Thingamajig?](https://www.bing.com/search?q=what+is+a+thingamajig)
-- [10 Tips for Never Forgetting Your Thingamajic](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
-- [IoT & Thingamajigs: Together Forever](https://www.youtube.com/watch?v=yPYZpwSpKmA)
+# Setup observability with the resource
+setup_observability(resource, exporters=otlp_exporters)
+# Get a tracer
+tracer = get_tracer()
+```
 
-## Tips
+### Step 3: Configure Metrics and Logging Export (Optional but Recommended)
 
-*This section is optional and may be omitted.*
+Add metrics and logs export too:
 
-*Add tips and hints here to give students food for thought. Sample IoT tips:*
+```python
+# Get a meter
+meter = get_meter()
 
-- IoTDevices can fail from a broken heart if they are not together with their thingamajig. Your device will display a broken heart emoji on its screen if this happens.
-- An IoTDevice can have one or more thingamajigs attached which allow them to connect to multiple networks.
+# 📝 Configure Logging
+logging.basicConfig(level=logging.INFO)
+# Create a fresh logger provider with only OTLP exporter
+logger_provider = LoggerProvider(resource=resource)
+otlp_log_exporter = [e for e in otlp_exporters if type(
+    e).__name__ == 'OTLPLogExporter'][0]
+logger_provider.add_log_record_processor(
+    BatchLogRecordProcessor(otlp_log_exporter))
 
-## Advanced Challenges (Optional)
+# Get root logger to configure all loggers
+root_logger = logging.getLogger()
 
-*If you want, you may provide additional goals to this challenge for folks who are eager.*
+# Remove old handlers and add new one with proper OTLP configuration
+for handler in root_logger.handlers[:]:
+    if isinstance(handler, LoggingHandler):
+        root_logger.removeHandler(handler)
 
-*This section is optional and may be omitted.*
+# Add new LoggingHandler to root logger (this will capture all loggers including Flask)
+handler = LoggingHandler(logger_provider=logger_provider)
+root_logger.addHandler(handler)
+root_logger.setLevel(logging.INFO)
+# set_logger_provider(logger_provider)
 
-*Sample IoT advanced challenges:*
+# Also attach to our named app logger explicitly
+app_logger.addHandler(handler)
 
-Too comfortable?  Eager to do more?  Try these additional challenges!
+# Create a reference for backward compatibility
+logger = app_logger
+```
 
-- Observe what happens if your IoTDevice is separated from its thingamajig.
-- Configure your IoTDevice to connect to BOTH the mothership and IoTQueenBee at the same time.
+### Step 4: Add Custom Attributes for your AI traces and spans
+
+Enhance your spans with AI-specific attributes:
+
+```python
+@app.route('/plan', methods=['POST'])
+def plan_trip():
+    with tracer.start_as_current_span("travel_plan_request") as span:
+        # Travel-specific attributes
+        duration = request.form.get('duration', '3')
+        interests = request.form.getlist('interests')
+        
+        # Set attributes New Relic can use
+        span.set_attribute("travel.duration_days", int(duration))
+        span.set_attribute("travel.interests_count", len(interests))
+        span.set_attribute("ai.model", model_id)  # Your model name
+        span.set_attribute("http.method", "POST")
+        span.set_attribute("http.route", "/plan")
+        
+        # ... rest of your code
+```
+
+### Step 5: Test the Connection
+
+```bash
+# 1. Make sure .env is loaded
+source .env
+
+# 2. Start your app
+python web_app.py
+
+# 3. Open the web user interface of our WandewrAI travel planner and submit a travel planning request
+http://localhost:5000/
+
+# 4. Check New Relic (wait a few seconds for data to appear)
+```
+
+---
+
+## 🔍 Viewing Your Data in New Relic
+
+### 1. Access the Traces
+
+1. Log into **New Relic**
+2. Navigate to **All entities** → **Services**
+3. Find your service: **travel-planner**
+4. Click **Traces**
+5. You should see your recent traces!
+
+### 2. Explore a Trace
+
+Click on a trace to see:
+
+- Full timeline of all spans
+- Which tools were called
+- How long each span took
+- Attributes you set
+
+### 3. Search and Filter
+
+Use NRQL to search traces:
+
+```
+SELECT * FROM Span 
+WHERE entity.name = 'travel-planner'
+AND name = 'get_weather'
+ORDER BY timestamp DESC
+LIMIT 50
+```
+
+---
+
+## 📊 Validating Your Integration
+
+You should see:
+
+1. ✅ Traces appearing in New Relic within seconds
+2. ✅ Tool spans visible (get_weather, get_datetime, etc.)
+3. ✅ Service map showing your app
+4. ✅ Metrics like span count, duration, errors
+5. ✅ All your custom attributes in trace details
+
+---
+
+## ⚠️ Troubleshooting
+
+**Issue:** Traces not appearing in New Relic
+
+- Check your License Key is correct
+- Verify endpoint: `https://otlp.nr-data.net`
+- Check app logs for export errors
+- Make sure your firewall allows outbound HTTPS
+
+**Issue:** "Connection refused" errors
+
+- Verify internet connectivity
+- Check that New Relic endpoint is accessible
+- Look at Python logs for detailed error messages
+
+**Issue:** Some attributes missing
+
+- Make sure you're calling `span.set_attribute()` before the span ends
+- Check attribute names are valid (lowercase, no spaces)
+
+---
+
+## 🎯 Next Steps in New Relic
+
+Now that you can see traces, explore:
+
+1. **Service Map** - See how services connect
+2. **Trace Details** - Dive deep into individual requests
+3. **Errors** - View failed requests and errors
+4. **Metrics** - See performance over time
+5. **Custom Dashboards** (Challenge 5) - Create your own views
+
+---
+
+## ✅ Challenge Checklist
+
+- [ ] OTLP exporter installed
+- [ ] New Relic endpoint configured
+- [ ] License Key added to .env
+- [ ] Tracer provider uses OTLP exporter
+- [ ] App runs without errors
+- [ ] Make a test request
+- [ ] Trace appears in New Relic
+- [ ] Custom attributes visible in New Relic
+- [ ] Can search and filter traces
+- [ ] Team can access New Relic and see traces
+
+---
+
+## 💡 Tips
+
+1. **License Key Security** - Never commit `.env` to git
+2. **Batch Exports** - Use BatchSpanProcessor for efficient sending
+3. **Test Locally** - Make requests and watch traces appear live
+4. **Custom Attributes** - Add anything useful for debugging
+
+---
+
+## 🎉 Milestone Reached
+
+Your WanderAI agents are now **observable at scale**!
+
+- ✅ Challenge 3: Local traces
+- ✅ Challenge 4: Traces in New Relic
+- **Challenge 5:** Build dashboards and optimize
+- **Challenge 6:** Quality gates and automation
+
+Your investors can now see exactly what your AI agents are doing! 📊

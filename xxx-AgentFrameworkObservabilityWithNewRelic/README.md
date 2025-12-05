@@ -80,9 +80,9 @@ This hack walks you through building the platform layer by layer, adding observa
   - Instrument everything
 - Challenge 04: **[New Relic Integration](Student/Challenge-04.md)**
   - See your data!
-- Challenge 05: **[Production Optimization](Student/Challenge-05.md)**
-  - Make it robust
-- Challenge 06: **[Quality Gates](Student/Challenge-06.md)**
+- Challenge 05: **[Monitoring Best Practices](Student/Challenge-05.md)**
+  - Learn industry best practices for monitoring AI-driven applications.
+- Challenge 06: **[LLM Evaluation & Quality Gates](Student/Challenge-06.md)**
   - Ensure excellence
 
 🎉 Launch WanderAI! 🎉

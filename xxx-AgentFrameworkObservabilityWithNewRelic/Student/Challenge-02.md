@@ -1,99 +1,395 @@
-# Challenge 02 - <Title of Challenge>
+# 🏗️ Challenge 2: Build Your MVP
 
 [< Previous Challenge](./Challenge-01.md) - **[Home](../README.md)** - [Next Challenge >](./Challenge-03.md)
 
-***This is a template for a single challenge. The italicized text provides hints & examples of what should or should NOT go in each section.  You should remove all italicized & sample text and replace with your content.***
+## 🎯 Objective
 
-## Pre-requisites (Optional)
+Create the first version of WanderAI's Travel Planner service!
 
-*Your hack's "Challenge 0" should cover pre-requisites for the entire hack, and thus this section is optional and may be omitted.  If you wish to spell out specific previous challenges that must be completed before starting this challenge, you may do so here.*
+You'll build a Flask web application that:
 
-## Introduction
+- ✅ Serves a web interface for travel planning
+- ✅ Accepts user travel preferences
+- ✅ Uses Microsoft Agent Framework to plan trips
+- ✅ Returns beautiful itineraries to users
 
-*This section should provide an overview of the technologies or tasks that will be needed to complete the this challenge.  This includes the technical context for the challenge, as well as any new "lessons" the attendees should learn before completing the challenge.*
+By the end, you'll have a working startup product! 🚀
 
-*Optionally, the coach or event host is encouraged to present a mini-lesson (with a PPT or video) to set up the context & introduction to each challenge. A summary of the content of that mini-lesson is a good candidate for this Introduction section*
+---
 
-*For example:*
+## 📋 What You're Building
 
-When setting up an IoT device, it is important to understand how 'thingamajigs' work. Thingamajigs are a key part of every IoT device and ensure they are able to communicate properly with edge servers. Thingamajigs require IP addresses to be assigned to them by a server and thus must have unique MAC addresses. In this challenge, you will get hands on with a thingamajig and learn how one is configured.
+### The MVP Feature Set
 
-## Description
+**User Interface:**
 
-*This section should clearly state the goals of the challenge and any high-level instructions you want the students to follow. You may provide a list of specifications required to meet the goals. If this is more than 2-3 paragraphs, it is likely you are not doing it right.*
+- A form where users enter their travel preferences
+  - Travel date
+  - Trip duration (days)
+  - Interests (multiple select)
+  - Special requests (free text)
 
-***NOTE:** Do NOT use ordered lists as that is an indicator of 'step-by-step' instructions. Instead, use bullet lists to list out goals and/or specifications.*
+**Backend:**
 
-***NOTE:** You may use Markdown sub-headers to organize key sections of your challenge description.*
+- Flask web server
+- AI agent that creates travel plans
+- Tool functions for getting data (weather, random destinations, current time)
+- JSON API for future mobile apps
 
-*Optionally, you may provide resource files such as a sample application, code snippets, or templates as learning aids for the students. These files are stored in the hack's `Student/Resources` folder. It is the coach's responsibility to package these resources into a Resources.zip file and provide it to the students at the start of the hack.*
+**Output:**
 
-***NOTE:** Do NOT provide direct links to files or folders in the What The Hack repository from the student guide. Instead, you should refer to the Resource.zip file provided by the coach.*
+- Formatted HTML page with travel itinerary
+- Beautiful presentation of the AI's recommendations
 
-***NOTE:** As an exception, you may provide a GitHub 'raw' link to an individual file such as a PDF or Office document, so long as it does not open the contents of the file in the What The Hack repo on the GitHub website.*
+---
 
-***NOTE:** Any direct links to the What The Hack repo will be flagged for review during the review process by the WTH V-Team, including exception cases.*
+## 🚀 Getting Started
 
-*Sample challenge text for the IoT Hack Of The Century:*
+### Step 1: Set Up Your Environment
 
-In this challenge, you will properly configure the thingamajig for your IoT device so that it can communicate with the mother ship.
+```bash
+# Create a virtual environment
+python3 -m venv .venv
+source .venv/bin/activate
 
-You can find a sample `thingamajig.config` file in the `/ChallengeXX` folder of the Resources.zip file provided by your coach. This is a good starting reference, but you will need to discover how to set exact settings.
+# Install dependencies
+pip install -r requirements.txt
+```
 
-Please configure the thingamajig with the following specifications:
-- Use dynamic IP addresses
-- Only trust the following whitelisted servers: "mothership", "IoTQueenBee" 
-- Deny access to "IoTProxyShip"
+**requirements.txt should include:**
 
-You can view an architectural diagram of an IoT thingamajig here: [Thingamajig.PDF](/Student/Resources/Architecture.PDF?raw=true).
+```
+agent-framework-core
+flask[async]
+requests
+python-dotenv
+```
 
-## Success Criteria
+### Step 2: Environment Variables
 
-*Success criteria goes here. The success criteria should be a list of checks so a student knows they have completed the challenge successfully. These should be things that can be demonstrated to a coach.* 
+Create a `.env` file in your project root:
 
-*The success criteria should not be a list of instructions.*
+```bash
+# LLM Configuration
+OPENAI_API_KEY=your_openai_api_key_here
+GITHUB_MODEL_ID=gpt-4o-mini
 
-*Success criteria should always start with language like: "Validate XXX..." or "Verify YYY..." or "Show ZZZ..." or "Demonstrate you understand VVV..."*
+# (Optional) Weather API
+OPENWEATHER_API_KEY=your_openweather_key_here
+```
 
-*Sample success criteria for the IoT sample challenge:*
+### Step 3: Understand the Components
 
-To complete this challenge successfully, you should be able to:
-- Verify that the IoT device boots properly after its thingamajig is configured.
-- Verify that the thingamajig can connect to the mothership.
-- Demonstrate that the thingamajic will not connect to the IoTProxyShip
+**You need to build:**
 
-## Learning Resources
+1. **Tool Functions** - Helper functions the agent can call
+   - `get_random_destination()` - Verify the destination choice
+   - `get_weather()` - Get current weather for a location
+   - `get_datetime()` - Return current date/time
 
-_List of relevant links and online articles that should give the attendees the knowledge needed to complete the challenge._
+2. **Flask App** - Web server
+   - GET `/` - Serve the home page form
+   - POST `/plan` - Accept travel preferences, run agent, return results
+   - (Optional) POST `/api/plan` - JSON API endpoint
 
-*Think of this list as giving the students a head start on some easy Internet searches. However, try not to include documentation links that are the literal step-by-step answer of the challenge's scenario.*
+3. **Agent Setup** - Create the AI agent
+   - Initialize OpenAI client
+   - Create ChatAgent with tools
+   - Set system instructions
 
-***Note:** Use descriptive text for each link instead of just URLs.*
+4. **Templates** - HTML pages (provided separately)
 
-*Sample IoT resource links:*
+---
 
-- [What is a Thingamajig?](https://www.bing.com/search?q=what+is+a+thingamajig)
-- [10 Tips for Never Forgetting Your Thingamajic](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
-- [IoT & Thingamajigs: Together Forever](https://www.youtube.com/watch?v=yPYZpwSpKmA)
+## 📝 Starter Code
 
-## Tips
+Create `web_app.py`:
 
-*This section is optional and may be omitted.*
+```python
+# 📦 Import Required Libraries
+import os
+import asyncio
+import time
+import logging
+from random import randint, uniform
 
-*Add tips and hints here to give students food for thought. Sample IoT tips:*
+# Flask imports
+from flask import Flask, render_template, request, jsonify
 
-- IoTDevices can fail from a broken heart if they are not together with their thingamajig. Your device will display a broken heart emoji on its screen if this happens.
-- An IoTDevice can have one or more thingamajigs attached which allow them to connect to multiple networks.
+# Microsoft Agent Framework
+from agent_framework import ChatAgent
+from agent_framework.openai import OpenAIChatClient
 
-## Advanced Challenges (Optional)
+# Load environment variables
+from dotenv import load_dotenv
+load_dotenv()
 
-*If you want, you may provide additional goals to this challenge for folks who are eager.*
+# 🌐 Initialize Flask Application
+app = Flask(__name__)
 
-*This section is optional and may be omitted.*
+# 📝 Configure Logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
-*Sample IoT advanced challenges:*
+# ============================================================================
+# TODO 1: Define Tool Functions
+# ============================================================================
+# These are functions the agent can call to get information
 
-Too comfortable?  Eager to do more?  Try these additional challenges!
+def get_selected_destination(destination: str) -> str:
+    """
+    TODO: Implement this tool function
+    
+    Args:
+        destination: The destination the user selected
+    
+    Returns:
+        A string confirming the destination
+    
+    Hint: Simply return a confirmation message with the destination name
+    """
+    pass
 
-- Observe what happens if your IoTDevice is separated from its thingamajig.
-- Configure your IoTDevice to connect to BOTH the mothership and IoTQueenBee at the same time.
+def get_weather(location: str) -> str:
+    """
+    TODO: Implement this tool function
+    
+    This should return weather information for a location.
+    For now, you can return a fake weather message.
+    
+    Args:
+        location: The location to get weather for
+    
+    Returns:
+        A weather description string
+    
+    Hint: For MVP, just return something like "The weather in {location} is sunny with a high of 22°C"
+    Real weather API integration is optional and can use OPENWEATHER_API_KEY
+    """
+    pass
+
+def get_datetime() -> str:
+    """
+    TODO: Implement this tool function
+    
+    Return the current date and time
+    
+    Returns:
+        Current date and time as string
+    
+    Hint: Use datetime.datetime.now().isoformat()
+    """
+    pass
+
+# ============================================================================
+# TODO 2: Create the OpenAI Chat Client
+# ============================================================================
+
+model_id = os.environ.get("GITHUB_MODEL_ID", "gpt-4o-mini")
+
+# TODO: Create an OpenAIChatClient instance
+# Hint: - You can leverage OpenAI, Azure OpenAI or GitHub Models here
+#       - OpenAI: Use api_key=os.environ.get("OPENAI_API_KEY"), model_id=model_id
+#       - GitHub Models: Use base_url=os.environ.get("GITHUB_ENDPOINT"), api_key=os.environ.get("GITHUB_TOKEN"), model_id=model_id
+openai_chat_client = None
+
+# ============================================================================
+# TODO 3: Create the Travel Planning Agent
+# ============================================================================
+
+# TODO: Create a ChatAgent with:
+# - chat_client: Your OpenAI client
+# - instructions: "You are a helpful AI Agent that can help plan vacations for customers."
+# - tools: A list of the three tool functions [get_selected_destination, get_weather, get_datetime]
+
+agent = None
+
+# ============================================================================
+# TODO 4: Create Flask Routes
+# ============================================================================
+
+@app.route('/')
+def index():
+    """Serve the home page with the travel planning form."""
+    # TODO: Render and return 'index.html'
+    # Hint: return render_template('index.html')
+    pass
+
+@app.route('/plan', methods=['POST'])
+async def plan_trip():
+    """
+    Handle travel plan requests from the form.
+    
+    TODO: Implement this endpoint
+    """
+    try:
+        # TODO: Extract form data
+        # Hint: Use request.form.get() for single values and request.form.getlist() for checkboxes
+        # You need: date, duration, interests (list), special_requests
+        
+        # TODO: Build a user prompt for the agent
+        # Example structure:
+        # f"Plan me a {duration}-day trip to a random destination starting on {date} ..."
+        
+        # TODO: Run the agent asynchronously
+        # Hint: Use asyncio to run: response = await agent.run(user_prompt)
+        
+        # TODO: Extract the travel plan from response
+        # Hint: response.messages[-1].contents[0].text
+        
+        # TODO: Render and return 'result.html' with the travel plan
+        pass
+        
+    except Exception as e:
+        logger.error(f"Error planning trip: {str(e)}")
+        return render_template('error.html', error=str(e)), 500
+
+# ============================================================================
+# Optional: API Endpoint for Mobile Apps
+# ============================================================================
+
+@app.route('/api/plan', methods=['POST'])
+async def api_plan_trip():
+    """
+    API endpoint that returns JSON instead of HTML.
+    
+    Optional for MVP but good practice for scaling!
+    """
+    # TODO: Similar to /plan but returns JSON
+    # Hint: Return jsonify({'travel_plan': text_content, 'success': True})
+    pass
+
+# ============================================================================
+# Main Execution
+# ============================================================================
+
+if __name__ == "__main__":
+    # Run Flask development server
+    app.run(debug=True, host='0.0.0.0', port=5000)
+```
+
+---
+
+## 🎨 HTML Templates
+
+You'll need to create these in a `templates/` folder:
+
+**templates/index.html** - The form page
+**templates/result.html** - The results page  
+**templates/error.html** - Error page
+
+*See hints.md for template suggestions*
+
+---
+
+## 🎯 Implementation Checklist
+
+- [ ] Create `web_app.py` with all TODO items filled in
+- [ ] Implement `get_random_destination()` tool
+- [ ] Implement `get_weather()` tool
+- [ ] Implement `get_datetime()` tool
+- [ ] Create OpenAI chat client
+- [ ] Create ChatAgent with tools
+- [ ] Implement `GET /` route
+- [ ] Implement `POST /plan` route
+- [ ] Create `templates/index.html`
+- [ ] Create `templates/result.html`
+- [ ] Create `templates/error.html`
+- [ ] Test: Run the app and submit a travel request
+- [ ] Verify: You get back a formatted travel plan
+
+---
+
+## 🧪 Testing Your MVP
+
+```bash
+# 1. Start your Flask app
+python web_app.py
+
+# 2. Open browser to http://localhost:5000
+
+# 3. Fill in the form:
+#    - Date: Pick a date
+#    - Duration: "3"
+#    - Interests: Check some boxes
+#    - Special Requests: (optional)
+
+# 4. Click "Plan My Trip"
+
+# 5. You should see a formatted travel itinerary!
+```
+
+---
+
+## 📊 Expected Output
+
+When you submit a travel request, you should see HTML that includes:
+
+```
+Destination: Barcelona, Spain
+Duration: 3 days
+
+Travel Plan:
+[AI-generated detailed itinerary]
+```
+
+Real example from AI:
+
+```
+Day 1: Arrival and Gothic Quarter
+- Arrive and settle into accommodation
+- Walk through the historic Gothic Quarter
+- Visit Barcelona Cathedral (entry ~€8)
+- Dinner at a local tapas bar (€15-25 per person)
+
+Current Weather: Sunny, 22°C
+Best Time to Visit: April-May or September-October
+```
+
+---
+
+## 💡 Hints & Tips
+
+1. **Start small** - Get the form rendering first, then add the agent logic
+2. **Test tools individually** - Make sure each tool works before integrating
+3. **Debug with print()** - Log what the agent is thinking
+4. **Reference the solution** - Look at `web_app.py` in the parent directory if stuck
+5. **Use async properly** - The agent.run() must be awaited in an async context
+
+---
+
+## 🚨 Common Issues
+
+**Issue:** `ModuleNotFoundError: No module named 'agent_framework'`
+
+- **Solution:** Make sure you've installed `agent-framework-core` in your .venv
+
+**Issue:** Agent doesn't call tools
+
+- **Solution:** Check that tools are passed to the ChatAgent constructor
+
+**Issue:** HTML template not found
+
+- **Solution:** Make sure `templates/` folder exists and is in the same directory as `web_app.py`
+
+**Issue:** OPENAI_API_KEY error
+
+- **Solution:** Check your `.env` file and ensure the key is set correctly
+
+---
+
+## ✅ Challenge Complete When
+
+- ✅ App runs without errors
+- ✅ Web form loads at <http://localhost:5000>
+- ✅ You can submit a travel request
+- ✅ AI agent returns a formatted travel plan
+- ✅ The plan includes real information from your tools
+
+---
+
+## 🎉 Celebrate
+
+You've built the MVP of WanderAI! This is a real, working startup product. Your first customers can now use it to plan trips! 🌍✈️
+
+**Next:** Challenge 3 - Add observability so you can see what's happening inside your agents!
