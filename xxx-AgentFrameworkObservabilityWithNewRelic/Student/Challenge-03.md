@@ -263,7 +263,7 @@ def plan_trip():
 
 When you run your app and submit a request, you should see traces printed to the console:
 
-```
+```json
 {
   "name": "get_weather",
   "context": {
@@ -310,7 +310,7 @@ You should also see structured logs with context.
 
 When you make a travel planning request, your console should show:
 
-```
+```log
 INFO:travel_planner:Travel plan requested for Barcelona, Spain (3 days)
 {trace: http.post.plan, date: 12/04/2025 16:08:00, duration: 3}
   {trace: get_random_destination, destination: Barcelona, Spain}

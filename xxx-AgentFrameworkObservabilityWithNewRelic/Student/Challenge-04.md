@@ -215,7 +215,7 @@ Click on a trace to see:
 
 Use NRQL to search traces:
 
-```
+```sql
 SELECT * FROM Span 
 WHERE entity.name = 'travel-planner'
 AND name = 'get_weather'

@@ -58,7 +58,7 @@ pip install -r requirements.txt
 
 **requirements.txt should include:**
 
-```
+```python
 agent-framework-core
 flask[async]
 requests
@@ -325,7 +325,7 @@ python web_app.py
 
 When you submit a travel request, you should see HTML that includes:
 
-```
+```log
 Destination: Barcelona, Spain
 Duration: 3 days
 
@@ -335,7 +335,7 @@ Travel Plan:
 
 Real example from AI:
 
-```
+```log
 Day 1: Arrival and Gothic Quarter
 - Arrive and settle into accommodation
 - Walk through the historic Gothic Quarter
