@@ -135,41 +135,41 @@ def get_weather(location: str) -> str:
 2. Name it: "WanderAI Agent Performance"
 3. Add widgets for:
 
-**Widget 1: Request Rate**
+#### **Widget 1: Request Rate**
 
-```
+```sql
 SELECT rate(count(*), 1 minute) FROM Metric 
 WHERE metricName = 'travel_plan.requests.total'
 TIMESERIES
 ```
 
-**Widget 2: Error Rate**
+#### **Widget 2: Error Rate**
 
-```
+```sql
 SELECT rate(count(*), 1 minute) FROM Metric 
 WHERE metricName = 'travel_plan.errors.total'
 TIMESERIES
 ```
 
-**Widget 3: Average Response Time**
+#### **Widget 3: Average Response Time**
 
-```
+```sql
 SELECT average(travel_plan.response_time_ms) 
 FROM Metric 
 TIMESERIES
 ```
 
-**Widget 4: Tool Usage Breakdown**
+#### **Widget 4: Tool Usage Breakdown**
 
-```
+```sql
 SELECT count('travel_plan.tool_calls.total') FROM Metric 
 WHERE metricName = 'travel_plan.tool_calls.total'
 FACET tool_name
 ```
 
-**Widget 5: Trace Count by Service**
+#### **Widget 5: Trace Count by Service**
 
-```
+```sql
 SELECT count(*) FROM Span 
 WHERE entity.name like '%travel-planner%'
 FACET name 
@@ -182,7 +182,7 @@ TIMESERIES
 
 ### Alert 1: High Error Rate
 
-```
+```sql
 ALERT "High Error Rate in Travel Planner"
 
 Trigger when:
@@ -196,7 +196,7 @@ Notify: #ops-team in Slack
 
 ### Alert 2: Slow Response Times
 
-```
+```sql
 ALERT "Slow Travel Plan Response"
 
 Trigger when:
@@ -210,7 +210,7 @@ Notify: #ops-team in Slack
 
 ### Alert 3: Tool Failures
 
-```
+```sql
 ALERT "Weather Tool Failing"
 
 Trigger when:
@@ -238,9 +238,9 @@ Notify: #backend-team in Slack
 
 ### Custom NRQL Queries
 
-**Query 1: Average token usage by model**
+#### **Query 1: Average token usage by model**
 
-```
+```sql
 SELECT 
     average(gen_ai.usage.input_tokens) as 'Input tokens', 
     average(gen_ai.usage.output_tokens) as 'Output tokens', 
@@ -249,9 +249,9 @@ FROM Span
 facet gen_ai.response.model
 ```
 
-**Query 2: Slowest tools**
+#### **Query 2: Slowest tools**
 
-```
+```sql
 SELECT average(duration.ms)
 FROM Span
 WHERE name IN  ('execute_tool get_weather','execute_tool get_datetime', 'execute_tool get_random_destination')
@@ -259,9 +259,9 @@ FACET name
 TIMESERIES
 ```
 
-**Query 3: Error breakdown**
+#### **Query 3: Error breakdown**
 
-```
+```sql
 SELECT count(*)
 FROM Log
 WHERE service.name like '%travel-planner%' 
