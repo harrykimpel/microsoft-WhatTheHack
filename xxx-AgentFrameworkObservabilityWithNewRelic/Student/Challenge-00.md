@@ -68,7 +68,7 @@ If you want to setup your environment on your local workstation, expand the sect
 
 <details markdown=1>
 <summary markdown="span">Click to expand/collapse Local Workstation Requirements</summary>
-  
+
 #### Set Up Local Dev Container
 
 You will next be setting up your local workstation so that it can use dev containers. A Dev Container is a Docker-based environment designed to provide a consistent and reproducible development setup. The VS Code Dev Containers extension lets you easily open projects inside a containerized environment.

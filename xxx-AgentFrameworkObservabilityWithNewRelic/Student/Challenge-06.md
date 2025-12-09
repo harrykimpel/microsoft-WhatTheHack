@@ -27,9 +27,11 @@ When you log events with this attribute, New Relic automatically:
 - 🛡️ Powers **Quality Evaluation** - Detect issues like toxicity, safety concerns
 - 📈 Builds **Insights Dashboards** - See AI behavior and trends
 
-### The Three Core Events
+### The Two Core Events
 
-Your application logs three custom events after each LLM interaction:
+Your application logs three custom events in total after each LLM interaction:
+
+1. `LlmChatCompletionMessage` for the user prompt, `role` is typically set to `user` and `sequence` is 0
 
 ```python
 # Event 1: User message input
@@ -43,7 +45,11 @@ logger.info("[agent_response]", extra={
     "vendor": "openai",
     # ... trace/span context ...
 })
+```
 
+2. `LlmChatCompletionMessage` for the LLM response, `role` is typically set to `assistant` and `sequence` is 1:
+
+```python
 # Event 2: Assistant response output
 logger.info("[agent_response]", extra={
     "newrelic.event.type": "LlmChatCompletionMessage",
@@ -55,7 +61,11 @@ logger.info("[agent_response]", extra={
     "vendor": "openai",
     # ... trace/span context ...
 })
+```
 
+3. `LlmChatCompletionSummary` for the summary of a LLM interaction:
+
+```python
 # Event 3: Summary of the interaction
 logger.info("[agent_response]", extra={
     "newrelic.event.type": "LlmChatCompletionSummary",
@@ -111,9 +121,9 @@ You can't just ship AI without testing. Consider:
 
 ### Layer 1: Custom Events (The Foundation)
 
-First, emit the three custom events (`LlmChatCompletionMessage` x2, `LlmChatCompletionSummary`). This tells New Relic about every LLM interaction and **unlocks model inventory & comparison features**.
+First, emit the two custom events (`LlmChatCompletionMessage` x2, `LlmChatCompletionSummary`). This tells New Relic about every LLM interaction and **unlocks New Relics curated user experience for model inventory & comparison features**.
 
-See `web_app.py` (lines 439-509) for the exact implementation. This is your baseline for all AI Monitoring.
+See examples below for the exact implementation. This is your baseline for all AI Monitoring.
 
 ### Layer 2: LLM-Based Quality Evaluation
 
@@ -251,7 +261,7 @@ class TravelPlanMetrics:
 
 ### Step 1: Emit Custom Events (The Foundation)
 
-Implement the three custom event types in your agent's response handler. Use the reference in `web_app.py` (lines 439-509) as your template:
+Implement the two custom event types in your agent's response handler. Use the reference in sample code below as your template:
 
 ```python
 import logging
@@ -316,12 +326,34 @@ async def run_agent(user_prompt: str):
     return response
 ```
 
-**Why this matters:** These custom events automatically populate:
+#### **Why this matters:** These custom events automatically populate
 
 - 📊 **Model Inventory** - All models used (gpt-4o-mini, gpt-4o, etc.)
 - 🔄 **Model Comparison** - Performance across models
 - 📈 **Token Usage Dashboard** - Monitor cost and efficiency
 - 🔍 **Interaction Log** - Every user/assistant message pair
+
+#### **How to access New Relics curated experience?**
+
+`AI Monitoring` is a first class citizen in New Relic.
+
+![New Relic AI MOnitoring](./Resources/newrelic-ai-monitoring.png)
+
+**Hint**: if you do not see this section in New Relics side menu, click on `All capabilities` and pin `AI Monitoring` to the side menu
+
+New Relics AI Monitoring section allows you to drill into:
+
+- **Model Inventory** - See all models used, versions, vendors
+    ![New Relic AI MOnitoring](./Resources/newrelic-ai-monitoring-model-inventory.png)
+- **Model Comparison** - Compare performance across models
+    ![New Relic AI MOnitoring](./Resources/newrelic-ai-monitoring-model-comparison.png)
+
+- **LLM Evaluation** - See toxicity, negativity, and quality issues detected automatically
+    ![New Relic AI MOnitoring](./Resources/newrelic-ai-monitoring-llm-evaluation.png)
+
+    The thresholds for toxicity, negativity, and keyword scanning are configurable in the `LLM Evaluation Settings` tab:
+
+    ![New Relic AI MOnitoring](./Resources/newrelic-ai-monitoring-llm-evaluation-settings.png)
 
 ### Step 2: Create Quality Evaluation Module
 
