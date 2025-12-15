@@ -52,3 +52,112 @@ The `newrelic.event.type` attribute in logger.info() calls is THE mechanism that
 - Rule-based checks work for business logic.
 - Quality metrics displayed in dashboard.
 - Attendees understand how New Relic AI Monitoring works.
+
+---
+
+## Common Issues & Troubleshooting
+
+### Issue 1: AI Monitoring Section Not Visible in New Relic
+
+**Symptom:** Can't find AI Monitoring in New Relic navigation
+**Cause:** Feature not pinned or custom events not being received
+**Solution:**
+
+- Click "All Capabilities" in New Relic sidebar
+- Search for "AI Monitoring" and pin it to navigation
+- Verify custom events are being sent (check Logs for `[agent_response]`)
+- Ensure `newrelic.event.type` attribute is set correctly
+- Wait 2-3 minutes for data to populate
+
+### Issue 2: Model Inventory Empty
+
+**Symptom:** AI Monitoring shows but no models listed
+**Cause:** `LlmChatCompletionMessage` events missing required attributes
+**Solution:**
+
+- Verify both user and assistant messages are logged
+- Check `response.model` attribute is set correctly
+- Ensure `vendor` attribute is set (e.g., "openai")
+- Verify `completion_id` is unique per interaction
+- Check NRQL: `FROM LlmChatCompletionMessage SELECT * LIMIT 10`
+
+### Issue 3: LLM Evaluation Returns Parse Errors
+
+**Symptom:** Evaluation fails with JSON decode errors
+**Cause:** LLM response not valid JSON or includes markdown formatting
+**Solution:**
+
+- Add explicit instruction: "Return ONLY valid JSON, no markdown"
+- Strip markdown code blocks from response before parsing
+- Use try/except with fallback evaluation result
+- Consider using structured output if model supports it
+- Reference `evaluation.py` for robust JSON extraction
+
+### Issue 4: Evaluation Takes Too Long
+
+**Symptom:** Each request takes 10+ seconds due to evaluation
+**Cause:** LLM evaluation adds latency for every request
+**Solution:**
+
+- Use `skip_llm=True` for real-time requests, run LLM evaluation async
+- Cache evaluation results for similar responses
+- Use a faster/smaller model for evaluation (gpt-4o-mini)
+- Run rule-based checks first, only LLM evaluate if needed
+- Consider batch evaluation for non-real-time use cases
+
+### Issue 5: Quality Metrics Not Showing in Dashboard
+
+**Symptom:** Evaluation counters/histograms not visible
+**Cause:** Metrics not exported or wrong metric names
+**Solution:**
+
+- Verify meter is configured with OTLP exporter
+- Check metric names match dashboard queries
+- Use `FROM Metric SELECT * WHERE metricName LIKE 'travel%'`
+- Ensure `.add()` and `.record()` are being called
+- Check for typos in metric attribute names
+
+### Issue 6: Toxicity/Negativity Not Being Detected
+
+**Symptom:** Clearly problematic content passes evaluation
+**Cause:** Evaluation prompt not specific enough or wrong thresholds
+**Solution:**
+
+- Review and refine the evaluator agent's instructions
+- Lower passing thresholds (e.g., score >= 7 instead of >= 6)
+- Test with known-bad examples to calibrate
+- Check LLM evaluation raw response for debugging
+- Use `NEGATIVITY_PROMPT_ENABLE=true` to test detection
+
+---
+
+## What Participants Struggle With
+
+- **Custom Event Structure:** Walk through the exact attributes needed for `LlmChatCompletionMessage` and `LlmChatCompletionSummary`
+- **Understanding newrelic.event.type:** Explain this is the magic attribute that unlocks AI Monitoring features
+- **Evaluation Design:** Help them think about what "quality" means for their travel planner
+- **Async Evaluation:** Guide them on when to evaluate synchronously vs. asynchronously
+- **CI/CD Integration:** Show how pytest and GitHub Actions work together for quality gates
+
+---
+
+## Time Management
+
+**Expected Duration:** 1 hour
+**Minimum Viable:** 45 minutes (custom events + rule-based evaluation)
+**Stretch Goals:** +30 minutes (LLM evaluation, CI/CD pipeline, advanced metrics)
+
+---
+
+## Validation Checklist
+
+Coach should verify participants have:
+
+- [ ] Custom events emitting `LlmChatCompletionMessage` for user and assistant
+- [ ] Custom events emitting `LlmChatCompletionSummary` for each interaction
+- [ ] AI Monitoring section accessible in New Relic
+- [ ] Model inventory shows their model (gpt-4o-mini or similar)
+- [ ] Rule-based evaluation checking response structure and content
+- [ ] Evaluation results logged/exported to New Relic
+- [ ] Can demonstrate evaluation catching a bad response (optional: LLM evaluation)
+- [ ] Can explain how quality gates would work in production

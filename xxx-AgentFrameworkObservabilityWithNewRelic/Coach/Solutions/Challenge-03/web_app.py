@@ -168,7 +168,7 @@ openai_chat_client = OpenAIChatClient(
 # TODO: Create a ChatAgent with:
 # - chat_client: Your OpenAI client
 # - instructions: "You are a helpful AI Agent that can help plan vacations for customers."
-# - tools: A list of the three tool functions [get_selected_destination, get_weather, get_datetime]
+# - tools: A list of the three tool functions [get_random_destination, get_weather, get_datetime]
 
 agent = ChatAgent(
     chat_client=openai_chat_client,

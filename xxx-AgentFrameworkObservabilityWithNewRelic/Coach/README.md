@@ -11,19 +11,19 @@ This hack includes an optional [lecture presentation](Lectures.pptx) that featur
 ## Coach's Guides
 
 - Challenge 00: **[Prerequisites - Ready, Set, GO!](./Solution-00.md)**
-	 - Prepare your workstation to work with Azure.
-- Challenge 01: **[Title of Challenge](./Solution-01.md)**
-	 - Description of challenge
-- Challenge 02: **[Title of Challenge](./Solution-02.md)**
-	 - Description of challenge
-- Challenge 03: **[Title of Challenge](./Solution-03.md)**
-	 - Description of challenge
-- Challenge 04: **[Title of Challenge](./Solution-04.md)**
-	 - Description of challenge
-- Challenge 05: **[Title of Challenge](./Solution-05.md)**
-	 - Description of challenge
-- Challenge 06: **[Title of Challenge](./Solution-06.md)**
-	 - Description of challenge
+  - Prepare your workstation to work with Azure.
+- Challenge 01: **[Master the Foundations](./Solution-01.md)**
+  - Understand Microsoft Agent Framework and AI agent concepts (45 mins)
+- Challenge 02: **[Build Your MVP](./Solution-02.md)**
+  - Create Flask app with AI travel planner agent (2-3 hours)
+- Challenge 03: **[Add OpenTelemetry Instrumentation](./Solution-03.md)**
+  - Instrument application with traces, metrics, and logs (1.5-2 hours)
+- Challenge 04: **[New Relic Integration](./Solution-04.md)**
+  - Connect observability pipeline to New Relic platform (1 hour)
+- Challenge 05: **[Monitoring Best Practices](./Solution-05.md)**
+  - Build dashboards and configure alerts for production (1.5 hours)
+- Challenge 06: **[LLM Evaluation & Quality Gates](./Solution-06.md)**
+  - Implement AI quality assurance and CI/CD gates (2-3 hours)
 
 ## Coach Prerequisites
 
@@ -45,27 +45,97 @@ _Please list any additional pre-event setup steps a coach would be required to s
 
 ## Azure Requirements
 
-This hack requires students to have access to an Azure subscription where they can create and consume Azure resources. These Azure requirements should be shared with a stakeholder in the organization that will be providing the Azure subscription(s) that will be used by the students.
+This hack requires students to have access to the following:
 
-_Please list Azure subscription requirements._
+### Required Azure Resources
 
-_For example:_
+- Access to an Azure subscription with **owner** access
+- Already deployed and configured Azure Native New Relic Service
+- All development is done in GitHub Codespaces or locally
+- LLM access is provided through:
+  - Option 1: GitHub Models (free tier, requires GitHub account)
+  - Option 2: OpenAI API (requires API key, usage fees apply)
+  - Option 3: Azure OpenAI Service (requires Azure subscription, optional)
 
-- Azure resources that will be consumed by a student implementing the hack's challenges
-- Azure permissions required by a student to complete the hack's challenges.
+### Required External Services
 
-## Suggested Hack Agenda (Optional)
+- **New Relic Account (Free Tier, if no Azure subscription is available)**
+  - Sign up at: <https://newrelic.com/signup>
+  - Free tier includes:
+    - 100 GB data ingest per month
+    - 1 full platform user
+    - Unlimited basic users
+    - Full access to AI Monitoring features
+  - Students need to obtain:
+    - License Key (for OTLP ingestion)
+    - Account credentials
 
-_This section is optional. You may wish to provide an estimate of how long each challenge should take for an average squad of students to complete and/or a proposal of how many challenges a coach should structure each session for a multi-session hack event. For example:_
+### GitHub Requirements
 
-- Sample Day 1
-  - Challenge 1 (1 hour)
-  - Challenge 2 (30 mins)
-  - Challenge 3 (2 hours)
-- Sample Day 2
-  - Challenge 4 (45 mins)
-  - Challenge 5 (1 hour)
-  - Challenge 6 (45 mins)
+- **GitHub Account** (free)
+  - Required for Codespaces
+  - Required for GitHub Models access (optional LLM provider)
+  - GitHub Copilot recommended (30-day free trial available)
+
+### Permissions Required
+
+- No special Azure permissions needed
+- Azure subscription with **owner** access
+- Students manage their own external service accounts
+
+### Cost Estimates
+
+- **Azure Subscription:** Test accounts will be available through educational programs and provided by the coach if needed
+- **New Relic:** Free tier sufficient for hack duration
+- **GitHub Codespaces:** Free tier (60 hours/month) sufficient
+- **OpenAI API:** $0.50-$2.00 per student for hack duration (if using OpenAI)
+- **GitHub Models:** Free tier available
+- **Total estimated cost per student:** $0-$2 (if using free tiers)
+
+## Suggested Hack Agenda
+
+This hack is designed to be completed in a single day with approximately 8 hours of active learning time (including breaks).
+
+### **Single Day Agenda (8 hours)**
+
+- **9:00 - 9:30** - Opening & Challenge 0 (Prerequisites)
+  - Ensure all participants have working Codespaces or local dev environments
+  - Verify GitHub Copilot is configured
+- **9:30 - 10:00** - Challenge 1 (Master the Foundations)
+  - Brief lecture on Microsoft Agent Framework concepts
+  - Quick knowledge check
+- **10:00 - 10:15** - Break
+- **10:15 - 11:45** - Challenge 2 (Build Your MVP)
+  - Hands-on: Build Flask app with AI travel planner agent
+  - Support participants who encounter issues
+- **11:45 - 12:30** - Lunch
+- **12:30 - 1:30** - Challenge 3 (Add OpenTelemetry)
+  - Brief lecture on observability concepts
+  - Hands-on instrumentation
+- **1:30 - 2:15** - Challenge 4 (New Relic Integration)
+  - Configure OTLP exporters
+  - View data in New Relic
+- **2:15 - 2:30** - Break
+- **2:30 - 3:30** - Challenge 5 (Monitoring Best Practices)
+  - Build custom dashboards
+  - Configure alerts
+- **3:30 - 4:30** - Challenge 6 (LLM Evaluation & Quality Gates)
+  - Implement custom events for New Relic AI Monitoring
+  - Build evaluation pipeline
+- **4:30 - 5:00** - Final presentations and wrap-up
+  - Teams demo complete solutions
+  - Q&A and next steps
+
+### **Flexible/Self-Paced Option**
+
+Participants can complete this hack at their own pace over 1-2 weeks, spending approximately:
+
+- Challenges 0-1: 1.5 hours
+- Challenge 2: 2-3 hours
+- Challenge 3: 2 hours
+- Challenge 4: 1 hour
+- Challenge 5: 1.5 hours
+- Challenge 6: 2.5 hours
 
 ## Repository Contents
 

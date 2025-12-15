@@ -136,7 +136,7 @@ logger = logging.getLogger(__name__)
 # ============================================================================
 # These are functions the agent can call to get information
 
-def get_selected_destination(destination: str) -> str:
+def get_random_destination(destination: str) -> str:
     """
     TODO: Implement this tool function
     
@@ -200,7 +200,7 @@ openai_chat_client = None
 # TODO: Create a ChatAgent with:
 # - chat_client: Your OpenAI client
 # - instructions: "You are a helpful AI Agent that can help plan vacations for customers."
-# - tools: A list of the three tool functions [get_selected_destination, get_weather, get_datetime]
+# - tools: A list of the three tool functions [get_random_destination, get_weather, get_datetime]
 
 agent = None
 
