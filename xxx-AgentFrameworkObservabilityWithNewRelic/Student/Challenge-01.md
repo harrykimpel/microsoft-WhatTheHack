@@ -48,7 +48,7 @@ In the next challenge, you will build your own Flask web app from scratch using 
 - How does the agent decide which tool to use?
 - What happens if a tool fails?
 
-### Part 4: Introduction to Observability (20 mins)
+### Part 3: Introduction to Observability (20 mins)
 
 **Read:**
 
