@@ -91,6 +91,12 @@ This hack walks you through building the platform layer by layer, adding observa
 
 - Your own Azure subscription with **owner** access. See considerations below for additional guidance.
 - A GitHub Enterprise account if using internal repositories, or a standard GitHub account if using public repositories.
+- Basic knowledge of Python and web development.
+- Familiarity with AI concepts and large language models (LLMs) is helpful but not required.
+
+## Estimated Time to Complete
+
+Approximately 3-5 hours, depending on your familiarity with the technologies involved.
 
 ## Contributors
 
