@@ -71,7 +71,7 @@ This hack walks you through building the platform layer by layer, adding observa
 ## Challenges
 
 - Challenge 00: **[Prerequisites - Ready, Set, GO!](Student/Challenge-00.md)**
-  - Prepare your environment in GitHub Codepspaces.
+  - Prepare your environment in GitHub Codespaces.
 - Challenge 01: **[Learn Concepts](Student/Challenge-01.md)**
   - Read & understand
 - Challenge 02: **[Build MVP](Student/Challenge-02.md)**

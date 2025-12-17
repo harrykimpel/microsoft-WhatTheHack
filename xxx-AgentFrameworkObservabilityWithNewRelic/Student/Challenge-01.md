@@ -1,77 +1,38 @@
-# 🌱 Challenge 1: Master the Foundations
+# Challenge 01 - Master the Foundations
 
 [< Previous Challenge](./Challenge-00.md) - **[Home](../README.md)** - [Next Challenge >](./Challenge-02.md)
 
-## 🎯 Objective
+## Introduction
 
-Understand how Microsoft Agent Framework works and the core concepts that will power WanderAI's AI agents.
+Before you start building WanderAI's AI agents, you need to understand the core concepts that power them. This challenge focuses on building your foundational knowledge of AI agents, the Microsoft Agent Framework, and observability concepts.
 
-By the end of this challenge, you should be able to:
+An AI agent is different from a simple LLM API call. While a direct API call just sends a prompt and receives a response, an agent can reason about problems, decide when to use external tools, and orchestrate multiple steps to accomplish complex tasks. Understanding this distinction is crucial for building effective AI-powered applications.
 
-- ✅ Explain what an AI agent is and how it differs from a simple LLM API call
-- ✅ Understand "tool calling" and why agents need tools
-- ✅ Describe the agent-tool lifecycle
-- ✅ Know what OpenTelemetry is and why observability matters for AI
-- ✅ Identify the key components of the complete solution
+In this challenge, you will study the Microsoft Agent Framework documentation and learn about tool calling, agent lifecycles, and why observability matters for AI systems.
 
----
+## Description
 
-## 📚 Learning Path
+Your goal is to gain a solid understanding of the following concepts:
 
-### Part 1: Understand AI Agents (30 mins)
+- **AI Agents vs. Simple LLM Calls** - Understand what differentiates an agent from a basic chat completion API call
+- **Tool Calling** - Learn why agents need tools and how they decide when to call them
+- **Agent-Tool Lifecycle** - Understand the flow from user request through agent reasoning to tool execution and response
+- **OpenTelemetry Basics** - Learn about traces, metrics, and logs and why they matter for AI systems
+- **Application Architecture** - Understand how a Flask web app integrates with the Microsoft Agent Framework
 
-**Read these resources:**
+### Key Concepts to Study
 
-1. [Microsoft Agent Framework GitHub](https://github.com/microsoft/agent-framework)
-2. [Agent Framework Documentation](https://learn.microsoft.com/en-us/agent-framework/overview/agent-framework-overview)
-3. [ChatAgent Concepts](https://learn.microsoft.com/en-us/agent-framework/tutorials/agents/run-agent?pivots=programming-language-python#create-the-agent-1)
+**AI Agents:**
 
-**Key Questions to Answer:**
-
-- What is a `ChatAgent`?
-- What does "tool calling" mean?
-- How does an agent decide when to call a tool vs. respond to the user?
+- What is a `ChatAgent` in the Microsoft Agent Framework?
+- How does an agent decide when to call a tool vs. respond directly to the user?
 - What's the relationship between instructions, tools, and responses?
 
-### Part 2: Agent Application Architecture (30 mins)
+**Observability:**
 
-In the next challenge, you will build your own Flask web app from scratch using the Microsoft Agent Framework. For now, focus on understanding the following concepts:
-
-- How a Flask app is structured (see [Flask Quickstart](https://flask.palletsprojects.com/en/3.0.x/quickstart/))
-- How agents are created and configured using the [Microsoft Agent Framework documentation](https://learn.microsoft.com/en-us/agent-framework/overview/agent-framework-overview)
-- What "tool calling" means and how tools are registered with an agent
-- The typical flow of a user request through a Flask route, agent logic, and response
-
-**Questions to consider:**
-
-- At what point can the agent call tools?
-- How does the agent decide which tool to use?
-- What happens if a tool fails?
-
-### Part 3: Introduction to Observability (20 mins)
-
-**Read:**
-
-- [OpenTelemetry Concepts](https://opentelemetry.io/docs/concepts/)
-- [Why Observability Matters](https://docs.newrelic.com/docs/using-new-relic/welcome-new-relic/get-started/introduction-new-relic/#observability)
-
-**Key Concepts:**
-
-**Traces** = A record of all the work done to fulfill a user request
-
-- Shows the full journey from request to response
-- Includes every step, tool call, and decision
-- Example: "User asked for travel plan → agent decided → called get_weather → tool returned → agent formatted response"
-
-**Metrics** = Measurements over time (numbers that change)
-
-- Example: "Average response time was 2.5 seconds"
-- Example: "3 requests per second"
-
-**Logs** = Text records of events
-
-- Example: "Tool get_weather() called for Barcelona"
-- Example: "Error: API returned 500 status"
+- **Traces** - A record of all the work done to fulfill a user request, showing the full journey from request to response
+- **Metrics** - Measurements over time (e.g., average response time, requests per second)
+- **Logs** - Text records of events (e.g., "Tool get_weather() called for Barcelona")
 
 **Why AI agents need observability:**
 
@@ -80,81 +41,38 @@ In the next challenge, you will build your own Flask web app from scratch using 
 - Latency can come from multiple sources (LLM, tools, network)
 - Debugging production AI failures requires understanding the full trace
 
----
-
-## 📝 Knowledge Check
+### Knowledge Check Questions
 
 Answer these questions to validate your learning:
 
-### Question 1: Agent vs. Simple LLM
+- What's the difference between calling an LLM API directly vs. using an agent?
+- Why does an agent need tools like `get_weather()`?
+- Why can't you just use print() statements to debug an AI agent in production?
+- Describe the basic architecture of an agent-powered Flask app
 
-**What's the difference between calling an LLM API directly vs. using an agent?**
+## Success Criteria
 
-*Hint: Think about who decides when to call tools.*
+To complete this challenge successfully, you should be able to:
 
-### Question 2: Tool Calling
+- Demonstrate your understanding of what an AI agent is and how it differs from a simple LLM API call
+- Explain what tool calling means and why agents need tools
+- Describe the agent-tool lifecycle
+- Explain what OpenTelemetry is and why observability matters for AI
+- Identify the key components of the complete solution architecture
 
-**Why does an agent need tools like `get_weather()`?**
+## Learning Resources
 
-*Hint: What information does the LLM model have access to?*
+- [Microsoft Agent Framework GitHub](https://github.com/microsoft/agent-framework)
+- [Agent Framework Documentation](https://learn.microsoft.com/en-us/agent-framework/overview/agent-framework-overview)
+- [ChatAgent Concepts](https://learn.microsoft.com/en-us/agent-framework/tutorials/agents/run-agent?pivots=programming-language-python#create-the-agent-1)
+- [Flask Quickstart](https://flask.palletsprojects.com/en/3.0.x/quickstart/)
+- [OpenTelemetry Concepts](https://opentelemetry.io/docs/concepts/)
+- [Why Observability Matters](https://docs.newrelic.com/docs/using-new-relic/welcome-new-relic/get-started/introduction-new-relic/#observability)
 
-### Question 3: Observability Value
+## Tips
 
-**Why can't you just use print() statements to debug an AI agent in production?**
-
-*Hint: Think about multiple concurrent requests.*
-
-### Question 4: Application Architecture
-
-**Describe the basic architecture of an agent-powered Flask app:**
-
-- The Flask application setup
-- The tool functions
-- The agent creation
-- The main request handler
-
-*Draw a simple diagram of how requests flow through the system, based on your understanding from the docs.*
-
-### Question 5: Observability Layers
-
-**Match each concept to its use case:**
-
-| Concept | Use Case |
-|---------|----------|
-| Traces | Understanding every decision an agent made |
-| Metrics | Detecting when response times slow down |
-| Logs | Finding the exact line of code that failed |
-
----
-
-## 🎬 What's Next?
-
-Once you've studied the concepts and answered the knowledge check questions:
-
-1. **Challenge 2** - You'll build your first agent application from scratch
-2. You'll create a Flask web app that serves travel plans
-3. You'll implement the same tools but understand them deeply
-
----
-
-## 💡 Tips
-
-- 📖 Don't skip reading the docs—they answer most questions
-- 🤔 Ask "why?" for every design decision you see
-- 📝 Take notes on concepts you find unclear
-- 💬 Ask mentors for clarification on tricky parts
-
----
-
-## ✅ Challenge Complete When
-
-You can answer all the knowledge check questions and explain:
-
-1. How Microsoft Agent Framework works
-2. What tool calling is and why it matters
-3. Why observability is critical for AI systems
-4. The overall architecture of an agent-powered Flask app
-
-**No code to write yet—this is learning!** 🧠
-
-Move to Challenge 2 when you're ready to start building! 🚀
+- Don't skip reading the docs—they answer most questions
+- Ask "why?" for every design decision you see
+- Take notes on concepts you find unclear
+- Ask coaches for clarification on tricky parts
+- This is a learning challenge—no code to write yet!
