@@ -17,8 +17,16 @@ Your goal is to implement a comprehensive evaluation and quality assurance syste
 The foundation of enterprise AI evaluation is capturing AI interactions as structured events. New Relic's AI Monitoring uses a special attribute `newrelic.event.type` that automatically populates:
 
 - **Model Inventory** - Track every LLM and version used
+    [New Relic Model Inventory](https://docs.newrelic.com/docs/ai-monitoring/explore-ai-data/view-model-data/#model-inventory)
+    ![Model Inventory Screenshot](../Images/newrelic-ai-monitoring-model-inventory.png)
 - **Model Comparison** - Compare quality across models
+    [New Relic Model Comparison](https://docs.newrelic.com/docs/ai-monitoring/explore-ai-data/compare-model-performance/)
+    ![Model Comparison Screenshot](../Images/newrelic-ai-monitoring-model-comparison.png)
 - **Quality Evaluation** - Detect issues like toxicity and safety concerns
+    [New Relic LLM Evaluation](https://docs.newrelic.com/docs/ai-monitoring/explore-ai-data/view-model-data/#llm-evaluation)
+    ![LLM Evaluation Screenshot](../Images/newrelic-ai-monitoring-llm-evaluation.png)
+
+    ![LLM Evaluation Settings Screenshot](../Images/newrelic-ai-monitoring-llm-evaluation-settings.png)
 - **Insights Dashboards** - See AI behavior and trends
 
 You need to emit three custom events after each LLM interaction:
@@ -40,8 +48,6 @@ Implement deterministic checks against business rules:
 
 Use another LLM to evaluate responses for:
 
-- **Toxicity** - Offensive, rude, or harmful language
-- **Negativity** - Unnecessarily negative tone
 - **Safety** - Recommendations should avoid dangerous conditions
 - **Accuracy** - Plausible destinations and activities
 - **Completeness** - Addresses all user requirements
@@ -61,6 +67,9 @@ Once you emit the custom events, you can access New Relic's curated AI Monitorin
 - **Model Inventory** - See all models used, versions, vendors
 - **Model Comparison** - Compare performance across models
 - **LLM Evaluation** - See toxicity, negativity, and quality issues detected automatically
+
+**Hint**: You may need to pin the "AI Monitoring" section in New Relic's sidebar via "All capabilities" to see it.
+![AI Monitoring Sidebar Screenshot](../Images/newrelic-ai-monitoring.png)
 
 ## Success Criteria
 
