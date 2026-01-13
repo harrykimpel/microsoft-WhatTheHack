@@ -1,6 +1,6 @@
 param accounts_foundry_gameday_name string = 'foundry-gameday'
 param monitors_NewRelicResource_GameDay_name string = 'NewRelicResource-GameDay'
-param resources_AzureNativeNewRelic_externalid string = '/subscriptions/0d71791f-11d8-4b5f-b2af-d0846a507cd3/resourceGroups/newrelic-gameday/providers/Microsoft.SaaS/resources/AzureNativeNewRelic'
+param resources_AzureNativeNewRelic_externalid string = '/subscriptions/${subscription().subscriptionId}/resourceGroups/newrelic-gameday/providers/Microsoft.SaaS/resources/AzureNativeNewRelic'
 
 resource accounts_foundry_gameday_name_resource 'Microsoft.CognitiveServices/accounts@2025-06-01' = {
   name: accounts_foundry_gameday_name
@@ -43,7 +43,7 @@ resource monitors_NewRelicResource_GameDay_name_resource 'NewRelic.Observability
         accountId: '7585826'
       }
       organizationInfo: {
-        organizationId: '96cecd0c-9137-4a5c-a7b9-5bda3d1a153f'
+        organizationId: '${organization().organizationId}'
       }
     }
     userInfo: {
