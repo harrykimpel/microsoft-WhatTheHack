@@ -2,15 +2,10 @@
 
 # Include functions
 source ./functions.sh
+
 # Default values
 LOCATION="East US 2"
-DOCUMENT_INTELLIGENCE_LOCATION="East US"
-OPENAI_LOCATION="East US 2"
 RESOURCE_GROUP_NAME="newrelic-gameday-wth"
-MODEL_NAME="gpt-5-mini"
-MODEL_VERSION="2025-08-07"
-# EMBEDDING_MODEL="text-embedding-ada-002"
-# EMBEDDING_MODEL_VERSION="2"
 
 # Parse arguments
 while [[ "$#" -gt 0 ]]; do
@@ -22,14 +17,8 @@ while [[ "$#" -gt 0 ]]; do
         --use-service-principal) USE_SERVICE_PRINCIPAL=true ;;
         --service-principal-id) SERVICE_PRINCIPAL_ID="$2"; shift ;;
         --service-principal-password) SERVICE_PRINCIPAL_PASSWORD="$2"; shift ;;
-        --openai-location) OPENAI_LOCATION="$2"; shift ;;
-        --document-intelligence-location) DOCUMENT_INTELLIGENCE_LOCATION="$2"; shift ;;
         --skip-local-settings-file) SKIP_LOCAL_SETTINGS_FILE=true; shift ;;
         --silent-install) SILENT_INSTALL=true; shift ;;
-        --model-name) MODEL_NAME="$2"; shift ;;
-        --model-version) MODEL_VERSION="$2"; shift ;;
-        # --embedding-model) EMBEDDING_MODEL="$2"; shift ;;
-        # --embedding-model-version) EMBEDDING_MODEL_VERSION="$2"; shift ;;
         *) error_exit "Unknown parameter passed: $1" ;;
     esac
     shift
@@ -59,12 +48,6 @@ if [[ "$SILENT_INSTALL" == false ]]; then
     echo -e "\t    SubscriptionId: \e[33m$SUBSCRIPTION_ID\e[0m"
     echo -e "\t    Resource Group: \e[33m$RESOURCE_GROUP_NAME\e[0m"
     echo -e "\t            Region: \e[33m$LOCATION\e[0m"
-    echo -e "\t   OpenAI Location: \e[33m$OPENAI_LOCATION\e[0m"
-    echo -e "\t Azure DI Location: \e[33m$DOCUMENT_INTELLIGENCE_LOCATION\e[0m"
-    echo -e "\t   Model Name: \e[33m$MODEL_NAME\e[0m"
-    echo -e "\tModel Version: \e[33m$MODEL_VERSION\e[0m"
-    echo -e "\tEmbedding Model: \e[33m$EMBEDDING_MODEL\e[0m"
-    echo -e "\tEmbedding Model Version: \e[33m$EMBEDDING_MODEL_VERSION\e[0m"
     echo -e "\e[31mIf any parameter is incorrect, abort this script, correct, and try again.\e[0m"
     echo -e "It will take around \e[32m15 minutes\e[0m to deploy all resources. You can monitor the progress from the deployments page in the resource group in Azure Portal.\n"
 
@@ -80,10 +63,24 @@ start=$(date +%s)
 echo -e "\n- Creating resource group: "
 az group create --name "$RESOURCE_GROUP_NAME" --location "$LOCATION" || error_exit "Failed to create resource group."
 
+# Install New Relic extension
+echo -e "\n- Installing New Relic extension: "
+az config set extension.use_dynamic_install=yes_without_prompt
+
+az extension add --name "new-relic" || echo "New Relic extension already installed."
+
+# Create New Relic monitor
+echo -e "\n- Creating New Relic monitor: "
+az new-relic monitor create --resource-group "gameday-test" --name "MyNewRelicMonitor" --location "East US" \
+    --user-info first-name="Harry" last-name="Kimpel" email-address="harry@kimpel.com" phone-number="+49 8841-6726777" \
+    --plan-data billing-cycle="MONTHLY" effective-date='2026-1-13T08:00:00+02:00' plan-details="newrelic-pay-as-you-go-free-live@TIDn7ja87drquhy@PUBIDnewrelicinc1635200720692.newrelic_liftr_payg_2025" usage-type="PAYG" \
+    --account-creation-source "LIFTR" --org-creation-source "LIFTR" 
+    || error_exit "Failed to create New Relic monitor."
+
 # Deploy resources
 echo -e "\n- Deploying resources: "
 result=$(az deployment group create --resource-group "$RESOURCE_GROUP_NAME" --template-file ./main.bicep \
-    --parameters openAILocation="$OPENAI_LOCATION" documentIntelligenceLocation="$DOCUMENT_INTELLIGENCE_LOCATION" modelName="$MODEL_NAME" modelVersion="$MODEL_VERSION") || error_exit "Azure deployment failed."
+    ) || error_exit "Azure deployment failed."
 
 # Deployment completed
 end=$(date +%s)
