@@ -67,7 +67,7 @@ A starter code file `web_app.py` with TODO comments is provided in the Resources
 To complete this challenge successfully, you should be able to:
 
 - Verify that the Flask app runs without errors
-- Demonstrate that the web form loads at `http://localhost:5000`
+- Demonstrate that the web form loads at `http://localhost:5002`
 - Submit a travel request through the form
 - Verify that the AI agent returns a formatted travel plan
 - Show that the plan includes information from your tool functions (weather, date/time)

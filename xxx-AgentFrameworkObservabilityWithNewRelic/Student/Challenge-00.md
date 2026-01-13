@@ -11,7 +11,9 @@ Thank you for participating in the WanderAI: Your Travel Planning Startup What T
 We have compiled a list of common tools and software that will come in handy to complete this hack!
 
 - [Visual Studio Code](../../000-HowToHack/WTH-Common-Prerequisites.md#visual-studio-code)
-- [GitHub Account](https://github.com/signup) - Required for GitHub Codespaces and GitHub Models
+- [GitHub Account](https://github.com/signup) - Required for GitHub Codespaces
+- [Microsoft Foundry Account](https://foundry.microsoft.com/) - Required for Azure OpenAI access
+- [Azure Native New Relic Service](https://learn.microsoft.com/en-us/azure/marketplace/new-relic-azure-monitoring/overview) - Required for New Relic Observability
 
 ## Description
 
@@ -68,10 +70,6 @@ On Windows and macOS (**NOTE:** only tested on Apple Silicon):
 - (Windows only) Install the Windows Subsystem for Linux along with a Linux distribution such as Ubuntu
 - Open the root folder of the Student resource package in Visual Studio Code
 - You should get prompted to re-open the folder in a Dev Container. You can do that by clicking the Yes button, but if you miss it or hit no, you can also use the Command Palette in VS Code and select `Dev Containers: Reopen in Container`
-
-#### Set Up GitHub Copilot
-
-For parts of this hack we will be relying heavily on GitHub Copilot for coding. Please set up [VS Code with GitHub Copilot](https://code.visualstudio.com/docs/copilot/setup-simplified?wt.md_id=AZ-MVP-5004796)
 
 </details>
 

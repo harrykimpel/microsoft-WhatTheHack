@@ -64,7 +64,7 @@ The [Example solution implementation](./Solutions/Challenge-02/) folder contains
 **Solution:**
 
 - Change port: `app.run(port=5001)` or use different port
-- Kill existing process: `lsof -i :5000` then `kill -9 <PID>`
+- Kill existing process: `lsof -i :5002` then `kill -9 <PID>`
 - Ensure `if __name__ == "__main__":` block is present
 - Check for syntax errors with `python -m py_compile web_app.py`
 
