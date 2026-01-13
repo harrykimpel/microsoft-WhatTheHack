@@ -6,11 +6,12 @@ source ./functions.sh
 LOCATION="East US 2"
 DOCUMENT_INTELLIGENCE_LOCATION="East US"
 OPENAI_LOCATION="East US 2"
-RESOURCE_GROUP_NAME="openai-apps-wth"
-MODEL_NAME="gpt-4o"
-MODEL_VERSION="2024-11-20"
-EMBEDDING_MODEL="text-embedding-ada-002"
-EMBEDDING_MODEL_VERSION="2"
+RESOURCE_GROUP_NAME="newrelic-gameday-wth"
+MODEL_NAME="gpt-5-mini"
+MODEL_VERSION="2025-08-07"
+# EMBEDDING_MODEL="text-embedding-ada-002"
+# EMBEDDING_MODEL_VERSION="2"
+
 # Parse arguments
 while [[ "$#" -gt 0 ]]; do
     case $1 in
@@ -27,8 +28,8 @@ while [[ "$#" -gt 0 ]]; do
         --silent-install) SILENT_INSTALL=true; shift ;;
         --model-name) MODEL_NAME="$2"; shift ;;
         --model-version) MODEL_VERSION="$2"; shift ;;
-        --embedding-model) EMBEDDING_MODEL="$2"; shift ;;
-        --embedding-model-version) EMBEDDING_MODEL_VERSION="$2"; shift ;;
+        # --embedding-model) EMBEDDING_MODEL="$2"; shift ;;
+        # --embedding-model-version) EMBEDDING_MODEL_VERSION="$2"; shift ;;
         *) error_exit "Unknown parameter passed: $1" ;;
     esac
     shift
@@ -39,8 +40,8 @@ done
 #     error_exit "Bicep CLI not found. Install it using 'az bicep install'."
 # fi
 
-echo -e "\n\t\t\e[32mWHAT THE HACK - AZURE OPENAI APPS\e[0m"
-echo -e "\tcreated with love by the Americas GPS Tech Team!\n"
+echo -e "\n\t\t\e[32mWHAT THE HACK - NEW RELIC GAMEDAY\e[0m"
+echo -e "\tcreated with love by the New Relic DevRel Team!\n"
 
 if [[ "$SILENT_INSTALL" == false ]]; then
     # Validate mandatory parameters, if required
@@ -82,67 +83,8 @@ az group create --name "$RESOURCE_GROUP_NAME" --location "$LOCATION" || error_ex
 # Deploy resources
 echo -e "\n- Deploying resources: "
 result=$(az deployment group create --resource-group "$RESOURCE_GROUP_NAME" --template-file ./main.bicep \
-    --parameters openAILocation="$OPENAI_LOCATION" documentIntelligenceLocation="$DOCUMENT_INTELLIGENCE_LOCATION" modelName="$MODEL_NAME" modelVersion="$MODEL_VERSION" embeddingModel="$EMBEDDING_MODEL" embeddingModelVersion="$EMBEDDING_MODEL_VERSION") || error_exit "Azure deployment failed."
+    --parameters openAILocation="$OPENAI_LOCATION" documentIntelligenceLocation="$DOCUMENT_INTELLIGENCE_LOCATION" modelName="$MODEL_NAME" modelVersion="$MODEL_VERSION") || error_exit "Azure deployment failed."
 
-# Extract outputs
-outputs=$(echo "$result" | jq -r '.properties.outputs')
-#echo $outputs
-if [[ "$SKIP_LOCAL_SETTINGS_FILE" == true ]]; then
-    echo -e "\n- Skipping local settings file generation."
-else
-    # Generate local settings file
-    echo -e "\n- Generating local settings file:"
-    generate_local_settings_file
-fi
-
-
-
-# Copy files to Azure Storage
-echo -e "\n- Copying files:"
-storage_connection=$(echo "$outputs" | jq -r '.storageConnectionString.value')
-COSMOS_DB_ACCOUNT=$(echo "$outputs" | jq -r '.cosmosDBAccount.value')
-STORAGE_ACCOUNT=$(echo "$outputs" | jq -r '.name.value')
-AZURE_AI_SEARCH=$(echo "$outputs" | jq -r '.searchName.value')
-
-#Workaround for FDPO MSFT internal subscriptions. 
-
-az storage account update -g $RESOURCE_GROUP_NAME --name $STORAGE_ACCOUNT  --allow-shared-key-access true
- 
-az storage account update \
-  --name ${STORAGE_ACCOUNT} \
-  --resource-group $RESOURCE_GROUP_NAME \
-  --public-network-access Enabled \
-  --default-action Allow
-
-  # Enable Public Network Access
-az cosmosdb update -g $RESOURCE_GROUP_NAME --name $COSMOS_DB_ACCOUNT --public-network-access Enabled 
-
-# Enable Local Authentication with Keys
-az resource update -g $RESOURCE_GROUP_NAME --name $COSMOS_DB_ACCOUNT --resource-type "Microsoft.DocumentDB/databaseAccounts" --set properties.disableLocalAuth=false
-
-az search service update --name $AZURE_AI_SEARCH --resource-group $RESOURCE_GROUP_NAME --public-access enabled --disable-local-auth false
-cosmosdb=$(az cosmosdb show --name $COSMOS_DB_ACCOUNT --resource-group $RESOURCE_GROUP_NAME | jq -r '.id')
-az resource update --ids $cosmosdb --set properties.disableLocalAuth=false --latest-include-preview
-
-#End workaround
-
-
-# Declare an associative array
-declare -A hashtable
-
-# Add key-value pairs to the hashtable
-hashtable["../data/contoso-education/F01-Civics-Geography and Climate/"]="f01-geography-climate"
-hashtable["../data/contoso-education/F02-Civics-Tourism and Economy/"]="f02-tour-economy"
-hashtable["../data/contoso-education/F03-Civics-Government and Politics/"]="f03-government-politics"
-hashtable["../data/contoso-education/F04-Activity-Preferences/"]="f04-activity-preferences"
-
-# Iterate over the hashtable
-for sourceDir in "${!hashtable[@]}"; do
-    az storage blob upload-batch --overwrite --source "$sourceDir" --destination "classifications" --connection-string "$storage_connection" || error_exit "Failed to upload files."
-    az storage blob upload-batch --overwrite --source "$sourceDir" --destination "${hashtable[$sourceDir]}" --connection-string "$storage_connection" || error_exit "Failed to upload files."
-done
-
-
-
+# Deployment completed
 end=$(date +%s)
 echo -e "\nThe deployment took: $((end - start)) seconds."
