@@ -6,6 +6,7 @@ source ./functions.sh
 # Default values
 LOCATION="East US 2"
 RESOURCE_GROUP_NAME="newrelic-gameday-wth"
+NEW_RELIC_MONITOR_NAME="newrelic-gameday-monitor"
 
 # Parse arguments
 while [[ "$#" -gt 0 ]]; do
@@ -71,8 +72,8 @@ az extension add --name "new-relic" || echo "New Relic extension already install
 
 # Create New Relic monitor
 echo -e "\n- Creating New Relic monitor: "
-az new-relic monitor create --resource-group "gameday-test" --name "MyNewRelicMonitor" --location "East US" \
-    --user-info first-name="Harry" last-name="Kimpel" email-address="harry@kimpel.com" phone-number="+49 8841-6726777" \
+az new-relic monitor create --resource-group "$RESOURCE_GROUP_NAME" --name "$NEW_RELIC_MONITOR_NAME" --location "$LOCATION" \
+    --user-info first-name="Firstname" last-name="Lastname" email-address="gameday@example.com" phone-number="+1 800 123456789" \
     --plan-data billing-cycle="MONTHLY" effective-date='2026-1-13T08:00:00+02:00' plan-details="newrelic-pay-as-you-go-free-live@TIDn7ja87drquhy@PUBIDnewrelicinc1635200720692.newrelic_liftr_payg_2025" usage-type="PAYG" \
     --account-creation-source "LIFTR" --org-creation-source "LIFTR" 
     || error_exit "Failed to create New Relic monitor."
