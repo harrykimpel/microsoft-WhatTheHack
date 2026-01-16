@@ -4,9 +4,13 @@
 source ./functions.sh
 
 # Default values
-LOCATION="East US 2"
+LOCATION="East US"
 RESOURCE_GROUP_NAME="newrelic-gameday-wth"
 NEW_RELIC_MONITOR_NAME="newrelic-gameday-monitor"
+NEW_RELIC_MONITOR_USER_FIRST_NAME="Firstname"
+NEW_RELIC_MONITOR_USER_LAST_NAME="Lastname"
+NEW_RELIC_MONITOR_USER_EMAIL_ADDRESS="gameday@example.com"
+NEW_RELIC_MONITOR_USER_PHONE_NUMBER="+1 800 123456789"
 
 # Parse arguments
 while [[ "$#" -gt 0 ]]; do
@@ -18,6 +22,10 @@ while [[ "$#" -gt 0 ]]; do
         --use-service-principal) USE_SERVICE_PRINCIPAL=true ;;
         --service-principal-id) SERVICE_PRINCIPAL_ID="$2"; shift ;;
         --service-principal-password) SERVICE_PRINCIPAL_PASSWORD="$2"; shift ;;
+        --new-relic-monitor-user-first-name) NEW_RELIC_MONITOR_USER_FIRST_NAME="$2"; shift ;;
+        --new-relic-monitor-user-last-name) NEW_RELIC_MONITOR_USER_LAST_NAME="$2"; shift ;;
+        --new-relic-monitor-user-email-address) NEW_RELIC_MONITOR_USER_EMAIL_ADDRESS="$2"; shift ;;
+        --new-relic-monitor-user-phone-number) NEW_RELIC_MONITOR_USER_PHONE_NUMBER="$2"; shift ;;
         --skip-local-settings-file) SKIP_LOCAL_SETTINGS_FILE=true; shift ;;
         --silent-install) SILENT_INSTALL=true; shift ;;
         *) error_exit "Unknown parameter passed: $1" ;;
@@ -72,16 +80,27 @@ az extension add --name "new-relic" || echo "New Relic extension already install
 
 # Create New Relic monitor
 echo -e "\n- Creating New Relic monitor: "
-az new-relic monitor create --resource-group "$RESOURCE_GROUP_NAME" --name "$NEW_RELIC_MONITOR_NAME" --location "$LOCATION" \
-    --user-info first-name="Firstname" last-name="Lastname" email-address="gameday@example.com" phone-number="+1 800 123456789" \
+result=$(az new-relic monitor create --resource-group "$RESOURCE_GROUP_NAME" --name "$NEW_RELIC_MONITOR_NAME" --location "$LOCATION" \
+    --user-info first-name="$NEW_RELIC_MONITOR_USER_FIRST_NAME" last-name="$NEW_RELIC_MONITOR_USER_LAST_NAME" email-address="$NEW_RELIC_MONITOR_USER_EMAIL_ADDRESS" phone-number="$NEW_RELIC_MONITOR_USER_PHONE_NUMBER" \
     --plan-data billing-cycle="MONTHLY" effective-date='2026-1-13T08:00:00+02:00' plan-details="newrelic-pay-as-you-go-free-live@TIDn7ja87drquhy@PUBIDnewrelicinc1635200720692.newrelic_liftr_payg_2025" usage-type="PAYG" \
-    --account-creation-source "LIFTR" --org-creation-source "LIFTR" 
-    || error_exit "Failed to create New Relic monitor."
+    --account-creation-source "LIFTR" --org-creation-source "LIFTR"  --identity type=SystemAssigned
+    ) || error_exit "Failed to create New Relic monitor."
+
+# Extract outputs
+outputs=$(echo "$result" | jq -r '.newRelicAccountProperties')
+
+NEW_RELIC_ACCOUNT_ID=$(echo "$outputs" | jq -r '.accountInfo.accountId')
+NEW_RELIC_ORGANIZATION_ID=$(echo "$outputs" | jq -r '.organizationInfo.organizationId')
+
+# Display New Relic account details
+echo -e "\n- New Relic Monitor created successfully!"
+echo -e "\tNew Relic Account ID: \e[33m$NEW_RELIC_ACCOUNT_ID\e[0m"
+echo -e "\tNew Relic Organization ID: \e[33m$NEW_RELIC_ORGANIZATION_ID\e[0m"
 
 # Deploy resources
 echo -e "\n- Deploying resources: "
 result=$(az deployment group create --resource-group "$RESOURCE_GROUP_NAME" --template-file ./main.bicep \
-    ) || error_exit "Azure deployment failed."
+    --parameters newRelicAccountId="$NEW_RELIC_ACCOUNT_ID" newRelicOrganizationId="$NEW_RELIC_ORGANIZATION_ID" ) || error_exit "Azure deployment failed."
 
 # Deployment completed
 end=$(date +%s)

@@ -3,11 +3,14 @@ param monitors_NewRelicResource_GameDay_name string = 'NewRelicResource-GameDay'
 
 var location = resourceGroup().location
 
+param newRelicAccountId string
+param newRelicOrganizationId string
+
 module openai 'modules/foundry.bicep' = {
   name: 'foundryDeployment'
   params: {
     location: location
-    name: 'foundry-gameday-${suffix}'
+    name: 'foundry-gameday-wth-12346-${suffix}'
   }
 }
 
@@ -16,5 +19,7 @@ module newrelic 'modules/newrelic.bicep' = {
   params: {
     location: location
     name: '${monitors_NewRelicResource_GameDay_name}-${suffix}'
+    newRelicAccountId: newRelicAccountId
+    newRelicOrganizationId: newRelicOrganizationId
   }
 }

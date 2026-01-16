@@ -1,5 +1,3 @@
-param accounts_foundry_gameday_name string = 'foundry-gameday'
-
 @description('The name of the Microsoft Foundry.')
 param name string
 
@@ -18,27 +16,42 @@ resource accounts_foundry_gameday_name_resource 'Microsoft.CognitiveServices/acc
   }
   properties: {
     apiProperties: {}
-    customSubDomainName: accounts_foundry_gameday_name
+    customSubDomainName: name
     networkAcls: {
       defaultAction: 'Allow'
       virtualNetworkRules: []
       ipRules: []
     }
     allowProjectManagement: true
-    defaultProject: 'project-gameday'
+    defaultProject: 'gameday-project'
     associatedProjects: [
-      'project-gameday'
+      'gameday-project'
     ]
     publicNetworkAccess: 'Enabled'
   }
 }
-resource accounts_foundry_gameday_name_Default 'Microsoft.CognitiveServices/accounts/defenderForAISettings@2025-06-01' = {
+
+resource accounts_foundry_gameday_name_project_gameday 'Microsoft.CognitiveServices/accounts/projects@2025-06-01' = {
   parent: accounts_foundry_gameday_name_resource
-  name: 'Default'
+  name: 'gameday-project'
+  location: 'eastus'
+  //kind: 'AIServices'
+  identity: {
+    type: 'SystemAssigned'
+  }
   properties: {
-    state: 'Disabled'
+    description: 'Default project created with the resource'
+    displayName: 'gameday-project'
   }
 }
+
+// resource accounts_foundry_gameday_name_Default 'Microsoft.CognitiveServices/accounts/defenderForAISettings@2025-06-01' = {
+//   parent: accounts_foundry_gameday_name_resource
+//   name: 'Default'
+//   properties: {
+//     state: 'Disabled'
+//   }
+// }
 
 // resource accounts_foundry_gameday_name_gpt_4_1_nano 'Microsoft.CognitiveServices/accounts/deployments@2025-06-01' = {
 //   parent: accounts_foundry_gameday_name_resource
@@ -154,169 +167,155 @@ resource accounts_foundry_gameday_name_gpt_5_mini 'Microsoft.CognitiveServices/a
 //   }
 // }
 
-resource accounts_foundry_gameday_name_project_gameday 'Microsoft.CognitiveServices/accounts/projects@2025-06-01' = {
-  parent: accounts_foundry_gameday_name_resource
-  name: 'project-gameday'
-  location: 'eastus'
-  kind: 'AIServices'
-  identity: {
-    type: 'SystemAssigned'
-  }
-  properties: {
-    description: 'Default project created with the resource'
-    displayName: 'project-gameday'
-  }
-}
+// resource accounts_foundry_gameday_name_Microsoft_Default 'Microsoft.CognitiveServices/accounts/raiPolicies@2025-06-01' = {
+//   parent: accounts_foundry_gameday_name_resource
+//   name: 'Microsoft.Default'
+//   properties: {
+//     mode: 'Blocking'
+//     contentFilters: [
+//       {
+//         name: 'Hate'
+//         severityThreshold: 'Medium'
+//         blocking: true
+//         enabled: true
+//         source: 'Prompt'
+//       }
+//       {
+//         name: 'Hate'
+//         severityThreshold: 'Medium'
+//         blocking: true
+//         enabled: true
+//         source: 'Completion'
+//       }
+//       {
+//         name: 'Sexual'
+//         severityThreshold: 'Medium'
+//         blocking: true
+//         enabled: true
+//         source: 'Prompt'
+//       }
+//       {
+//         name: 'Sexual'
+//         severityThreshold: 'Medium'
+//         blocking: true
+//         enabled: true
+//         source: 'Completion'
+//       }
+//       {
+//         name: 'Violence'
+//         severityThreshold: 'Medium'
+//         blocking: true
+//         enabled: true
+//         source: 'Prompt'
+//       }
+//       {
+//         name: 'Violence'
+//         severityThreshold: 'Medium'
+//         blocking: true
+//         enabled: true
+//         source: 'Completion'
+//       }
+//       {
+//         name: 'Selfharm'
+//         severityThreshold: 'Medium'
+//         blocking: true
+//         enabled: true
+//         source: 'Prompt'
+//       }
+//       {
+//         name: 'Selfharm'
+//         severityThreshold: 'Medium'
+//         blocking: true
+//         enabled: true
+//         source: 'Completion'
+//       }
+//     ]
+//   }
+// }
 
-resource accounts_foundry_gameday_name_Microsoft_Default 'Microsoft.CognitiveServices/accounts/raiPolicies@2025-06-01' = {
-  parent: accounts_foundry_gameday_name_resource
-  name: 'Microsoft.Default'
-  properties: {
-    mode: 'Blocking'
-    contentFilters: [
-      {
-        name: 'Hate'
-        severityThreshold: 'Medium'
-        blocking: true
-        enabled: true
-        source: 'Prompt'
-      }
-      {
-        name: 'Hate'
-        severityThreshold: 'Medium'
-        blocking: true
-        enabled: true
-        source: 'Completion'
-      }
-      {
-        name: 'Sexual'
-        severityThreshold: 'Medium'
-        blocking: true
-        enabled: true
-        source: 'Prompt'
-      }
-      {
-        name: 'Sexual'
-        severityThreshold: 'Medium'
-        blocking: true
-        enabled: true
-        source: 'Completion'
-      }
-      {
-        name: 'Violence'
-        severityThreshold: 'Medium'
-        blocking: true
-        enabled: true
-        source: 'Prompt'
-      }
-      {
-        name: 'Violence'
-        severityThreshold: 'Medium'
-        blocking: true
-        enabled: true
-        source: 'Completion'
-      }
-      {
-        name: 'Selfharm'
-        severityThreshold: 'Medium'
-        blocking: true
-        enabled: true
-        source: 'Prompt'
-      }
-      {
-        name: 'Selfharm'
-        severityThreshold: 'Medium'
-        blocking: true
-        enabled: true
-        source: 'Completion'
-      }
-    ]
-  }
-}
-
-resource accounts_foundry_gameday_name_Microsoft_DefaultV2 'Microsoft.CognitiveServices/accounts/raiPolicies@2025-06-01' = {
-  parent: accounts_foundry_gameday_name_resource
-  name: 'Microsoft.DefaultV2'
-  properties: {
-    mode: 'Blocking'
-    contentFilters: [
-      {
-        name: 'Hate'
-        severityThreshold: 'Medium'
-        blocking: true
-        enabled: true
-        source: 'Prompt'
-      }
-      {
-        name: 'Hate'
-        severityThreshold: 'Medium'
-        blocking: true
-        enabled: true
-        source: 'Completion'
-      }
-      {
-        name: 'Sexual'
-        severityThreshold: 'Medium'
-        blocking: true
-        enabled: true
-        source: 'Prompt'
-      }
-      {
-        name: 'Sexual'
-        severityThreshold: 'Medium'
-        blocking: true
-        enabled: true
-        source: 'Completion'
-      }
-      {
-        name: 'Violence'
-        severityThreshold: 'Medium'
-        blocking: true
-        enabled: true
-        source: 'Prompt'
-      }
-      {
-        name: 'Violence'
-        severityThreshold: 'Medium'
-        blocking: true
-        enabled: true
-        source: 'Completion'
-      }
-      {
-        name: 'Selfharm'
-        severityThreshold: 'Medium'
-        blocking: true
-        enabled: true
-        source: 'Prompt'
-      }
-      {
-        name: 'Selfharm'
-        severityThreshold: 'Medium'
-        blocking: true
-        enabled: true
-        source: 'Completion'
-      }
-      {
-        name: 'Jailbreak'
-        blocking: true
-        enabled: true
-        source: 'Prompt'
-      }
-      {
-        name: 'Protected Material Text'
-        blocking: true
-        enabled: true
-        source: 'Completion'
-      }
-      {
-        name: 'Protected Material Code'
-        blocking: false
-        enabled: true
-        source: 'Completion'
-      }
-    ]
-  }
-}
+// resource accounts_foundry_gameday_name_Microsoft_DefaultV2 'Microsoft.CognitiveServices/accounts/raiPolicies@2025-06-01' = {
+//   parent: accounts_foundry_gameday_name_resource
+//   name: 'Microsoft.DefaultV2'
+//   properties: {
+//     mode: 'Blocking'
+//     contentFilters: [
+//       {
+//         name: 'Hate'
+//         severityThreshold: 'Medium'
+//         blocking: true
+//         enabled: true
+//         source: 'Prompt'
+//       }
+//       {
+//         name: 'Hate'
+//         severityThreshold: 'Medium'
+//         blocking: true
+//         enabled: true
+//         source: 'Completion'
+//       }
+//       {
+//         name: 'Sexual'
+//         severityThreshold: 'Medium'
+//         blocking: true
+//         enabled: true
+//         source: 'Prompt'
+//       }
+//       {
+//         name: 'Sexual'
+//         severityThreshold: 'Medium'
+//         blocking: true
+//         enabled: true
+//         source: 'Completion'
+//       }
+//       {
+//         name: 'Violence'
+//         severityThreshold: 'Medium'
+//         blocking: true
+//         enabled: true
+//         source: 'Prompt'
+//       }
+//       {
+//         name: 'Violence'
+//         severityThreshold: 'Medium'
+//         blocking: true
+//         enabled: true
+//         source: 'Completion'
+//       }
+//       {
+//         name: 'Selfharm'
+//         severityThreshold: 'Medium'
+//         blocking: true
+//         enabled: true
+//         source: 'Prompt'
+//       }
+//       {
+//         name: 'Selfharm'
+//         severityThreshold: 'Medium'
+//         blocking: true
+//         enabled: true
+//         source: 'Completion'
+//       }
+//       {
+//         name: 'Jailbreak'
+//         blocking: true
+//         enabled: true
+//         source: 'Prompt'
+//       }
+//       {
+//         name: 'Protected Material Text'
+//         blocking: true
+//         enabled: true
+//         source: 'Completion'
+//       }
+//       {
+//         name: 'Protected Material Code'
+//         blocking: false
+//         enabled: true
+//         source: 'Completion'
+//       }
+//     ]
+//   }
+// }
 
 #disable-next-line outputs-should-not-contain-secrets
 output key1 string = accounts_foundry_gameday_name_resource.listKeys().key1
