@@ -4,6 +4,8 @@ param name string
 @description('Location where the Azure Open AI will be created.')
 param location string
 
+param foundryDefaultProject string = 'gameday-project'
+
 resource accounts_foundry_gameday_name_resource 'Microsoft.CognitiveServices/accounts@2025-06-01' = {
   name: name
   location: location
@@ -23,9 +25,9 @@ resource accounts_foundry_gameday_name_resource 'Microsoft.CognitiveServices/acc
       ipRules: []
     }
     allowProjectManagement: true
-    defaultProject: 'gameday-project'
+    defaultProject: foundryDefaultProject
     associatedProjects: [
-      'gameday-project'
+      foundryDefaultProject
     ]
     publicNetworkAccess: 'Enabled'
   }
@@ -33,15 +35,15 @@ resource accounts_foundry_gameday_name_resource 'Microsoft.CognitiveServices/acc
 
 resource accounts_foundry_gameday_name_project_gameday 'Microsoft.CognitiveServices/accounts/projects@2025-06-01' = {
   parent: accounts_foundry_gameday_name_resource
-  name: 'gameday-project'
-  location: 'eastus'
+  name: foundryDefaultProject
+  location: location
   //kind: 'AIServices'
   identity: {
     type: 'SystemAssigned'
   }
   properties: {
     description: 'Default project created with the resource'
-    displayName: 'gameday-project'
+    displayName: foundryDefaultProject
   }
 }
 
@@ -318,5 +320,5 @@ resource accounts_foundry_gameday_name_gpt_5_mini 'Microsoft.CognitiveServices/a
 // }
 
 #disable-next-line outputs-should-not-contain-secrets
-output key1 string = accounts_foundry_gameday_name_resource.listKeys().key1
-output endpoint string = accounts_foundry_gameday_name_resource.properties.endpoint
+//output key1 string = accounts_foundry_gameday_name_resource.listKeys().key1
+//output endpoint string = accounts_foundry_gameday_name_resource.properties.endpoint

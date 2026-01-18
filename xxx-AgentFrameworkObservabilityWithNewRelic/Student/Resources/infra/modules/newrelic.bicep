@@ -1,13 +1,13 @@
-param resources_AzureNativeNewRelic_externalid string = '/subscriptions/${subscription().subscriptionId}/resourceGroups/newrelic-gameday/providers/Microsoft.SaaS/resources/AzureNativeNewRelic'
+// param resources_AzureNativeNewRelic_externalid string = '/subscriptions/${subscription().subscriptionId}/resourceGroups/newrelic-gameday/providers/Microsoft.SaaS/resources/AzureNativeNewRelic'
 
-@description('The name of the New Relic resource.')
-param name string
+// @description('The name of the New Relic resource.')
+// param name string
 
-@description('Location where the Azure Open AI will be created.')
-param location string
+// @description('Location where the Azure Open AI will be created.')
+// param location string
 
-param newRelicAccountId string
-param newRelicOrganizationId string
+// param newRelicAccountId string
+// param newRelicOrganizationId string
 
 // resource monitors_NewRelicResource_GameDay_name_resource 'NewRelic.Observability/monitors@2025-05-01-preview' = {
 //   name: name
