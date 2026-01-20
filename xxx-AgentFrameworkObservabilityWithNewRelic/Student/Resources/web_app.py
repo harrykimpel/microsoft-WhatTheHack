@@ -80,24 +80,18 @@ def get_datetime() -> str:
     return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
 # ============================================================================
-# TODO 2: Create the OpenAI Chat Client
+# TODO 2: Create/configure the OpenAI Chat Client
 # ============================================================================
 
 
-model_id = os.environ.get("GITHUB_MODEL_ID", "gpt-4o-mini")
+model_id = os.environ.get("MODEL_ID", "gpt-5-mini")
 
-# TODO: Create an OpenAIChatClient instance
-# Hint: Use api_key=os.environ.get("OPENAI_API_KEY"), model_id=model_id
-# openai_chat_client = OpenAIChatClient(
-#     api_key=os.environ.get("OPENAI_API_KEY"),
-#     model_id=model_id
-# )
+# Use Microsoft Foundry endpoint directly
 openai_chat_client = OpenAIChatClient(
-    base_url=os.environ.get("GITHUB_ENDPOINT"),
-    api_key=os.environ.get("GITHUB_TOKEN"),
+    base_url=os.environ.get("MSFT_FOUNDRY_ENDPOINT"),
+    api_key=os.environ.get("MSFT_FOUNDRY_API_KEY"),
     model_id=model_id
 )
-
 
 # ============================================================================
 # TODO 3: Create the Travel Planning Agent
@@ -123,8 +117,6 @@ agent = ChatAgent(
 @app.route('/')
 def index():
     """Serve the home page with the travel planning form."""
-    # TODO: Render and return 'index.html'
-    # Hint: return render_template('index.html')
     return render_template('index.html')
 
 
