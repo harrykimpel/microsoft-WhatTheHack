@@ -52,13 +52,35 @@ Use another LLM to evaluate responses for:
 - **Accuracy** - Plausible destinations and activities
 - **Completeness** - Addresses all user requirements
 
-### Layer 4: Integration into Your Application
+### Layer 4: User Feedback Collection
+
+Capture real user feedback to measure actual satisfaction with AI-generated travel plans:
+
+- Add thumbs up/down buttons to the travel plan results in the WanderAI application UI
+- Create a feedback endpoint that captures user ratings (positive/negative)
+- **Critical**: Include the `trace_id` from the agent interaction in the feedback log record
+- Emit a custom event with `newrelic.event.type: 'LlmFeedbackMessage'` containing:
+  - `trace_id` - Links feedback to the specific AI interaction
+  - `rating` - User's thumbs up (1) or thumbs down (-1)
+  - `timestamp` - When feedback was provided
+  - `user_id` (optional) - If available
+  - Any additional metadata (e.g., feedback text, category)
+
+This feedback data will help you:
+
+- Correlate user satisfaction with evaluation scores
+- Identify which types of travel plans users prefer
+- Track quality trends over time
+- Build a dataset for fine-tuning and improvement
+
+### Layer 5: Integration into Your Application
 
 Integrate the evaluation system into your Flask application:
 
 - Run evaluation after generating each travel plan
 - Track evaluation metrics (passed/failed, scores)
 - Optionally block low-quality responses from reaching users
+- Capture and log user feedback with trace correlation
 
 ### Accessing New Relic AI Monitoring
 
@@ -80,6 +102,9 @@ To complete this challenge successfully, you should be able to:
 - Verify that rule-based evaluation is running on generated travel plans
 - Demonstrate that evaluation metrics are being tracked (passed/failed counts, scores)
 - Show that you can view AI monitoring data in New Relic's AI Monitoring section
+- Implement thumbs up/down feedback buttons in the WanderAI UI
+- Demonstrate that `LlmFeedbackMessage` events with `trace_id` correlation are sent to New Relic
+- Show that you can query feedback data and correlate it with AI interactions using `trace_id`
 
 ## Learning Resources
 
@@ -96,11 +121,16 @@ To complete this challenge successfully, you should be able to:
 - LLM-based evaluation is more expensive but catches subtle issues
 - Consider caching evaluation results for identical responses
 - Look for the "AI Monitoring" section in New Relic's sidebar (you may need to pin it via "All capabilities")
+- **For feedback**: Store the `trace_id` from the agent response in your frontend so it can be sent back with user feedback
+- Use NRQL queries like `SELECT * FROM LlmFeedbackMessage WHERE trace_id = 'xxx'` to correlate feedback with interactions
+- Join feedback data with LLM events: `FROM LlmChatCompletionSummary, LlmFeedbackMessage WHERE trace_id = trace_id`
 
 ## Advanced Challenges (Optional)
 
 - Set up a CI/CD pipeline with GitHub Actions that runs evaluation tests before deployment
 - Implement A/B testing to compare two agent versions and their quality scores
-- Add a feedback loop that lets users rate plans and uses ratings in evaluation
-- Create custom dashboards showing evaluation trends over time
-- Implement automatic prompt tuning based on evaluation results
+- Create custom dashboards showing evaluation trends over time with feedback correlation
+- Build a dashboard that shows the relationship between automated evaluation scores and user feedback ratings
+- Implement automatic prompt tuning based on evaluation results and user feedback patterns
+- Add detailed feedback options (e.g., "too expensive", "unsafe destination", "missing activities") beyond thumbs up/down
+- Set up alerts when feedback ratings drop below a threshold for specific destinations or time periods
