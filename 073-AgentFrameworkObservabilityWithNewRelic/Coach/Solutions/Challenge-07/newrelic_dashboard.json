@@ -1,0 +1,365 @@
+{
+  "name": "WanderAI Security - Prompt Injection Monitoring",
+  "description": "Comprehensive dashboard for monitoring prompt injection attacks and security events",
+  "permissions": "PUBLIC_READ_WRITE",
+  "pages": [
+    {
+      "name": "Security Overview",
+      "description": "High-level security metrics and attack trends",
+      "widgets": [
+        {
+          "title": "Total Attacks Detected (24h)",
+          "layout": {
+            "column": 1,
+            "row": 1,
+            "width": 4,
+            "height": 3
+          },
+          "visualization": {
+            "id": "viz.billboard"
+          },
+          "rawConfiguration": {
+            "nrqlQueries": [
+              {
+                "accountId": 0,
+                "query": "SELECT count(*) as 'Total Attacks' FROM PromptInjectionAttempt WHERE wasBlocked = true SINCE 24 hours ago"
+              }
+            ],
+            "thresholds": [
+              {
+                "alertSeverity": "WARNING",
+                "value": 10
+              },
+              {
+                "alertSeverity": "CRITICAL",
+                "value": 50
+              }
+            ]
+          }
+        },
+        {
+          "title": "Attack Detection Rate (Last Hour)",
+          "layout": {
+            "column": 5,
+            "row": 1,
+            "width": 4,
+            "height": 3
+          },
+          "visualization": {
+            "id": "viz.line"
+          },
+          "rawConfiguration": {
+            "nrqlQueries": [
+              {
+                "accountId": 0,
+                "query": "SELECT count(*) FROM PromptInjectionAttempt WHERE wasBlocked = true TIMESERIES 5 minutes SINCE 1 hour ago"
+              }
+            ]
+          }
+        },
+        {
+          "title": "Risk Score Distribution",
+          "layout": {
+            "column": 9,
+            "row": 1,
+            "width": 4,
+            "height": 3
+          },
+          "visualization": {
+            "id": "viz.histogram"
+          },
+          "rawConfiguration": {
+            "nrqlQueries": [
+              {
+                "accountId": 0,
+                "query": "SELECT histogram(riskScore, 10, 10) FROM PromptInjectionAttempt SINCE 1 hour ago"
+              }
+            ]
+          }
+        },
+        {
+          "title": "Attack Types Breakdown",
+          "layout": {
+            "column": 1,
+            "row": 4,
+            "width": 6,
+            "height": 3
+          },
+          "visualization": {
+            "id": "viz.pie"
+          },
+          "rawConfiguration": {
+            "nrqlQueries": [
+              {
+                "accountId": 0,
+                "query": "SELECT count(*) FROM PromptInjectionAttempt WHERE wasBlocked = true FACET attackType SINCE 24 hours ago"
+              }
+            ]
+          }
+        },
+        {
+          "title": "Detection Methods Used",
+          "layout": {
+            "column": 7,
+            "row": 4,
+            "width": 6,
+            "height": 3
+          },
+          "visualization": {
+            "id": "viz.bar"
+          },
+          "rawConfiguration": {
+            "nrqlQueries": [
+              {
+                "accountId": 0,
+                "query": "SELECT count(*) FROM PromptInjectionAttempt FACET detectionMethod SINCE 1 hour ago"
+              }
+            ]
+          }
+        },
+        {
+          "title": "Recent High-Risk Attacks",
+          "layout": {
+            "column": 1,
+            "row": 7,
+            "width": 12,
+            "height": 3
+          },
+          "visualization": {
+            "id": "viz.table"
+          },
+          "rawConfiguration": {
+            "nrqlQueries": [
+              {
+                "accountId": 0,
+                "query": "SELECT timestamp, riskScore, attackType, promptSnippet, wasBlocked FROM PromptInjectionAttempt WHERE riskScore > 0.7 SINCE 1 hour ago LIMIT 20"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Performance & Latency",
+      "description": "Detection performance and system impact metrics",
+      "widgets": [
+        {
+          "title": "Average Detection Latency",
+          "layout": {
+            "column": 1,
+            "row": 1,
+            "width": 4,
+            "height": 3
+          },
+          "visualization": {
+            "id": "viz.billboard"
+          },
+          "rawConfiguration": {
+            "nrqlQueries": [
+              {
+                "accountId": 0,
+                "query": "SELECT average(detectionLatencyMs) as 'Avg Latency (ms)' FROM PromptInjectionAttempt SINCE 1 hour ago"
+              }
+            ],
+            "thresholds": [
+              {
+                "alertSeverity": "WARNING",
+                "value": 100
+              },
+              {
+                "alertSeverity": "CRITICAL",
+                "value": 200
+              }
+            ]
+          }
+        },
+        {
+          "title": "Detection Latency Over Time",
+          "layout": {
+            "column": 5,
+            "row": 1,
+            "width": 8,
+            "height": 3
+          },
+          "visualization": {
+            "id": "viz.line"
+          },
+          "rawConfiguration": {
+            "nrqlQueries": [
+              {
+                "accountId": 0,
+                "query": "SELECT average(detectionLatencyMs), percentile(detectionLatencyMs, 95) FROM PromptInjectionAttempt TIMESERIES 5 minutes SINCE 1 hour ago"
+              }
+            ]
+          }
+        },
+        {
+          "title": "Security Check Spans (Distributed Tracing)",
+          "layout": {
+            "column": 1,
+            "row": 4,
+            "width": 12,
+            "height": 3
+          },
+          "visualization": {
+            "id": "viz.line"
+          },
+          "rawConfiguration": {
+            "nrqlQueries": [
+              {
+                "accountId": 0,
+                "query": "SELECT average(duration) FROM Span WHERE name = 'security.prompt_injection.detect' TIMESERIES 5 minutes SINCE 1 hour ago"
+              }
+            ]
+          }
+        },
+        {
+          "title": "Throughput (Checks per Minute)",
+          "layout": {
+            "column": 1,
+            "row": 7,
+            "width": 6,
+            "height": 3
+          },
+          "visualization": {
+            "id": "viz.line"
+          },
+          "rawConfiguration": {
+            "nrqlQueries": [
+              {
+                "accountId": 0,
+                "query": "SELECT rate(count(*), 1 minute) as 'Checks/min' FROM PromptInjectionAttempt TIMESERIES 5 minutes SINCE 1 hour ago"
+              }
+            ]
+          }
+        },
+        {
+          "title": "Detection Method Performance",
+          "layout": {
+            "column": 7,
+            "row": 7,
+            "width": 6,
+            "height": 3
+          },
+          "visualization": {
+            "id": "viz.bar"
+          },
+          "rawConfiguration": {
+            "nrqlQueries": [
+              {
+                "accountId": 0,
+                "query": "SELECT average(detectionLatencyMs) FROM PromptInjectionAttempt FACET detectionMethod SINCE 1 hour ago"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Alert Trends",
+      "description": "Security trends and anomaly detection",
+      "widgets": [
+        {
+          "title": "Attack Volume Trend (7 days)",
+          "layout": {
+            "column": 1,
+            "row": 1,
+            "width": 12,
+            "height": 3
+          },
+          "visualization": {
+            "id": "viz.area"
+          },
+          "rawConfiguration": {
+            "nrqlQueries": [
+              {
+                "accountId": 0,
+                "query": "SELECT count(*) FROM PromptInjectionAttempt WHERE wasBlocked = true TIMESERIES 1 hour SINCE 7 days ago"
+              }
+            ]
+          }
+        },
+        {
+          "title": "Top Attack Patterns",
+          "layout": {
+            "column": 1,
+            "row": 4,
+            "width": 6,
+            "height": 3
+          },
+          "visualization": {
+            "id": "viz.table"
+          },
+          "rawConfiguration": {
+            "nrqlQueries": [
+              {
+                "accountId": 0,
+                "query": "SELECT count(*) as 'Count', average(riskScore) as 'Avg Risk' FROM PromptInjectionAttempt WHERE wasBlocked = true FACET promptSnippet SINCE 24 hours ago LIMIT 10"
+              }
+            ]
+          }
+        },
+        {
+          "title": "Attack Type Trends (24h)",
+          "layout": {
+            "column": 7,
+            "row": 4,
+            "width": 6,
+            "height": 3
+          },
+          "visualization": {
+            "id": "viz.stacked-bar"
+          },
+          "rawConfiguration": {
+            "nrqlQueries": [
+              {
+                "accountId": 0,
+                "query": "SELECT count(*) FROM PromptInjectionAttempt WHERE wasBlocked = true FACET attackType TIMESERIES 1 hour SINCE 24 hours ago"
+              }
+            ]
+          }
+        },
+        {
+          "title": "Confidence Score Distribution",
+          "layout": {
+            "column": 1,
+            "row": 7,
+            "width": 6,
+            "height": 3
+          },
+          "visualization": {
+            "id": "viz.histogram"
+          },
+          "rawConfiguration": {
+            "nrqlQueries": [
+              {
+                "accountId": 0,
+                "query": "SELECT histogram(confidence, 10, 10) FROM PromptInjectionAttempt SINCE 1 hour ago"
+              }
+            ]
+          }
+        },
+        {
+          "title": "Block Rate Over Time",
+          "layout": {
+            "column": 7,
+            "row": 7,
+            "width": 6,
+            "height": 3
+          },
+          "visualization": {
+            "id": "viz.line"
+          },
+          "rawConfiguration": {
+            "nrqlQueries": [
+              {
+                "accountId": 0,
+                "query": "SELECT percentage(count(*), WHERE wasBlocked = true) as 'Block Rate' FROM PromptInjectionAttempt TIMESERIES 5 minutes SINCE 1 hour ago"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

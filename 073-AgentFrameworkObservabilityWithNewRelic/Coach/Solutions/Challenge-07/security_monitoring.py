@@ -14,8 +14,31 @@ Features:
 import time
 from datetime import datetime
 from typing import Optional, Dict, Any
-from opentelemetry import trace, metrics
-from opentelemetry.trace import Status, StatusCode
+
+# Try to import OpenTelemetry, but make it optional for demo purposes
+try:
+    from opentelemetry import trace, metrics
+    from opentelemetry.trace import Status, StatusCode
+    OTEL_AVAILABLE = True
+except ImportError:
+    print("Warning: OpenTelemetry not installed. Running in demo mode without telemetry.")
+    OTEL_AVAILABLE = False
+    # Create mock classes for demo
+    class MockTracer:
+        def start_as_current_span(self, name):
+            return MockSpan()
+    class MockSpan:
+        def __enter__(self): return self
+        def __exit__(self, *args): pass
+        def set_attribute(self, *args): pass
+        def set_status(self, *args): pass
+    class MockMeter:
+        def create_counter(self, **kwargs): return MockMetric()
+        def create_histogram(self, **kwargs): return MockMetric()
+        def create_gauge(self, **kwargs): return MockMetric()
+    class MockMetric:
+        def add(self, *args, **kwargs): pass
+        def record(self, *args, **kwargs): pass
 
 from prompt_injection_detector import DetectionResult, AttackType
 
@@ -36,9 +59,13 @@ class SecurityMonitor:
         """
         self.service_name = service_name
         
-        # Initialize OpenTelemetry
-        self.tracer = trace.get_tracer(__name__)
-        self.meter = metrics.get_meter(__name__)
+        # Initialize OpenTelemetry (or mocks if not available)
+        if OTEL_AVAILABLE:
+            self.tracer = trace.get_tracer(__name__)
+            self.meter = metrics.get_meter(__name__)
+        else:
+            self.tracer = MockTracer()
+            self.meter = MockMeter()
         
         # Create metrics
         self._init_metrics()
@@ -174,9 +201,11 @@ class SecurityMonitor:
             
             # Set span status
             if was_blocked:
-                span.set_status(Status(StatusCode.OK, "Request blocked successfully"))
+                if OTEL_AVAILABLE:
+                    span.set_status(Status(StatusCode.OK, "Request blocked successfully"))
             else:
-                span.set_status(Status(StatusCode.OK, "Request allowed"))
+                if OTEL_AVAILABLE:
+                    span.set_status(Status(StatusCode.OK, "Request allowed"))
     
     def _log_security_event(
         self,
