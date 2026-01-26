@@ -56,6 +56,12 @@ This hack walks you through building the platform layer by layer, adding observa
     - Ensure bad outputs never reach customers
     - Measure and improve AI quality over time
 
+7. 🛡️ Secure Against Prompt Injection: "Keep your agents safe."
+    - Detect prompt injection attacks
+    - Monitor for suspicious activity
+    - Log and alert on security events
+    - Ensure your agents stay trustworthy
+
 ## Learning Objectives
 
 🎓 What You'll Learn ... by completing this hack, you'll master:
@@ -66,7 +72,8 @@ This hack walks you through building the platform layer by layer, adding observa
 4. ✅ New Relic Integration - Sending and analyzing observability data
 5. ✅ Production Monitoring - Best practices for AI systems
 6. ✅ AI Quality Assurance - Evaluating and gating AI outputs
-7. ✅ Full Stack AI - From prototype to production-ready service
+7. ✅ Security and Trust - Protecting against prompt injection and ensuring agent reliability
+8. ✅ Full Stack AI - From prototype to production-ready service
 
 ## Challenges
 
@@ -84,7 +91,9 @@ This hack walks you through building the platform layer by layer, adding observa
   - Learn industry best practices for monitoring AI-driven applications.
 - Challenge 06: **[LLM Evaluation & Quality Gates](Student/Challenge-06.md)**
   - Ensure excellence
-
+- Challenge 07: **[Prompt Injection Detection & Monitoring](Student/Challenge-07.md)**
+  - Secure your agents
+  
 🎉 Launch WanderAI! 🎉
 
 ## Prerequisites

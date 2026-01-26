@@ -1,6 +1,6 @@
 # Challenge 06 - LLM Evaluation and Quality Gates
 
-[< Previous Challenge](./Challenge-05.md) - **[Home](../README.md)**
+[< Previous Challenge](./Challenge-05.md) - **[Home](../README.md)** - [Next Challenge >](./Challenge-07.md)
 
 ## Introduction
 
@@ -13,6 +13,17 @@ In this challenge, you'll build an automated quality gate for your AI agents usi
 Your goal is to implement a comprehensive evaluation and quality assurance system for your AI-generated travel plans. This involves several layers of evaluation working together.
 
 ### Layer 1: Custom Events for New Relic AI Monitoring
+
+OpenTelemetry defines an [Event](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/data-model.md#events) as a `LogRecord` with a non-empty [EventName](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/data-model.md#field-eventname). [Custom Events](https://docs.newrelic.com/docs/data-apis/custom-data/custom-events/report-custom-event-data/) are a core signal in the New Relic platform. However, despite using the same name, OpenTelemetry Events and New Relic Custom Events are not identical concepts:
+
+- OpenTelemetry `EventName`s do not share the same format or [semantics](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md) as Custom Event types. OpenTelemetry Event names are fully qualified with a namespace and follow lower snake case, e.g. `com.acme.my_event`. Custom Event types are pascal case, e.g. `MyEvent`.
+- OpenTelemetry Events can be thought of as an enhanced structured log. Like structured logs, their data is encoded in key-value pairs rather than free form text. In addition, the `EventName` acts as an unambiguous signal of the class / type of event which occurred. Custom Events are treated as an entirely new event type, accessible via NRQL with `SELECT * FROM MyEvent`.
+
+Because of these differences, OpenTelemetry Events are ingested as New Relic `Logs` since most of the time, OpenTelemetry Events are closer in similarity to New Relic `Logs` than New Relic Custom Events.
+
+However, you can explicitly signal that an OpenTelemetry `LogRecord` should be ingested as a Custom Event by adding an entry to `LogRecord.attributes` following the form: `newrelic.event.type=<EventType>`.
+
+For example, a `LogRecord` with attribute `newrelic.event.type=MyEvent` will be ingested as a Custom Event with `type=MyEvent`, and accessible via NRQL with: `SELECT * FROM MyEvent`.
 
 The foundation of enterprise AI evaluation is capturing AI interactions as structured events. New Relic's AI Monitoring uses a special attribute `newrelic.event.type` that automatically populates:
 
