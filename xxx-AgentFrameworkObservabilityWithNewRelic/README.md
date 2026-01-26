@@ -79,11 +79,11 @@ This hack walks you through building the platform layer by layer, adding observa
 
 - Challenge 00: **[Prerequisites - Ready, Set, GO!](Student/Challenge-00.md)**
   - Prepare your environment in GitHub Codespaces.
-- Challenge 01: **[Learn Concepts](Student/Challenge-01.md)**
+- Challenge 01: **[Master the Foundations](Student/Challenge-01.md)**
   - Read & understand
-- Challenge 02: **[Build MVP](Student/Challenge-02.md)**
+- Challenge 02: **[Build Your MVP](Student/Challenge-02.md)**
   - Create basic agent + Flask web app
-- Challenge 03: **[Add OpenTelemetry](Student/Challenge-03.md)**
+- Challenge 03: **[Add OpenTelemetry Instrumentation](Student/Challenge-03.md)**
   - Instrument everything
 - Challenge 04: **[New Relic Integration](Student/Challenge-04.md)**
   - See your data!
@@ -91,7 +91,7 @@ This hack walks you through building the platform layer by layer, adding observa
   - Learn industry best practices for monitoring AI-driven applications.
 - Challenge 06: **[LLM Evaluation & Quality Gates](Student/Challenge-06.md)**
   - Ensure excellence
-- Challenge 07: **[Prompt Injection Detection & Monitoring](Student/Challenge-07.md)**
+- Challenge 07: **[AI Security: Prompt Injection Detection & Prevention](Student/Challenge-07.md)**
   - Secure your agents
   
 🎉 Launch WanderAI! 🎉
