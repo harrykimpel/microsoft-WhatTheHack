@@ -17,6 +17,83 @@ In this challenge, you'll learn to detect and prevent prompt injection attacks w
 
 **⚠️ Educational Purpose:** This challenge is designed for educational use to teach security awareness. Always use these techniques responsibly and only in authorized testing environments.
 
+## Security Architecture: Layered Defense with Microsoft Foundry Guardrails
+
+This challenge implements security as a **multi-layer defense strategy**:
+
+```
+Layer 1: Application-Level Controls (web_app.py)
+├── Input validation and sanitization
+├── Rule-based & heuristic prompt injection detection
+├── Risk scoring and blocking logic
+├── Hardened agent system prompts
+└── OpenTelemetry monitoring
+
+Layer 2: Platform-Level Controls (Microsoft Foundry Guardrails)
+├── Automated risk detection via ML classification models
+├── Multiple intervention points (user input, tool call, tool response, output)
+├── Configurable risk responses (annotate or block)
+├── Built-in compliance and safety guardrails
+└── No additional code required
+```
+
+### What are Microsoft Foundry Guardrails?
+
+Microsoft Foundry Guardrails provide enterprise-grade safety and security controls that complement your application-level defenses:
+
+- **Risk Detection:** ML-powered classification models automatically detect undesirable behavior and harmful content
+- **Intervention Points:** Four configurable scanning points:
+  - **User Input:** Scan user prompts before they reach the agent
+  - **Tool Call** (Preview): Monitor function calls made by the agent
+  - **Tool Response** (Preview): Inspect data returned from tool functions
+  - **Output:** Review agent responses before returning to users
+- **Response Actions:** Automatically annotate detected risks or block further processing
+- **Agent-Specific:** Tool call and tool response monitoring available for agents (currently in preview)
+
+### Why Multiple Layers Matter
+
+**Application-Level Controls (This Challenge):**
+
+- Fast (<100ms) detection specific to your domain
+- No external service dependency
+- Full transparency and control
+- Tailored to your business logic
+
+**Platform-Level Guardrails (Microsoft Foundry):**
+
+- Broad coverage of safety and compliance risks
+- Maintained and updated by Microsoft
+- Pre-built models require no training
+- Catches edge cases your detection might miss
+
+### Integration Pattern
+
+```
+User Request
+    ↓
+[Foundry Guardrails: User Input] ← Scan for general safety risks
+    ↓ (if safe)
+[Application: Input Validation] ← Domain-specific validation
+    ↓ (if valid)
+[Application: Injection Detection] ← Travel planner-specific threats
+    ↓ (if low risk)
+[Agent with Tool Calls]
+    ↓
+[Foundry Guardrails: Tool Call] ← Monitor functions being called
+    ↓
+[Tool Response]
+    ↓
+[Foundry Guardrails: Tool Response] ← Validate function outputs
+    ↓
+[Agent Processing]
+    ↓
+[Foundry Guardrails: Output] ← Final safety check
+    ↓
+[Application: Response Check] ← Domain-specific validation
+    ↓
+[Return to User]
+```
+
 ## Description
 
 Your security team at WanderAI has discovered several attempted prompt injection attacks in production logs. Your mission is to enhance the existing travel planning application with security controls:
@@ -269,6 +346,13 @@ To complete this challenge successfully, you must modify `web_app.py` to:
 - [Prompt Injection Explained](https://simonwillison.net/2023/Apr/14/worst-that-can-happen/)
 - [Defending Against Prompt Injection](https://learnprompting.org/docs/prompt_hacking/defensive_measures/overview)
 
+### Microsoft Foundry Guardrails
+
+- [Microsoft Foundry Guardrails Overview](https://learn.microsoft.com/en-us/azure/ai-foundry/concepts/guardrails)
+- [Configuring Guardrails for Safety](https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/configure-guardrails)
+- [Agent Guardrails (Preview)](https://learn.microsoft.com/en-us/azure/ai-foundry/concepts/agent-guardrails)
+- [Intervention Points and Risk Detection](https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/guardrails-intervention-points)
+
 ### OpenTelemetry Security
 
 - [OpenTelemetry Security Best Practices](https://opentelemetry.io/docs/specs/otel/security/)
@@ -295,13 +379,27 @@ To complete this challenge successfully, you must modify `web_app.py` to:
 
 If you finish early, try these advanced scenarios:
 
-1. **LLM-Based Detection:** Use Claude or GPT to analyze prompts for injection attempts
-2. **Output Validation:** Check agent responses to ensure no system prompt was leaked
-3. **Rate Limiting:** Add per-user rate limits to slow down attack attempts
-4. **Adaptive Thresholds:** Adjust detection sensitivity based on user history
-5. **Pattern Learning:** Build machine learning model to detect new attack patterns
-6. **Response Injection:** Validate outputs to prevent response injection attacks
-7. **Audit Trail:** Create detailed security audit logs for compliance teams
+1. **Microsoft Foundry Guardrails Integration:** Configure Foundry Guardrails on your agent to add platform-level safety controls:
+   - Enable user input scanning for general safety risks
+   - Configure tool call monitoring (preview) to oversee function calls
+   - Set up tool response validation (preview) for function outputs
+   - Enable output scanning before responses reach users
+   - Document how Foundry Guardrails complement your application-level controls
+   - Compare detection coverage between your code and Foundry Guardrails
+
+2. **LLM-Based Detection:** Use Claude or GPT to analyze prompts for injection attempts
+
+3. **Output Validation:** Check agent responses to ensure no system prompt was leaked
+
+4. **Rate Limiting:** Add per-user rate limits to slow down attack attempts
+
+5. **Adaptive Thresholds:** Adjust detection sensitivity based on user history
+
+6. **Pattern Learning:** Build machine learning model to detect new attack patterns
+
+7. **Response Injection:** Validate outputs to prevent response injection attacks
+
+8. **Audit Trail:** Create detailed security audit logs for compliance teams
 
 ## Coach's Notes
 

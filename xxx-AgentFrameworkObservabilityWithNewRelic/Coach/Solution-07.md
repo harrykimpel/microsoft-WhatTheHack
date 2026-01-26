@@ -44,6 +44,33 @@ The solution integrates security into the Flask route, not in separate files. Th
 - Monitoring is built in, not added later
 - Existing architecture is preserved and enhanced
 
+### 4. Layered Defense with Microsoft Foundry Guardrails
+
+This challenge emphasizes that production security is **not a single layer**:
+
+**Application-Level (What Students Build):**
+
+- Fast, domain-specific detection
+- Travel planner business logic validation
+- No external dependencies for core detection
+- Full control and transparency
+
+**Platform-Level (Microsoft Foundry Guardrails):**
+
+- Enterprise-grade ML-powered risk detection
+- Pre-trained models for general safety and compliance
+- Multiple intervention points (user input, tool call, tool response, output)
+- Maintained and updated by Microsoft
+- Agent-specific guardrails available in preview
+
+**Why Both Matter:**
+
+- **Application controls** catch domain-specific threats (injection attacks on travel planner)
+- **Foundry guardrails** catch general safety risks (harmful content, compliance violations)
+- **Together** they provide defense in depth—multiple layers stop attacks that evade one layer
+
+**Teaching Point:** Emphasize that real production systems use multiple control layers. Foundry Guardrails complement the code-level controls students are building, not replace them.
+
 ## Implementation Path
 
 ### Stage 1: Rule-Based Detection (30 minutes)
@@ -440,6 +467,14 @@ def test_detection_latency():
    - Track: detection rate, block rate, false positives, response latency
    - Look for anomalies in patterns over time
 
+6. **What about Microsoft Foundry Guardrails?**
+   - Answer: Guardrails provide platform-level defense complementing code-level controls
+   - Application controls catch domain-specific threats (prompt injection on travel planner)
+   - Foundry Guardrails catch general safety risks (harmful content, compliance violations)
+   - Together: Defense in depth—multiple layers stop what one layer misses
+   - Agent guardrails in preview support tool call and tool response monitoring
+   - Best practice: Use both—code controls for custom logic, Foundry for broad coverage
+
 ## Success Criteria for Coaches
 
 ✅ Students can explain prompt injection and why it matters  
@@ -467,4 +502,17 @@ def test_detection_latency():
 - [OpenTelemetry Metrics Documentation](https://opentelemetry.io/docs/instrumentation/python/instrumentation/#metrics)
 - [New Relic Custom Events](https://docs.newrelic.com/docs/opentelemetry/best-practices/opentelemetry-best-practices-logs/#custom-events)
 
----
+### Microsoft Foundry Guardrails Resources
+
+- [Microsoft Foundry Guardrails Overview](https://learn.microsoft.com/en-us/azure/ai-foundry/concepts/guardrails)
+- [Configuring Guardrails for Safety](https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/configure-guardrails)
+- [Agent Guardrails (Preview)](https://learn.microsoft.com/en-us/azure/ai-foundry/concepts/agent-guardrails)
+- [Guardrails Intervention Points and Risk Detection](https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/guardrails-intervention-points)
+
+**Teaching Note on Guardrails:**
+
+- Show students how Foundry Guardrails complement their code-level controls
+- Emphasize that production systems use multiple layers (application + platform)
+- Discuss the four intervention points: user input, tool call (preview), tool response (preview), output
+- Use Foundry Guardrails as an "advanced challenge" to extend this exercise
+- Explain that while students code their own detector, Foundry provides pre-built, enterprise-grade guardrails

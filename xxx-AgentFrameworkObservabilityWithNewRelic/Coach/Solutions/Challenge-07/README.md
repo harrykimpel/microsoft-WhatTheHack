@@ -163,6 +163,55 @@ Comprehensive test suite with 40+ test cases covering:
 - **Test:** See `TestIntegration` class
 - **Validation:** Both HTML and JSON endpoints work
 
+## Multi-Layer Security: Application + Platform Controls
+
+This solution demonstrates **application-level security controls**. In production, these are typically **layered with platform-level controls** like Microsoft Foundry Guardrails:
+
+### Application-Level (What This Solution Builds)
+
+- Fast, domain-specific threat detection
+- Travel planner business logic validation
+- Custom detection rules tailored to your use case
+- Full control and transparency
+- No external service calls required
+
+### Platform-Level (Microsoft Foundry Guardrails)
+
+- Enterprise-grade ML-powered risk detection
+- Pre-trained models for general safety and compliance
+- Multiple intervention points:
+  - **User Input:** Screen user prompts for safety risks
+  - **Tool Call** (Preview): Monitor agent function calls
+  - **Tool Response** (Preview): Validate tool outputs
+  - **Output:** Review agent responses before returning
+- Maintained and updated by Microsoft
+- Agent guardrails in preview for agent-specific monitoring
+
+### Why Both Layers?
+
+**Complementary Coverage:**
+
+```
+Application Controls     → Catch domain-specific threats
+(prompt injection)         (travel planner logic bypass)
+
+Foundry Guardrails      → Catch general safety risks
+(output filtering)        (harmful content, compliance)
+
+Together                → Defense in depth
+                          Multiple layers = stronger defense
+```
+
+**Best Practice:**
+
+- Use application controls for custom business logic
+- Use Foundry Guardrails for broad safety coverage
+- Monitor both in New Relic for complete visibility
+- Analyze which layer catches which threats
+
+**For Advanced Challenge:**
+If students finish early, they can configure Foundry Guardrails on the agent to see how platform-level controls complement their code-level detection. This teaches enterprise-grade security architecture.
+
 ## Architecture Overview
 
 ```
@@ -257,16 +306,31 @@ if risk['should_block']:
    - For batch: can use slower LLM-based detection
    - Tradeoff between accuracy and latency
 
+5. **How do Microsoft Foundry Guardrails fit in?**
+   - Platform-level controls complement application code
+   - Application code: domain-specific (injection threats)
+   - Foundry Guardrails: general safety (harmful content)
+   - Together: defense in depth with multiple layers
+   - Guardrails handle broad cases, your code handles edge cases
+
 ## Advanced Extensions
 
 If time permits, students could:
 
-1. Add LLM-based detection for higher accuracy
-2. Implement per-user rate limiting
-3. Create an audit trail of blocked requests
-4. Build machine learning model for new patterns
-5. Add response validation (check if prompt leaked)
-6. Implement adaptive thresholds based on user trust
+1. **Microsoft Foundry Guardrails Integration:**
+   - Configure guardrails on the agent for platform-level controls
+   - Enable user input scanning for general safety
+   - Set up tool call monitoring (preview) for function oversight
+   - Configure tool response validation (preview)
+   - Enable output scanning before responses return
+   - Compare what each layer catches
+
+2. Add LLM-based detection for higher accuracy
+3. Implement per-user rate limiting
+4. Create an audit trail of blocked requests
+5. Build machine learning model for new patterns
+6. Add response validation (check if prompt leaked)
+7. Implement adaptive thresholds based on user trust
 
 ## Resources
 
@@ -274,6 +338,12 @@ If time permits, students could:
 - [OpenTelemetry Python Documentation](https://opentelemetry.io/docs/instrumentation/python/)
 - [New Relic Custom Events](https://docs.newrelic.com/docs/logs/logs-context/logs-context-python/)
 - [Prompt Injection Patterns](https://simonwillison.net/2023/Apr/14/worst-that-can-happen/)
+
+### Microsoft Foundry Guardrails Resources
+
+- [Microsoft Foundry Guardrails Overview](https://learn.microsoft.com/en-us/azure/ai-foundry/guardrails/guardrails-overview?view=foundry)
+- [Configuring Guardrails for Safety](https://learn.microsoft.com/en-us/azure/ai-foundry/guardrails/how-to-create-guardrails?view=foundry&tabs=python)
+- [Intervention Points and Risk Detection](https://learn.microsoft.com/en-us/azure/ai-foundry/guardrails/intervention-points?view=foundry&pivots=programming-language-foundry-portal)
 
 ## Feedback & Iteration
 
