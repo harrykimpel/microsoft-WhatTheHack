@@ -12,6 +12,15 @@ Key additions:
 5. Blocking logic for malicious requests
 """
 
+from opentelemetry.exporter.otlp.proto.grpc.metric_exporter import OTLPMetricExporter
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
+from opentelemetry.sdk.metrics import MeterProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry import trace, metrics
+from agent_framework.openai import OpenAIChatClient
+from agent_framework import ChatAgent
 import os
 import asyncio
 import time
@@ -24,32 +33,23 @@ from typing import Dict, List, Tuple
 # Flask imports
 from flask import Flask, render_template, request, jsonify
 
-# Microsoft Agent Framework
-from agent_framework import ChatAgent
-from agent_framework.openai import OpenAIChatClient
-
-# OpenTelemetry imports
-from opentelemetry import trace, metrics
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import BatchSpanProcessor
-from opentelemetry.sdk.metrics import MeterProvider
-from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
-from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
-from opentelemetry.exporter.otlp.proto.grpc.metric_exporter import OTLPMetricExporter
-
 # Load environment variables
 from dotenv import load_dotenv
 load_dotenv()
+
+# Configure Logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Microsoft Agent Framework
+
+# OpenTelemetry imports
 
 # ============================================================================
 # Initialize Flask Application
 # ============================================================================
 
 app = Flask(__name__)
-
-# Configure Logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 # ============================================================================
 # SECURITY: Initialize OpenTelemetry for Security Monitoring
@@ -264,16 +264,19 @@ def get_random_destination() -> str:
         "Tokyo", "Sydney", "Cairo"
     ]
     destination = destinations[randint(0, len(destinations) - 1)]
+    logger.info(f"Selected random destination: {destination}")
     return f"You have selected {destination} as your travel destination."
 
 
 def get_weather(location: str) -> str:
     """Return weather for a location."""
+    logger.info(f"Fetching weather for location: {location}")
     return f"The weather in {location} is sunny with a high of {randint(20, 30)}°C."
 
 
 def get_datetime() -> str:
     """Return current date and time."""
+    logger.info("Fetching current date and time.")
     return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
 
@@ -334,6 +337,7 @@ agent = ChatAgent(
 @app.route('/')
 def index():
     """Serve the home page."""
+    logger.info("Serving home page.")
     return render_template('index.html')
 
 
@@ -349,6 +353,7 @@ async def plan_trip():
     4. Run agent if security checks pass
     5. Return results
     """
+    logger.info("Received travel plan request.")
     try:
         # ====== STEP 1: Extract and validate form data ======
         date = request.form.get('date', '')

@@ -1,4 +1,7 @@
 # 📦 Import Required Libraries
+from agent_framework.observability import setup_observability, get_tracer, get_meter
+from agent_framework.openai import OpenAIChatClient
+from agent_framework import ChatAgent
 from dotenv import load_dotenv
 from opentelemetry.semconv._incubating.attributes.service_attributes import SERVICE_NAME, SERVICE_VERSION
 from opentelemetry._logs import set_logger_provider
@@ -18,17 +21,15 @@ from random import randint, uniform
 # Flask imports
 from flask import Flask, render_template, request, jsonify
 
-# Microsoft Agent Framework
-from agent_framework import ChatAgent
-from agent_framework.openai import OpenAIChatClient
-from agent_framework.observability import setup_observability, get_tracer, get_meter
-
 import logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 # Load environment variables
 load_dotenv()
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Microsoft Agent Framework
 
 # Create named logger for application logs (before getting root logger)
 app_logger = logging.getLogger("travel_planner")
@@ -113,6 +114,7 @@ def get_random_destination() -> str:
         # Set attributes that will help you debug
         span.set_attribute("destination", destination)
         result = f"You have selected {destination} as your travel destination."
+    logger.info(f"Selected random destination: {destination}")
     return result
 
 
@@ -133,7 +135,7 @@ def get_weather(location: str) -> str:
     Real weather API integration is optional and can use OPENWEATHER_API_KEY
     """
     # Log the request
-    logger.info(f"Getting weather for {location}")
+    logger.info(f"Fetching weather for location: {location}")
 
     # Create a span for this tool call
     with tracer.start_as_current_span("get_weather") as span:
@@ -174,6 +176,7 @@ def get_datetime() -> str:
 
     Hint: Use datetime.datetime.now().isoformat()
     """
+    logger.info("Fetching current date and time.")
     # Create a span for this tool call
     with tracer.start_as_current_span("get_datetime") as span:
         result = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
@@ -220,8 +223,7 @@ agent = ChatAgent(
 @app.route('/')
 def index():
     """Serve the home page with the travel planning form."""
-    # TODO: Render and return 'index.html'
-    # Hint: return render_template('index.html')
+    logger.info("Serving home page.")
     return render_template('index.html')
 
 
@@ -232,6 +234,7 @@ async def plan_trip():
 
     TODO: Implement this endpoint
     """
+    logger.info("Received travel plan request.")
     # Create a span for this tool call
     with tracer.start_as_current_span("plan_trip") as span:
         try:
@@ -293,25 +296,8 @@ async def plan_trip():
             return render_template('error.html', error=str(e)), 500
 
 # ============================================================================
-# Optional: API Endpoint for Mobile Apps
-# ============================================================================
-
-
-@app.route('/api/plan', methods=['POST'])
-def api_plan_trip():
-    """
-    API endpoint that returns JSON instead of HTML.
-
-    Optional for MVP but good practice for scaling!
-    """
-    # TODO: Similar to /plan but returns JSON
-    # Hint: Return jsonify({'travel_plan': text_content, 'success': True})
-    pass
-
-# ============================================================================
 # Main Execution
 # ============================================================================
-
 
 if __name__ == "__main__":
     # Run Flask development server

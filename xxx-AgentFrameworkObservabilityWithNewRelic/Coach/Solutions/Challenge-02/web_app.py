@@ -1,4 +1,6 @@
 # 📦 Import Required Libraries
+from agent_framework.openai import OpenAIChatClient
+from agent_framework import ChatAgent
 import os
 import asyncio
 import time
@@ -8,20 +10,17 @@ from random import randint, uniform
 # Flask imports
 from flask import Flask, render_template, request, jsonify
 
-# Microsoft Agent Framework
-from agent_framework import ChatAgent
-from agent_framework.openai import OpenAIChatClient
-
 # Load environment variables
 from dotenv import load_dotenv
 load_dotenv()
 
-# 🌐 Initialize Flask Application
-app = Flask(__name__)
-
 # 📝 Configure Logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+# Microsoft Agent Framework
+# 🌐 Initialize Flask Application
+app = Flask(__name__)
 
 # ============================================================================
 # TODO 1: Define Tool Functions
@@ -44,6 +43,7 @@ def get_random_destination() -> str:
     destinations = ["Garmisch-Partenkirchen", "Munich",
                     "Paris", "New York", "Tokyo", "Sydney", "Cairo"]
     destination = destinations[randint(0, len(destinations) - 1)]
+    logger.info(f"Selected random destination: {destination}")
     return f"You have selected {destination} as your travel destination."
 
 
@@ -63,6 +63,7 @@ def get_weather(location: str) -> str:
     Hint: For MVP, just return something like "The weather in {location} is sunny with a high of 22°C"
     Real weather API integration is optional and can use OPENWEATHER_API_KEY
     """
+    logger.info(f"Fetching weather for location: {location}")
     return f"The weather in {location} is sunny with a high of {randint(20, 30)}°C."
 
 
@@ -77,6 +78,7 @@ def get_datetime() -> str:
 
     Hint: Use datetime.datetime.now().isoformat()
     """
+    logger.info("Fetching current date and time.")
     return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
 # ============================================================================
@@ -118,8 +120,7 @@ agent = ChatAgent(
 @app.route('/')
 def index():
     """Serve the home page with the travel planning form."""
-    # TODO: Render and return 'index.html'
-    # Hint: return render_template('index.html')
+    logger.info("Serving home page.")
     return render_template('index.html')
 
 
@@ -130,6 +131,7 @@ async def plan_trip():
 
     TODO: Implement this endpoint
     """
+    logger.info("Received travel plan request.")
     try:
         # TODO: Extract form data
         # Hint: Use request.form.get() for single values and request.form.getlist() for checkboxes
@@ -181,25 +183,8 @@ Instructions:
         return render_template('error.html', error=str(e)), 500
 
 # ============================================================================
-# Optional: API Endpoint for Mobile Apps
-# ============================================================================
-
-
-@app.route('/api/plan', methods=['POST'])
-def api_plan_trip():
-    """
-    API endpoint that returns JSON instead of HTML.
-
-    Optional for MVP but good practice for scaling!
-    """
-    # TODO: Similar to /plan but returns JSON
-    # Hint: Return jsonify({'travel_plan': text_content, 'success': True})
-    pass
-
-# ============================================================================
 # Main Execution
 # ============================================================================
-
 
 if __name__ == "__main__":
     # Run Flask development server
