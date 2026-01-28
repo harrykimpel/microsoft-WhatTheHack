@@ -34,7 +34,13 @@ Your goal is to add comprehensive OpenTelemetry instrumentation to your travel p
 - Create a resource identifying your service (e.g., "travel-planner")
 - Set up the observability framework using the Agent Framework's built-in helpers
 
-Refer to the [Agent Framework Observability Guide](https://learn.microsoft.com/en-us/agent-framework/user-guide/observability?pivots=programming-language-python) for details on initialization. It is recommended to start the simplest approach first, such as console exporter, and then expand to more complex exporters like New Relic later.
+Refer to the [Agent Framework Observability Guide](https://learn.microsoft.com/en-us/agent-framework/user-guide/observability?pivots=programming-language-python) for details on initialization. It is recommended to start the simplest approach first, such as console exporter.
+
+Once you updated your application to successfully emit traces to the console (hint: this should only include adding two lines of code to your app), start your app again and evaluate the console output.
+
+If you see traces being emitted there, you can then proceed to set up OTLP exporter (hint: look for `OTEL_EXPORTER_OTLP_*` environment variables) to send data to New Relic. Restart your app again and verify that traces appear in [New Relic](https://one.newrelic.com/) (it can take a few minutes for data to appear). If you are curious, Agent Framework also allows you to configure logging of sensitive data (prompts, responses, function call arguments, and results).
+
+If you see traces in New Relic, you can then proceed to instrument the tool functions and Flask routes as described below.
 
 **Tool Instrumentation:**
 
