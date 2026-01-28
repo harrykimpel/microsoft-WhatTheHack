@@ -1,4 +1,5 @@
 # 📦 Import Required Libraries
+from dotenv import load_dotenv
 import os
 import asyncio
 import time
@@ -8,19 +9,18 @@ from random import randint, uniform
 # Flask imports
 from flask import Flask, render_template, request, jsonify
 
-# TODO 1: Import Microsoft Agent Framework
-# HINT: from agent_framework import ???
-
 # Load environment variables
-from dotenv import load_dotenv
 load_dotenv()
-
-# 🌐 Initialize Flask Application
-app = Flask(__name__)
 
 # 📝 Configure Logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+# TODO 1: Import Microsoft Agent Framework
+# HINT: from agent_framework import ???
+
+# 🌐 Initialize Flask Application
+app = Flask(__name__)
 
 # ============================================================================
 # TODO 1: Define Tool Functions
@@ -41,6 +41,7 @@ def get_random_destination() -> str:
     destinations = ["Garmisch-Partenkirchen", "Munich",
                     "Paris", "New York", "Tokyo", "Sydney", "Cairo"]
     destination = destinations[randint(0, len(destinations) - 1)]
+    logger.info(f"Selected random destination: {destination}")
     return f"You have selected {destination} as your travel destination."
 
 
@@ -52,6 +53,7 @@ def get_weather(location: str) -> str:
         Current weather as string
     Hint: Use OpenWeatherMap API with requests library or return mock data
     """
+    logger.info(f"Fetching weather for location: {location}")
     pass  # Your code here
 
 
@@ -66,6 +68,7 @@ def get_datetime() -> str:
 
     Hint: Use datetime.datetime.now().isoformat()
     """
+    logger.info("Fetching current date and time.")
     return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
 # ============================================================================
@@ -94,6 +97,7 @@ model_id = os.environ.get("MODEL_ID", "gpt-5-mini")
 @app.route('/')
 def index():
     """Serve the home page with the travel planning form."""
+    logger.info("Serving home page.")
     return render_template('index.html')
 
 
@@ -104,6 +108,7 @@ async def plan_trip():
 
     TODO: Implement this endpoint
     """
+    logger.info("Received travel plan request.")
     try:
         # TODO: Extract form data
         # Hint: Use request.form.get() for single values and request.form.getlist() for checkboxes

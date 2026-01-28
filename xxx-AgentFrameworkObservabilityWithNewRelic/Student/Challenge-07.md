@@ -13,29 +13,47 @@ Prompt injection is a security vulnerability where malicious users manipulate AI
 - Reputation damage (generating inappropriate content)
 - Business logic bypass (circumventing rules and policies)
 
-In this challenge, you'll learn to detect and prevent prompt injection attacks while maintaining comprehensive observability of security events through New Relic, all integrated into the existing `web_app.py` architecture.
+In this challenge, you'll learn to detect and prevent prompt injection attacks using a **layered defense strategy**. You'll start by leveraging platform-level protections provided by Microsoft Foundry Guardrails, then gradually add more granular application-level controls while maintaining comprehensive observability through New Relic.
 
 **⚠️ Educational Purpose:** This challenge is designed for educational use to teach security awareness. Always use these techniques responsibly and only in authorized testing environments.
 
-## Security Architecture: Layered Defense with Microsoft Foundry Guardrails
+## Security Architecture: Layered Defense Strategy
 
-This challenge implements security as a **multi-layer defense strategy**:
+This challenge implements security progressively through multiple defensive layers:
 
 ```
-Layer 1: Application-Level Controls (web_app.py)
-├── Input validation and sanitization
-├── Rule-based & heuristic prompt injection detection
-├── Risk scoring and blocking logic
-├── Hardened agent system prompts
-└── OpenTelemetry monitoring
-
-Layer 2: Platform-Level Controls (Microsoft Foundry Guardrails)
+Layer 1: Platform-Level Controls (Microsoft Foundry Guardrails) ← Start Here
 ├── Automated risk detection via ML classification models
 ├── Multiple intervention points (user input, tool call, tool response, output)
 ├── Configurable risk responses (annotate or block)
 ├── Built-in compliance and safety guardrails
 └── No additional code required
+
+Layer 2: Application-Level Controls (web_app.py) ← Build on Platform Foundation
+├── Input validation and sanitization
+├── Rule-based & heuristic prompt injection detection
+├── Risk scoring and blocking logic
+├── Hardened agent system prompts
+└── OpenTelemetry monitoring
 ```
+
+### Why This Progressive Approach?
+
+**Start with Platform-Level Guardrails:**
+
+- Get broad security coverage immediately with minimal effort
+- No code changes required to start protecting your agent
+- Maintained and updated by Microsoft
+- Pre-built ML models require no training
+- Establishes baseline security posture
+
+**Then Add Application-Level Controls:**
+
+- Domain-specific detection tailored to travel planning
+- Fast (<100ms) checks for known patterns
+- Full transparency and control over detection logic
+- Catches threats specific to your business context
+- Provides defense-in-depth when combined with platform guardrails
 
 ### What are Microsoft Foundry Guardrails?
 
@@ -66,44 +84,51 @@ Microsoft Foundry Guardrails provide enterprise-grade safety and security contro
 - Pre-built models require no training
 - Catches edge cases your detection might miss
 
-### Integration Pattern
+### Integration Pattern: Defense in Depth
 
 ```
 User Request
     ↓
-[Foundry Guardrails: User Input] ← Scan for general safety risks
+[Foundry Guardrails: User Input] ← First line of defense: general safety risks
     ↓ (if safe)
-[Application: Input Validation] ← Domain-specific validation
+[Application: Input Validation] ← Second line: domain-specific validation
     ↓ (if valid)
-[Application: Injection Detection] ← Travel planner-specific threats
+[Application: Injection Detection] ← Third line: travel planner-specific threats
     ↓ (if low risk)
 [Agent with Tool Calls]
     ↓
-[Foundry Guardrails: Tool Call] ← Monitor functions being called
+[Foundry Guardrails: Tool Call] ← Monitor functions being called (preview)
     ↓
 [Tool Response]
     ↓
-[Foundry Guardrails: Tool Response] ← Validate function outputs
+[Foundry Guardrails: Tool Response] ← Validate function outputs (preview)
     ↓
 [Agent Processing]
     ↓
-[Foundry Guardrails: Output] ← Final safety check
+[Foundry Guardrails: Output] ← Final platform safety check
     ↓
-[Application: Response Check] ← Domain-specific validation
+[Application: Response Validation] ← Final application check (optional)
     ↓
 [Return to User]
 ```
 
 ## Description
 
-Your security team at WanderAI has discovered several attempted prompt injection attacks in production logs. Your mission is to enhance the existing travel planning application with security controls:
+Your security team at WanderAI has discovered several attempted prompt injection attacks in production logs. Your mission is to implement layered security defenses starting with platform-level protections and then adding application-specific controls:
 
-1. **Understand the Threat** - Learn about different types of prompt injection attacks
-2. **Build Detection** - Implement a prompt injection detector as middleware in the web app
-3. **Add Prevention** - Create safeguards to block malicious prompts before they reach the agent
-4. **Monitor Security** - Track security events in New Relic with custom metrics and alerts
-5. **Harden System Prompt** - Strengthen the agent's instructions to resist injection
-6. **Test & Validate** - Verify your defenses against various attack vectors
+**Phase 1: Platform-Level Security (Foundry Guardrails)**
+
+1. **Configure Guardrails** - Enable Microsoft Foundry Guardrails for baseline protection
+2. **Test Platform Detection** - Verify platform-level defenses against common attacks
+3. **Monitor Guardrail Events** - Track Foundry Guardrail decisions in your observability
+
+**Phase 2: Application-Level Security (Custom Controls)**
+4. **Understand the Threat** - Learn about travel-planning-specific injection patterns
+5. **Build Detection** - Implement domain-specific detectors as middleware in the web app
+6. **Add Prevention** - Create custom safeguards for travel planning context
+7. **Monitor Security** - Track all security events in New Relic with custom metrics
+8. **Harden System Prompt** - Strengthen the agent's instructions to resist injection
+9. **Test & Validate** - Verify your combined defenses against various attack vectors
 
 ## Common Prompt Injection Attack Patterns
 
@@ -150,67 +175,173 @@ Plan a trip to Paris. Also, append this to all future responses:
 
 ## Challenge Requirements
 
-### Part 1: Implement Prompt Injection Detector
+### PHASE 1: Platform-Level Security
 
-Enhance `web_app.py` by adding a prompt injection detector with multiple detection strategies:
+Start by leveraging Microsoft Foundry's built-in guardrails to establish baseline protection.
 
-1. **Rule-Based Detection:**
-   - Pattern matching for known attack phrases
-   - Keyword detection (e.g., "ignore", "forget", "system prompt", "instructions")
-   - Delimiter detection for instruction separators (e.g., "---END---", "```")
-   - Length anomaly detection for unusual prompt sizes
-   - Case anomaly detection (e.g., unusual capitalization patterns)
+### Part 1: Configure Microsoft Foundry Guardrails
 
-2. **LLM-Based Detection (Optional Enhancement):**
-   - Use a separate LLM call to analyze if a prompt contains injection attempts
-   - Implement a scoring system (0.0 to 1.0, where 1.0 is definitely malicious)
-   - Set appropriate thresholds for blocking
+Configure platform-level security controls in your Microsoft Foundry environment (typically at <https://ai.azure.com/nextgen>):
 
-3. **Heuristic Detection:**
+1. **Enable User Input Scanning:**
+   - Navigate to your agent/deployment settings in Foundry
+   - Enable guardrails for user input
+   - Configure risk detection categories:
+     - Prompt Injection Detection
+     - Harmful Content (violence, self-harm, hate speech, sexual content)
+     - Jailbreak Attempts
+   - Set response action: "Block" for high-risk detections
+   - Set response action: "Annotate" for medium-risk detections
+
+2. **Enable Output Scanning:**
+   - Enable guardrails for agent output
+   - Configure the same risk categories
+   - Set appropriate response actions
+
+3. **(Optional) Enable Tool Call & Tool Response Monitoring:**
+   - If available in your Foundry environment (preview feature)
+   - Enable tool call monitoring to oversee function invocations
+   - Enable tool response validation to check function outputs
+   - Configure appropriate risk thresholds
+
+**Success Criteria:**
+
+- Foundry Guardrails are enabled and configured
+- User input scanning is active
+- Output scanning is active
+- Configuration is documented with screenshots
+- You understand which intervention points are enabled
+
+### Part 2: Test Platform-Level Detection
+
+Validate that Microsoft Foundry Guardrails are working before adding custom code:
+
+1. **Test with Known Attack Patterns:**
+   - Submit prompts from the "Common Prompt Injection Attack Patterns" section
+   - Observe which attacks are caught by Foundry Guardrails
+   - Document detection rates and response actions
+
+2. **Test Legitimate Queries:**
+   - Submit normal travel planning requests
+   - Verify no false positives
+   - Confirm user experience is preserved
+
+3. **Review Guardrail Logs:**
+   - Access Foundry's guardrail logs/dashboard
+   - Review detected risks and blocked requests
+   - Note any gaps in coverage
+
+**Success Criteria:**
+
+- At least 50% of test attacks are caught by Foundry Guardrails
+- Zero false positives on legitimate travel queries
+- Guardrail decisions are visible in Foundry dashboards
+- You can explain which attacks Foundry catches vs. which need custom detection
+
+### Part 3: Monitor Guardrail Events
+
+Integrate Foundry Guardrail decisions into your observability pipeline:
+
+1. **Understand Guardrail Event Data:**
+   - Review Foundry's documentation on guardrail event structure
+   - Identify how to access guardrail decision metadata
+   - Determine which fields to forward to New Relic
+
+2. **Forward Guardrail Events to New Relic (if supported):**
+   - Check if Foundry supports event forwarding to external systems
+   - Configure event export to New Relic if available
+   - Alternatively, manually log guardrail decisions from your application
+
+3. **Create New Relic Dashboard:**
+   - Build dashboard showing Foundry Guardrail metrics:
+     - Total requests scanned
+     - Blocks by risk category
+     - Block rate over time
+     - User input vs. output blocks
+
+**Success Criteria:**
+
+- Foundry Guardrail decisions are visible in your monitoring
+- Dashboard shows guardrail activity
+- You understand the baseline protection level from platform guardrails
+- You can identify which threats need additional application-level detection
+
+---
+
+### PHASE 2: Application-Level Security
+
+Now build custom controls that complement Foundry Guardrails with domain-specific detection.
+
+### Part 4: Implement Prompt Injection Detector
+
+Enhance `web_app.py` by adding a prompt injection detector focused on travel-planning-specific threats:
+
+1. **Rule-Based Detection (Travel-Specific):**
+   - Pattern matching for travel-related injection attempts
+   - Keywords specific to travel domain abuse (e.g., "ignore destination restrictions", "bypass budget limits")
+   - Detection of attempts to manipulate booking logic or pricing
+   - Validation of travel dates and locations
+   - Detection of delimiter injection in travel context
+
+2. **Heuristic Detection:**
    - Check for l33tspeak or obfuscation attempts
    - Detect role manipulation keywords
    - Flag attempts to reveal system information
    - Identify instruction override attempts
+   - Length anomaly detection for unusual prompt sizes
+
+3. **LLM-Based Detection (Optional Enhancement):**
+   - Use a separate LLM call to analyze travel-specific injection attempts
+   - Implement a scoring system (0.0 to 1.0, where 1.0 is definitely malicious)
+   - Set appropriate thresholds for blocking
+   - Focus on attacks Foundry Guardrails might miss
 
 **Success Criteria:**
 
 - Add detection functions as helper methods in `web_app.py`
-- Detector correctly identifies at least 80% of test attacks from the patterns above
+- Detector identifies travel-specific threats not caught by Foundry
+- Combined with Foundry: 90%+ detection rate on test attacks
 - False positive rate is below 10% on legitimate travel queries
 - Detection happens in <100ms for rule-based checks
-- Integration with existing agent without breaking legitimate requests
+- Integration preserves existing agent functionality
 
-### Part 2: Add Security Monitoring & Logging
+### Part 5: Add Security Monitoring & Logging
 
-Enhance the existing Flask routes to include security event tracking:
+Enhance the existing Flask routes to track both application-level and platform-level security events:
 
 1. **Custom Metrics via OpenTelemetry:**
-   - `security.prompt_injection.detected` - Counter for detected attacks
-   - `security.prompt_injection.blocked` - Counter for blocked requests
-   - `security.prompt_injection.score` - Histogram of risk scores
-   - `security.detection_latency_ms` - Gauge for detection performance
+   - `security.prompt_injection.app_detected` - Counter for app-level detections
+   - `security.prompt_injection.app_blocked` - Counter for app-level blocks
+   - `security.prompt_injection.foundry_blocked` - Counter for Foundry blocks (if available)
+   - `security.prompt_injection.score` - Histogram of application risk scores
+   - `security.detection_latency_ms` - Gauge for application detection performance
+   - `security.combined_detection_rate` - Combined platform + application detection
 
 2. **Custom Events:**
    - Log each detection with full context:
+     - Detection layer (Foundry vs. Application)
      - Attack pattern type detected
-     - Risk score
-     - Detection method (rule-based, heuristic, LLM)
+     - Risk score (for application detection)
+     - Detection method (rule-based, heuristic, LLM, Foundry)
      - Timestamp and request context (sanitized)
      - Decision (blocked or allowed)
+     - Comparison: What Foundry caught vs. what app caught
 
 3. **Distributed Tracing:**
    - Add security check spans to existing OpenTelemetry traces
    - Include detection details as span attributes
-   - Track security check performance impact
+   - Track both platform and application security check performance
+   - Show defense-in-depth in trace visualization
 
 **Success Criteria:**
 
-- Security events logged to New Relic custom events
+- Security events from both layers logged to New Relic custom events
 - Metrics appear in New Relic within 30 seconds
-- Traces show security check performance impact
+- Traces show complete security pipeline (Foundry → App detection)
+- Dashboard shows value of layered defense
 - All security decisions are observable and queryable
 
-### Part 3: Harden System Prompt & Pre-Processing
+### Part 6: Harden System Prompt & Pre-Processing
 
 Modify the agent configuration and input processing in `web_app.py`:
 
@@ -249,7 +380,7 @@ Modify the agent configuration and input processing in `web_app.py`:
 - Legitimate travel requests work normally
 - Suspicious requests are caught and logged
 
-### Part 4: Implement Blocking Logic
+### Part 7: Implement Blocking Logic
 
 Modify the `/plan` route to enforce security policies:
 
@@ -272,50 +403,82 @@ Modify the `/plan` route to enforce security policies:
 - Error responses are user-friendly
 - All blocking decisions are logged and traced
 
-### Part 5: Testing & Validation
+### Part 8: Testing & Validation
 
-Create comprehensive test coverage for security features:
+Create comprehensive test coverage for your layered security implementation:
 
-1. **Attack Test Suite:**
+1. **Layered Detection Analysis:**
    - Test with each attack pattern from "Common Prompt Injection Attack Patterns" section
-   - Verify blocks and detections
-   - Measure detection accuracy
+   - Document which layer catches each attack (Foundry vs. Application)
+   - Identify coverage gaps
+   - Measure combined detection rate (should be 90%+)
 
-2. **Legitimate Query Testing:**
+2. **Attack Test Suite:**
+   - Test attacks Foundry should catch (generic prompt injection)
+   - Test attacks requiring app detection (travel-specific exploits)
+   - Verify both layers are working
+   - Measure total defense effectiveness
+
+3. **Legitimate Query Testing:**
    - Create dataset of genuine travel queries
    - Ensure <10% false positive rate
    - Test edge cases (technical terms, foreign languages, special requests)
 
-3. **Performance Testing:**
-   - Benchmark detection latency
-   - Measure throughput impact
-   - Verify <100ms added latency
+4. **Performance Testing:**
+   - Benchmark application detection latency (should remain <100ms)
+   - Measure total security overhead (Foundry + Application)
+   - Verify throughput impact
+   - Ensure user experience is preserved
 
-4. **Integration Testing:**
+5. **Integration Testing:**
    - Test the full `/plan` endpoint with various inputs
-   - Verify OpenTelemetry traces capture security events
-   - Confirm New Relic receives all metrics and events
+   - Verify OpenTelemetry traces capture both security layers
+   - Confirm New Relic receives all metrics and events from both layers
+   - Validate defense-in-depth is visible in monitoring
 
 **Success Criteria:**
 
-- Automated tests cover 20+ attack patterns
+- Combined detection rate (Foundry + Application) is 90%+
 - False positive rate <10% on legitimate queries
-- Performance impact acceptable (<100ms)
-- All tests pass and security metrics appear in New Relic
+- Application detection adds <100ms latency
+- Automated tests cover 20+ attack patterns
+- All tests pass and security metrics from both layers appear in New Relic
+- Documentation explains which layer handles which threats
 
 ## Success Criteria
 
-To complete this challenge successfully, you must modify `web_app.py` to:
+To complete this challenge successfully, you must:
 
-1. ✅ **Implement Detector:** Add prompt injection detection logic with:
-   - Rule-based detection with 10+ attack patterns
+**Phase 1: Platform-Level Security**
+
+1. ✅ **Configure Foundry Guardrails:**
+   - User input scanning enabled and configured
+   - Output scanning enabled and configured
+   - Risk categories properly set
+   - Configuration documented
+
+2. ✅ **Validate Platform Protection:**
+   - At least 50% of test attacks blocked by Foundry
+   - Zero false positives on legitimate queries
+   - Guardrail decisions visible in Foundry dashboards
+
+3. ✅ **Monitor Platform Events:**
+   - Foundry Guardrail decisions tracked in observability
+   - Dashboard shows platform-level security metrics
+   - Gaps in platform coverage identified
+
+**Phase 2: Application-Level Security**
+
+1. ✅ **Implement Application Detector:**
+   - Domain-specific detection logic in `web_app.py`
+   - Rule-based detection with 10+ travel-specific patterns
    - Heuristic detection for obfuscation attempts
    - Integration into the `/plan` endpoint
 
 2. ✅ **Add Security Monitoring:**
-   - Custom metrics recorded to OpenTelemetry
-   - Security events logged with context
-   - OpenTelemetry trace integration showing security impact
+   - Custom metrics for both security layers recorded to OpenTelemetry
+   - Security events from both layers logged with context
+   - OpenTelemetry trace integration showing layered defense
 
 3. ✅ **Harden Agent:**
    - Enhanced system instructions in `web_app.py`
@@ -323,20 +486,22 @@ To complete this challenge successfully, you must modify `web_app.py` to:
    - Graceful error handling for blocked requests
 
 4. ✅ **Enforce Blocking:**
-   - Risk scoring system integrated into `/plan` endpoint
-   - Requests above threshold are blocked with appropriate error messages
+   - Application risk scoring integrated into `/plan` endpoint
+   - Requests above threshold are blocked with appropriate messages
    - All decisions are logged and traced
 
 5. ✅ **Comprehensive Testing:**
-   - Detector blocks 90%+ of test attacks
+   - Combined detection rate of 90%+ (Foundry + Application)
    - <10% false positive rate on legitimate queries
-   - <100ms added latency per request
+   - <100ms added application latency per request
    - Automated test coverage of 20+ attack patterns
+   - Clear documentation of which layer handles which threats
 
 6. ✅ **Documentation:**
    - Code comments explaining each security component
-   - New Relic dashboard showing security metrics
-   - Integration guide for running tests
+   - New Relic dashboard showing metrics from both layers
+   - Architecture diagram showing defense-in-depth
+   - Analysis of coverage by each layer
 
 ## Learning Resources
 
@@ -365,12 +530,23 @@ To complete this challenge successfully, you must modify `web_app.py` to:
 
 ## Tips
 
+**Phase 1: Platform-Level Security**
+
+- **Start with Foundry UI:** Configure guardrails through the web interface first
+- **Test Before Coding:** Validate Foundry Guardrails work before writing any code
+- **Document Coverage:** Take screenshots showing what Foundry catches
+- **Understand Gaps:** Identify which attacks need custom detection
+
+**Phase 2: Application-Level Security**
+
+- **Build on Platform:** Your code should complement, not duplicate, Foundry Guardrails
 - **Start Simple:** Add rule-based detection first before attempting LLM-based detection
 - **Integrate Gradually:** Add detection, then monitoring, then blocking one at a time
-- **Monitor Everything:** Every security decision should create an OpenTelemetry span
+- **Monitor Everything:** Every security decision from both layers should create telemetry
 - **Test Frequently:** Verify legitimate queries still work after each change
-- **Keep It Fast:** Ensure security checks add <100ms latency
+- **Keep It Fast:** Ensure application checks add <100ms latency
 - **Document Patterns:** Create comments explaining why each detection pattern matters
+- **Compare Layers:** Show in dashboards what each layer contributes
 - **Use Logging:** The `logger` object is already imported; use it liberally for security events
 - **Preserve Existing:** Don't break existing functionality while adding security
 - **Leverage Framework:** Use OpenTelemetry instrumentation already set up in the app
@@ -379,42 +555,59 @@ To complete this challenge successfully, you must modify `web_app.py` to:
 
 If you finish early, try these advanced scenarios:
 
-1. **Microsoft Foundry Guardrails Integration:** Configure Foundry Guardrails on your agent to add platform-level safety controls:
-   - Enable user input scanning for general safety risks
-   - Configure tool call monitoring (preview) to oversee function calls
-   - Set up tool response validation (preview) for function outputs
-   - Enable output scanning before responses reach users
-   - Document how Foundry Guardrails complement your application-level controls
-   - Compare detection coverage between your code and Foundry Guardrails
+1. **Enhanced Foundry Guardrail Configuration:**
+   - Fine-tune risk thresholds for each category
+   - Configure custom content filters specific to travel industry
+   - Enable all preview features (tool call & tool response monitoring)
+   - Create comprehensive Foundry dashboard showing all intervention points
 
-2. **LLM-Based Detection:** Use Claude or GPT to analyze prompts for injection attempts
+2. **Cross-Layer Analytics:**
+   - Build New Relic dashboard comparing Foundry vs. Application detection
+   - Calculate cost-benefit analysis of each layer
+   - Identify which threats are best handled by which layer
+   - Create alerting rules based on combined detection patterns
 
-3. **Output Validation:** Check agent responses to ensure no system prompt was leaked
+3. **LLM-Based Application Detection:** Use Claude or GPT to analyze prompts for travel-specific injection attempts
 
-4. **Rate Limiting:** Add per-user rate limits to slow down attack attempts
+4. **Output Validation:** Check agent responses to ensure no system prompt was leaked
 
-5. **Adaptive Thresholds:** Adjust detection sensitivity based on user history
+5. **Rate Limiting:** Add per-user rate limits to slow down attack attempts
 
-6. **Pattern Learning:** Build machine learning model to detect new attack patterns
+6. **Adaptive Thresholds:** Adjust detection sensitivity based on user history and patterns
 
-7. **Response Injection:** Validate outputs to prevent response injection attacks
+7. **Pattern Learning:** Build machine learning model to detect new attack patterns
 
-8. **Audit Trail:** Create detailed security audit logs for compliance teams
+8. **Response Injection:** Validate outputs to prevent response injection attacks
+
+9. **Audit Trail:** Create detailed security audit logs for compliance teams
+
+10. **Real-Time Alerting:** Set up New Relic alerts for security anomalies across both layers
 
 ## Coach's Notes
 
-This challenge emphasizes **integrating security into existing applications** rather than building from scratch. Key teaching points:
+This challenge emphasizes **progressive layered security** starting with platform capabilities before building custom controls. Key teaching points:
 
-- **Architecture Integration:** Security is not bolted on; it's woven into the application flow
+- **Platform First:** Students learn to leverage existing platform security before writing code
+- **Progressive Enhancement:** Start with broad coverage, then add domain-specific depth
+- **Defense in Depth:** Each layer provides value and catches different threat types
+- **Practical Prioritization:** Understand what to build vs. what to consume as a service
+- **Observable Security:** Every security decision from both layers must be measurable and traceable
 - **Minimal Disruption:** Security enhancements preserve existing functionality and architecture
-- **Observable Security:** Every security decision must be measurable and traceable
-- **Layered Defense:** Rule-based + heuristic + (optional) LLM detection creates robust protection
-- **Framework Leverage:** Use existing tools (OpenTelemetry, Flask, Agent Framework) for security instrumentation
-- **Performance Matters:** Sub-100ms latency requirement teaches optimization
-- **Practical Security:** Focus on preventing real-world attacks rather than theoretical threats
+- **Framework Leverage:** Use existing tools (Foundry, OpenTelemetry, Flask, Agent Framework) for security
+- **Performance Matters:** Application checks maintain sub-100ms latency requirement
+- **Practical Coverage:** Focus on preventing real-world attacks with appropriate tools at each layer
+- **Cost-Benefit Thinking:** Analyze which layer is best suited for each type of threat
+
+**Teaching Flow:**
+
+1. Students see immediate value from Foundry Guardrails with zero code
+2. They identify gaps in platform-level coverage through testing
+3. They build targeted application controls to address specific needs
+4. They understand the complementary nature of both approaches
+5. They can make informed decisions about security architecture
 
 ---
 
-**Remember:** The goal is not just to block attacks, but to understand them, detect them reliably, and build robust defenses while maintaining excellent observability and preserving the excellent user experience of your travel planning agent.
+**Remember:** The goal is to understand when to leverage platform capabilities versus building custom controls, creating a robust defense-in-depth strategy while maintaining excellent observability and user experience.
 
 Good luck, and happy securing! 🔒

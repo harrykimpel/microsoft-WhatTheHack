@@ -38,11 +38,13 @@ Refer to the [Agent Framework Observability Guide](https://learn.microsoft.com/e
 
 Once you updated your application to successfully emit traces to the console (hint: this should only include adding two lines of code to your app), start your app again and evaluate the console output.
 
-If you see traces being emitted there, you can then proceed to set up OTLP exporter (hint: look for `OTEL_EXPORTER_OTLP_*` environment variables) to send data to New Relic. Restart your app again and verify that traces appear in [New Relic](https://one.newrelic.com/) (it can take a few minutes for data to appear). If you are curious, Agent Framework also allows you to configure logging of sensitive data (prompts, responses, function call arguments, and results).
+If you are curious, Agent Framework also allows you to configure logging of sensitive data (prompts, responses, function call arguments, and results). This will log sensitive data to the console along with the traces. Be cautious when enabling this in production environments.
 
-If you see traces in New Relic, you can then proceed to instrument the tool functions and Flask routes as described below.
+If you see traces and logs being emitted there, you can then proceed to instrument the tool functions and Flask routes as described below.
 
 **Tool Instrumentation:**
+
+By leveraging the above approach you will notice that the Agent Framework automatically instruments tool calls. However, to get more detailed insights, you will manually add spans around each tool function:
 
 - Get a tracer for creating spans
 - Wrap each tool function (`get_random_destination`, `get_weather`, `get_datetime`) with `tracer.start_as_current_span()`
@@ -52,7 +54,7 @@ If you see traces in New Relic, you can then proceed to instrument the tool func
 **Route Instrumentation:**
 
 - Wrap the `/plan` route handler with a span
-- Add request-specific attributes (destination, duration, HTTP method)
+- Add request-specific attributes (destination, duration, etc.)
 - Handle errors and mark spans appropriately
 
 **Logging Configuration:**
@@ -85,4 +87,4 @@ To complete this challenge successfully, you should be able to:
 - Use meaningful attributes - Include anything that helps debugging
 - Don't overload - Every span and log should have a purpose
 - Test without the agent first - Make sure basic Flask routes work before adding agent complexity
-- The Agent Framework provides helper functions like `setup_observability()`, `get_tracer()`, and `get_meter()` that simplify setup
+- The Agent Framework provides helper functions like `configure_otel_providers()`, `get_tracer()`, and `get_meter()` that simplify setup
