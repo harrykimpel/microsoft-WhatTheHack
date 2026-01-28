@@ -513,20 +513,10 @@ To complete this challenge successfully, you must:
 
 ### Microsoft Foundry Guardrails
 
-- [Microsoft Foundry Guardrails Overview](https://learn.microsoft.com/en-us/azure/ai-foundry/concepts/guardrails)
-- [Configuring Guardrails for Safety](https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/configure-guardrails)
-- [Agent Guardrails (Preview)](https://learn.microsoft.com/en-us/azure/ai-foundry/concepts/agent-guardrails)
-- [Intervention Points and Risk Detection](https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/guardrails-intervention-points)
-
-### OpenTelemetry Security
-
-- [OpenTelemetry Security Best Practices](https://opentelemetry.io/docs/specs/otel/security/)
-- [Instrumenting Security Events](https://opentelemetry.io/docs/instrumentation/python/)
-
-### New Relic Security Monitoring
-
-- [Security Monitoring in New Relic](https://docs.newrelic.com/docs/security/)
-- [Custom Security Dashboards](https://docs.newrelic.com/docs/query-your-data/explore-query-data/dashboards/introduction-dashboards/)
+- [Microsoft Foundry Guardrails Overview](https://learn.microsoft.com/en-us/azure/ai-foundry/guardrails/guardrails-overview?view=foundry)
+- [Configuring Guardrails for Safety](https://learn.microsoft.com/en-us/azure/ai-foundry/guardrails/how-to-create-guardrails?view=foundry&tabs=python)
+- [Assign a guardrail to agents and models](https://learn.microsoft.com/en-us/azure/ai-foundry/guardrails/how-to-create-guardrails?view=foundry&tabs=python#assign-a-guardrail-to-agents-and-models)
+- [Intervention Points and Risk Detection](https://learn.microsoft.com/en-us/azure/ai-foundry/guardrails/intervention-points?view=foundry&pivots=programming-language-foundry-portal)
 
 ## Tips
 
@@ -582,29 +572,6 @@ If you finish early, try these advanced scenarios:
 9. **Audit Trail:** Create detailed security audit logs for compliance teams
 
 10. **Real-Time Alerting:** Set up New Relic alerts for security anomalies across both layers
-
-## Coach's Notes
-
-This challenge emphasizes **progressive layered security** starting with platform capabilities before building custom controls. Key teaching points:
-
-- **Platform First:** Students learn to leverage existing platform security before writing code
-- **Progressive Enhancement:** Start with broad coverage, then add domain-specific depth
-- **Defense in Depth:** Each layer provides value and catches different threat types
-- **Practical Prioritization:** Understand what to build vs. what to consume as a service
-- **Observable Security:** Every security decision from both layers must be measurable and traceable
-- **Minimal Disruption:** Security enhancements preserve existing functionality and architecture
-- **Framework Leverage:** Use existing tools (Foundry, OpenTelemetry, Flask, Agent Framework) for security
-- **Performance Matters:** Application checks maintain sub-100ms latency requirement
-- **Practical Coverage:** Focus on preventing real-world attacks with appropriate tools at each layer
-- **Cost-Benefit Thinking:** Analyze which layer is best suited for each type of threat
-
-**Teaching Flow:**
-
-1. Students see immediate value from Foundry Guardrails with zero code
-2. They identify gaps in platform-level coverage through testing
-3. They build targeted application controls to address specific needs
-4. They understand the complementary nature of both approaches
-5. They can make informed decisions about security architecture
 
 ---
 
