@@ -1,5 +1,5 @@
 agent-framework-core
-flask
+flask[async]
 flask-cors
 requests
 python-dotenv

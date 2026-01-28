@@ -4,9 +4,19 @@
 
 ## Introduction
 
-Now that you have a working MVP, it's time to add observability to your WanderAI agents using OpenTelemetry. Right now, if something goes wrong with your agent, you have no visibility into which tool was called, how long operations take, or how to correlate logs to specific requests.
+Now that you have a working MVP, it's time to add observability to your WanderAI agents using [OpenTelemetry](https://opentelemetry.io/). Right now, if something goes wrong with your agent, you have no visibility into which tool was called, how long operations take, or how to correlate logs to specific requests.
 
 OpenTelemetry is the industry standard for observability in modern applications. By instrumenting your application, you'll be able to see traces showing the full journey of each request, capture timing information, and add structured context to your logs.
+
+Microsoft Agent Framework already integrates with OpenTelemetry out of the box, and more specifically Agent Framework emits traces, logs, and metrics according to the [OpenTelemetry GenAI Semantic Conventions](https://opentelemetry.io/docs/specs/semconv/gen-ai/).
+
+In this challenge, you will enhance your travel planning application by adding OpenTelemetry instrumentation to key parts of the codebase, including:
+
+- Tool functions
+- Flask route handlers
+- Logging configuration
+
+We will start by initializing OpenTelemetry in the application, then proceed to instrument the tool functions and Flask routes to capture detailed traces. Finally, we will configure structured logging that includes trace context for better correlation.
 
 ## Description
 
@@ -23,10 +33,12 @@ Your goal is to add comprehensive OpenTelemetry instrumentation to your travel p
 
 - Create a resource identifying your service (e.g., "travel-planner")
 - Set up the observability framework using the Agent Framework's built-in helpers
-- Get a tracer for creating spans
+
+Refer to the [Agent Framework Observability Guide](https://learn.microsoft.com/en-us/agent-framework/user-guide/observability?pivots=programming-language-python) for details on initialization. It is recommended to start the simplest approach first, such as console exporter, and then expand to more complex exporters like New Relic later.
 
 **Tool Instrumentation:**
 
+- Get a tracer for creating spans
 - Wrap each tool function (`get_random_destination`, `get_weather`, `get_datetime`) with `tracer.start_as_current_span()`
 - Add relevant attributes to spans (e.g., location, destination)
 - Log information within the span context
@@ -54,11 +66,11 @@ To complete this challenge successfully, you should be able to:
 
 ## Learning Resources
 
+- [Microsoft Agent Framework Observability](https://learn.microsoft.com/en-us/agent-framework/user-guide/observability?pivots=programming-language-python)
 - [OpenTelemetry Concepts](https://opentelemetry.io/docs/concepts/)
 - [OpenTelemetry Python Documentation](https://opentelemetry.io/docs/instrumentation/python/)
 - [OpenTelemetry Python API - Tracing](https://opentelemetry.io/docs/instrumentation/python/manual/)
 - [OTLP Protocol](https://opentelemetry.io/docs/specs/otel/protocol/)
-- [Agent Framework Observability](https://learn.microsoft.com/en-us/agent-framework/overview/agent-framework-overview)
 
 ## Tips
 

@@ -112,7 +112,7 @@ The `newrelic.event.type` attribute in logger.info() calls is THE mechanism that
 
 - Use `skip_llm=True` for real-time requests, run LLM evaluation async
 - Cache evaluation results for similar responses
-- Use a faster/smaller model for evaluation (gpt-4o-mini)
+- Use a faster/smaller model for evaluation (gpt-5-mini)
 - Run rule-based checks first, only LLM evaluate if needed
 - Consider batch evaluation for non-real-time use cases
 
@@ -167,7 +167,7 @@ Coach should verify participants have:
 - [ ] Custom events emitting `LlmChatCompletionMessage` for user and assistant
 - [ ] Custom events emitting `LlmChatCompletionSummary` for each interaction
 - [ ] AI Monitoring section accessible in New Relic
-- [ ] Model inventory shows their model (gpt-4o-mini or similar)
+- [ ] Model inventory shows their model (gpt-5-mini or similar)
 - [ ] Rule-based evaluation checking response structure and content
 - [ ] Evaluation results logged/exported to New Relic
 - [ ] Can demonstrate evaluation catching a bad response (optional: LLM evaluation)

@@ -281,7 +281,7 @@ def get_datetime() -> str:
 # OpenAI Chat Client Configuration
 # ============================================================================
 
-model_id = os.environ.get("MODEL_ID", "gpt-4o-mini")
+model_id = os.environ.get("MODEL_ID", "gpt-5-mini")
 
 openai_chat_client = OpenAIChatClient(
     base_url=os.environ.get("MSFT_FOUNDRY_ENDPOINT"),

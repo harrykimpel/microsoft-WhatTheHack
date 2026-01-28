@@ -28,7 +28,7 @@ def evaluator():
 @pytest.fixture
 def evaluator_with_llm():
     """Create an evaluator with LLM enabled."""
-    return TravelPlanEvaluator(enable_llm_evaluation=True, model_id="gpt-4o-mini")
+    return TravelPlanEvaluator(enable_llm_evaluation=True, model_id="gpt-5-mini")
 
 
 @pytest.fixture
@@ -280,7 +280,7 @@ class TestFactoryFunctions:
         """Test create_evaluator with custom settings."""
         evaluator = create_evaluator(
             enable_llm=True,
-            model_id="gpt-4o-mini",
+            model_id="gpt-5-mini",
             strict=True
         )
 

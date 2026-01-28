@@ -73,6 +73,26 @@ On Windows and macOS (**NOTE:** only tested on Apple Silicon):
 
 </details>
 
+### Gather Your Credentials
+
+Before proceeding with the hack, you will need to gather the following credentials from your provided environment:
+
+#### Microsoft Foundry Credentials
+
+1. Navigate to your Microsoft Foundry environment (typically at [https://ai.azure.com/nextgen](https://ai.azure.com/nextgen))
+2. Locate and copy your **Foundry Endpoint URL**
+3. Locate and copy your **Foundry API Key**
+
+Keep these credentials in a safe place as you will need them to configure your application in the upcoming challenges.
+
+#### New Relic License Key
+
+1. Access your New Relic account at [https://one.newrelic.com/](https://one.newrelic.com/)
+2. Navigate to your account settings or API keys section at [https://one.newrelic.com/launcher/api-keys-ui.api-keys-launcher](https://one.newrelic.com/launcher/api-keys-ui.api-keys-launcher)
+3. Locate and copy your **New Relic License Key** (also known as Ingest License Key)
+
+This license key will be used to send telemetry data from your application to New Relic for observability and monitoring.
+
 ## Success Criteria
 
 To complete this challenge successfully, you should be able to:
@@ -80,6 +100,8 @@ To complete this challenge successfully, you should be able to:
 - Verify that you have a GitHub Codespace running with the dev container configuration set to `xxx-AgentFrameworkObservabilityWithNewRelic`
 - Verify that Visual Studio Code is available in your browser (or locally) with the hack files loaded
 - Verify that you have access to the sample application code and resource files
+- Verify that you have collected your Microsoft Foundry endpoint and API key
+- Verify that you have collected your New Relic license key
 
 ## Learning Resources
 

@@ -179,7 +179,7 @@ class TravelPlanEvaluator:
     def __init__(
         self,
         enable_llm_evaluation: bool = True,
-        model_id: str = "gpt-4o",
+        model_id: str = "gpt-5-mini",
         strict_mode: bool = False
     ):
         """
@@ -725,7 +725,7 @@ class TravelPlanMetrics:
 
 def create_evaluator(
     enable_llm: bool = True,
-    model_id: str = "gpt-4o",
+    model_id: str = "gpt-5-mini",
     strict: bool = False
 ) -> TravelPlanEvaluator:
     """

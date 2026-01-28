@@ -8,9 +8,8 @@ from random import randint, uniform
 # Flask imports
 from flask import Flask, render_template, request, jsonify
 
-# Microsoft Agent Framework
-from agent_framework import ChatAgent
-from agent_framework.openai import OpenAIChatClient
+# TODO 1: Import Microsoft Agent Framework
+# HINT: from agent_framework import ???
 
 # Load environment variables
 from dotenv import load_dotenv
@@ -31,15 +30,13 @@ logger = logging.getLogger(__name__)
 
 def get_random_destination() -> str:
     """
-    TODO: Implement this tool function
+    TODO: Implement/update this tool function
 
-    Args:
-        destination: The destination the user selected
+    Get a random travel destination
 
     Returns:
-        A string confirming the destination
+        A random destination
 
-    Hint: Simply return a confirmation message with the destination name
     """
     destinations = ["Garmisch-Partenkirchen", "Munich",
                     "Paris", "New York", "Tokyo", "Sydney", "Cairo"]
@@ -49,21 +46,13 @@ def get_random_destination() -> str:
 
 def get_weather(location: str) -> str:
     """
-    TODO: Implement this tool function
-
-    This should return weather information for a location.
-    For now, you can return a fake weather message.
-
-    Args:
-        location: The location to get weather for
-
+    TODO: Implement this function
+    Get current weather for a given location
     Returns:
-        A weather description string
-
-    Hint: For MVP, just return something like "The weather in {location} is sunny with a high of 22°C"
-    Real weather API integration is optional and can use OPENWEATHER_API_KEY
+        Current weather as string
+    Hint: Use OpenWeatherMap API with requests library or return mock data
     """
-    return f"The weather in {location} is sunny with a high of {randint(20, 30)}°C."
+    pass  # Your code here
 
 
 def get_datetime() -> str:
@@ -86,33 +75,21 @@ def get_datetime() -> str:
 
 model_id = os.environ.get("MODEL_ID", "gpt-5-mini")
 
-# Use Microsoft Foundry endpoint directly
-openai_chat_client = OpenAIChatClient(
-    base_url=os.environ.get("MSFT_FOUNDRY_ENDPOINT"),
-    api_key=os.environ.get("MSFT_FOUNDRY_API_KEY"),
-    model_id=model_id
-)
+# HINT: openai_chat_client = ???
 
 # ============================================================================
-# TODO 3: Create the Travel Planning Agent
+# TODO 3: Create the Travel Planning ChatAgent
 # ============================================================================
 
-# TODO: Create a ChatAgent with:
 # - chat_client: Your OpenAI client
 # - instructions: "You are a helpful AI Agent that can help plan vacations for customers."
 # - tools: A list of the three tool functions [get_random_destination, get_weather, get_datetime]
+# agent = ???
 
-agent = ChatAgent(
-    chat_client=openai_chat_client,
-    instructions="You are a helpful AI Agent that can help plan vacations for customers at random destinations.",
-    # Tool functions available to the agent
-    tools=[get_random_destination, get_weather, get_datetime]
-)
 
 # ============================================================================
-# TODO 4: Create Flask Routes
+# Flask Routes
 # ============================================================================
-
 
 @app.route('/')
 def index():
@@ -158,15 +135,9 @@ Instructions:
 
         # TODO: Run the agent asynchronously
         # Hint: Use asyncio to run: response = await agent.run(user_prompt)
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        response = await agent.run(user_prompt)
-        loop.close()
 
         # TODO: Extract the travel plan from response
-        # Hint: response.messages[-1].contents[0].text
-        last_message = response.messages[-1]
-        text_content = last_message.contents[0].text
+        # Hint: text_content = response.messages???
 
         # TODO: Render and return 'result.html' with the travel plan
         return render_template('result.html',
@@ -177,21 +148,6 @@ Instructions:
         logger.error(f"Error planning trip: {str(e)}")
         return render_template('error.html', error=str(e)), 500
 
-# ============================================================================
-# Optional: API Endpoint for Mobile Apps
-# ============================================================================
-
-
-@app.route('/api/plan', methods=['POST'])
-def api_plan_trip():
-    """
-    API endpoint that returns JSON instead of HTML.
-
-    Optional for MVP but good practice for scaling!
-    """
-    # TODO: Similar to /plan but returns JSON
-    # Hint: Return jsonify({'travel_plan': text_content, 'success': True})
-    pass
 
 # ============================================================================
 # Main Execution

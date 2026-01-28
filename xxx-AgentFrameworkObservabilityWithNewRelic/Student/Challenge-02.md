@@ -41,7 +41,7 @@ Your application needs these key pieces:
   - POST `/plan` - Accept travel preferences, run agent, return results
 
 - **Agent Setup** - Create the AI agent:
-  - Initialize OpenAI client (using GitHub Models or Azure OpenAI)
+  - Initialize OpenAI client (using Microsoft Foundry)
   - Create ChatAgent with tools
   - Set system instructions for travel planning
 
@@ -54,8 +54,9 @@ Your application needs these key pieces:
 
 Your application needs the following environment variables configured in a `.env` file:
 
-- `OPENAI_API_KEY` or `GITHUB_TOKEN` - API key for LLM access
-- `GITHUB_MODEL_ID` - Model to use (e.g., `gpt-4o-mini`)
+- `MSFT_FOUNDRY_ENDPOINT` - Endpoint URL for Microsoft Foundry (e.g. <https://your-resource-name.openai.azure.com/openai/v1/>)
+- `MSFT_FOUNDRY_API_KEY` - API key for LLM access
+- `MODEL_ID` - Model to use (e.g., `gpt-5-mini`)
 - `OPENWEATHER_API_KEY` (optional) - For real weather data
 
 ### Starter Code
@@ -71,6 +72,8 @@ To complete this challenge successfully, you should be able to:
 - Submit a travel request through the form
 - Verify that the AI agent returns a formatted travel plan
 - Show that the plan includes information from your tool functions (weather, date/time)
+
+Once you have met these criteria, you will have successfully built the MVP for WanderAI's Travel Planner service! Leverage the `run.sh` script to start your application. The first time you run it, it will install dependencies and set up the environment. Initially, no `.env` file will exist, so the script will create one and terminate. Add your API keys and other required environment variables listed above. Run the script again to start the Flask server.
 
 ## Learning Resources
 
