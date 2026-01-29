@@ -451,53 +451,53 @@ To complete this challenge successfully, you must:
 
 **Phase 1: Platform-Level Security**
 
-1. ✅ **Configure Foundry Guardrails:**
+1. [ ] **Configure Foundry Guardrails:**
    - User input scanning enabled and configured
    - Output scanning enabled and configured
    - Risk categories properly set
    - Configuration documented
 
-2. ✅ **Validate Platform Protection:**
+2. [ ] **Validate Platform Protection:**
    - At least 50% of test attacks blocked by Foundry
    - Zero false positives on legitimate queries
    - Guardrail decisions visible in Foundry dashboards
 
-3. ✅ **Monitor Platform Events:**
+3. [ ] **Monitor Platform Events:**
    - Foundry Guardrail decisions tracked in observability
    - Dashboard shows platform-level security metrics
    - Gaps in platform coverage identified
 
 **Phase 2: Application-Level Security**
 
-1. ✅ **Implement Application Detector:**
+1. [ ] **Implement Application Detector:**
    - Domain-specific detection logic in `web_app.py`
    - Rule-based detection with 10+ travel-specific patterns
    - Heuristic detection for obfuscation attempts
    - Integration into the `/plan` endpoint
 
-2. ✅ **Add Security Monitoring:**
+2. [ ] **Add Security Monitoring:**
    - Custom metrics for both security layers recorded to OpenTelemetry
    - Security events from both layers logged with context
    - OpenTelemetry trace integration showing layered defense
 
-3. ✅ **Harden Agent:**
+3. [ ] **Harden Agent:**
    - Enhanced system instructions in `web_app.py`
    - Input validation and sanitization
    - Graceful error handling for blocked requests
 
-4. ✅ **Enforce Blocking:**
+4. [ ] **Enforce Blocking:**
    - Application risk scoring integrated into `/plan` endpoint
    - Requests above threshold are blocked with appropriate messages
    - All decisions are logged and traced
 
-5. ✅ **Comprehensive Testing:**
+5. [ ] **Comprehensive Testing:**
    - Combined detection rate of 90%+ (Foundry + Application)
    - <10% false positive rate on legitimate queries
    - <100ms added application latency per request
    - Automated test coverage of 20+ attack patterns
    - Clear documentation of which layer handles which threats
 
-6. ✅ **Documentation:**
+6. [ ] **Documentation:**
    - Code comments explaining each security component
    - New Relic dashboard showing metrics from both layers
    - Architecture diagram showing defense-in-depth

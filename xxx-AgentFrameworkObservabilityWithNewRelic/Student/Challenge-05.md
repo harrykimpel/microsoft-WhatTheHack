@@ -58,11 +58,11 @@ For a travel planning agent, focus on:
 
 To complete this challenge successfully, you should be able to:
 
-- Demonstrate that custom metrics are being collected and exported to New Relic
-- Show a dashboard with at least 5 widgets visualizing different aspects of your application
-- Verify that at least 2 alerts are configured and working
-- Demonstrate that you can write custom NRQL queries to analyze your data
-- Show that your team can access and understand the dashboard
+- [ ] Demonstrate that custom metrics are being collected and exported to New Relic
+- [ ] Show a dashboard with at least 5 widgets visualizing different aspects of your application
+- [ ] Verify that at least 2 alerts are configured and working
+- [ ] Demonstrate that you can write custom NRQL queries to analyze your data
+- [ ] Show that your team can access and understand the dashboard
 
 ## Learning Resources
 

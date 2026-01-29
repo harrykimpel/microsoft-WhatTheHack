@@ -108,14 +108,14 @@ Once you emit the custom events, you can access New Relic's curated AI Monitorin
 
 To complete this challenge successfully, you should be able to:
 
-- Demonstrate that custom events (`LlmChatCompletionMessage`, `LlmChatCompletionSummary`) are being sent to New Relic
-- Show that the Model Inventory in New Relic displays your models
-- Verify that rule-based evaluation is running on generated travel plans
-- Demonstrate that evaluation metrics are being tracked (passed/failed counts, scores)
-- Show that you can view AI monitoring data in New Relic's AI Monitoring section
-- Implement thumbs up/down feedback buttons in the WanderAI UI
-- Demonstrate that `LlmFeedbackMessage` events with `trace_id` correlation are sent to New Relic
-- Show that you can query feedback data and correlate it with AI interactions using `trace_id`
+- [ ] Demonstrate that custom events (`LlmChatCompletionMessage`, `LlmChatCompletionSummary`) are being sent to New Relic
+- [ ] Show that the Model Inventory in New Relic displays your models
+- [ ] Verify that rule-based evaluation is running on generated travel plans
+- [ ] Demonstrate that evaluation metrics are being tracked (passed/failed counts, scores)
+- [ ] Show that you can view AI monitoring data in New Relic's AI Monitoring section
+- [ ] Implement thumbs up/down feedback buttons in the WanderAI UI
+- [ ] Demonstrate that `LlmFeedbackMessage` events with `trace_id` correlation are sent to New Relic
+- [ ] Show that you can query feedback data and correlate it with AI interactions using `trace_id`
 
 ## Learning Resources
 

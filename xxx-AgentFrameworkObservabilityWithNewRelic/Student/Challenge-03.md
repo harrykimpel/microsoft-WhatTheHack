@@ -66,11 +66,11 @@ By leveraging the above approach you will notice that the Agent Framework automa
 
 To complete this challenge successfully, you should be able to:
 
-- Verify that OpenTelemetry SDK is initialized in your application
-- Demonstrate that traces appear in the console when you make requests
-- Show that tool function spans are captured with their attributes
-- Verify that Flask route spans include request information
-- Demonstrate that logs include trace context for correlation
+- [ ] Verify that OpenTelemetry SDK is initialized in your application
+- [ ] Demonstrate that traces appear in the console when you make requests
+- [ ] Show that tool function spans are captured with their attributes
+- [ ] Verify that Flask route spans include request information
+- [ ] Demonstrate that logs include trace context for correlation
 
 If everything is set up correctly, when you run your Flask app and submit a travel request, you should see detailed traces in the console output showing the full journey of the request, including tool calls and route handling.
 

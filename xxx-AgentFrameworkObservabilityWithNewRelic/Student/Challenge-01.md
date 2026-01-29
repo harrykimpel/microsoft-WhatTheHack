@@ -63,11 +63,11 @@ Answer these questions to validate your learning:
 
 To complete this challenge successfully, you should be able to:
 
-- Demonstrate your understanding of what an AI agent is and how it differs from a simple LLM API call
-- Explain what tool calling means and why agents need tools
-- Describe the agent-tool lifecycle
-- Explain what OpenTelemetry is and why observability matters for AI
-- Identify the key components of the complete solution architecture
+- [ ] Reflect on your understanding of what an AI agent is and how it differs from a simple LLM API call
+- [ ] Articulate what tool calling means and why agents need tools
+- [ ] Describe the agent-tool lifecycle
+- [ ] Explain what OpenTelemetry is and why observability matters for AI
+- [ ] Identify the key components of the complete solution architecture
 
 # **TODO: what's next, how to apply this as part of the next challenge**
 

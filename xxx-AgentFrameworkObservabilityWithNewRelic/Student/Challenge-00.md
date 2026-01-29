@@ -97,11 +97,11 @@ This license key will be used to send telemetry data from your application to Ne
 
 To complete this challenge successfully, you should be able to:
 
-- Verify that you have a GitHub Codespace running with the dev container configuration set to `xxx-AgentFrameworkObservabilityWithNewRelic`
-- Verify that Visual Studio Code is available in your browser (or locally) with the hack files loaded
-- Verify that you have access to the sample application code and resource files
-- Verify that you have collected your Microsoft Foundry endpoint and API key
-- Verify that you have collected your New Relic license key
+- [ ] Verify that you have a GitHub Codespace running with the dev container configuration set to `xxx-AgentFrameworkObservabilityWithNewRelic`
+- [ ] Verify that Visual Studio Code is available in your browser (or locally) with the hack files loaded
+- [ ] Verify that you have access to the sample application code and resource files
+- [ ] Verify that you have collected your Microsoft Foundry endpoint and API key
+- [ ] Verify that you have collected your New Relic license key
 
 ## Learning Resources
 

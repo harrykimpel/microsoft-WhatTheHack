@@ -61,11 +61,11 @@ If you see traces in New Relic, you can then proceed to instrument the tool func
 
 To complete this challenge successfully, you should be able to:
 
-- Verify that traces appear in New Relic within seconds of making requests
-- Demonstrate that tool spans are visible in the trace details (get_weather, get_datetime, etc.)
-- Show the service map in New Relic displaying your application
-- Verify that custom attributes are visible in trace details
-- Demonstrate that you can search and filter traces using NRQL queries
+- [ ] Verify that traces appear in New Relic within seconds of making requests
+- [ ] Demonstrate that tool spans are visible in the trace details (get_weather, get_datetime, etc.)
+- [ ] Show the service map in New Relic displaying your application
+- [ ] Verify that custom attributes are visible in trace details
+- [ ] Demonstrate that you can search and filter traces using NRQL queries
 
 ## Learning Resources
 
