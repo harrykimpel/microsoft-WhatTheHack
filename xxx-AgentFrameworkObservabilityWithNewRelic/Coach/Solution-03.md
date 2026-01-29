@@ -49,7 +49,7 @@ The [Example solution implementation](./Solutions/Challenge-03/) folder contains
 **Cause:** OpenTelemetry not initialized or exporters not configured
 **Solution:**
 
-- Verify `setup_observability()` is called before creating tracer/meter
+- Verify `configure_otel_providers()` is called before creating tracer/meter
 - Check that `get_tracer()` and `get_meter()` are called after setup
 - Ensure spans are created with `with tracer.start_as_current_span("name"):`
 - Add a console exporter temporarily to verify data is being generated

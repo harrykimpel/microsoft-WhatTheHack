@@ -25,18 +25,7 @@ A GitHub account, GitHub Copilot, and VS Code is all that is needed for this hac
 - Verify GitHub account has Codespaces enabled
 - Check [GitHub Status](https://www.githubstatus.com/) for outages
 
-### Issue 2: GitHub Copilot Not Working
-
-**Symptom:** No suggestions appearing, or "Copilot is not available" message
-**Cause:** Extension not installed, not signed in, or subscription expired
-**Solution:**
-
-- Verify Copilot extension is installed in VS Code
-- Sign out and sign back into GitHub in VS Code
-- Check subscription status at github.com/settings/copilot
-- Restart VS Code after installation
-
-### Issue 3: VS Code Extensions Not Installing
+### Issue 2: VS Code Extensions Not Installing
 
 **Symptom:** Extensions fail to install or show errors
 **Cause:** Network restrictions, proxy settings, or corrupted cache
@@ -47,7 +36,7 @@ A GitHub account, GitHub Copilot, and VS Code is all that is needed for this hac
 - Clear VS Code extension cache: `~/.vscode/extensions`
 - Restart VS Code
 
-### Issue 4: Environment Variables Not Set
+### Issue 3: Environment Variables Not Set
 
 **Symptom:** API calls fail with authentication errors
 **Cause:** `.env` file missing or not loaded
@@ -83,7 +72,6 @@ Coach should verify participants have:
 
 - [ ] GitHub account created and logged in
 - [ ] VS Code or Codespaces running successfully
-- [ ] GitHub Copilot extension installed and working (shows suggestions)
 - [ ] Can create and edit files in the workspace
-- [ ] New Relic account created (if using their own)
+- [ ] New Relic account created and logged in
 - [ ] Environment variables configured in `.env` file

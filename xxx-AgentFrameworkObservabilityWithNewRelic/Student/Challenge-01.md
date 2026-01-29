@@ -59,6 +59,8 @@ Answer these questions to validate your learning:
 
 ## Success Criteria
 
+# **TODO: check whether we want to run some kind of quiz or knowledge check here**
+
 To complete this challenge successfully, you should be able to:
 
 - Demonstrate your understanding of what an AI agent is and how it differs from a simple LLM API call
@@ -67,14 +69,16 @@ To complete this challenge successfully, you should be able to:
 - Explain what OpenTelemetry is and why observability matters for AI
 - Identify the key components of the complete solution architecture
 
+# **TODO: what's next, how to apply this as part of the next challenge**
+
 ## Learning Resources
 
 - [Microsoft Agent Framework GitHub](https://github.com/microsoft/agent-framework)
 - [Agent Framework Documentation](https://learn.microsoft.com/en-us/agent-framework/overview/agent-framework-overview)
 - [ChatAgent Concepts](https://learn.microsoft.com/en-us/agent-framework/tutorials/agents/run-agent?pivots=programming-language-python#create-the-agent-1)
-- [Flask Quickstart](https://flask.palletsprojects.com/en/3.0.x/quickstart/)
 - [OpenTelemetry Concepts](https://opentelemetry.io/docs/concepts/)
 - [Why Observability Matters](https://docs.newrelic.com/docs/using-new-relic/welcome-new-relic/get-started/introduction-new-relic/#observability)
+- [Flask Quickstart](https://flask.palletsprojects.com/en/3.0.x/quickstart/)
 
 ## Tips
 

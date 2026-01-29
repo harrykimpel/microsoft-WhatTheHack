@@ -446,20 +446,20 @@ async def plan_trip():
 
         user_prompt = f"""Plan me a {duration}-day trip to a random destination starting on {date}.
 
-Trip Details:
-- Date: {date}
-- Duration: {duration} days
-- Interests: {', '.join(sanitized_interests) if sanitized_interests else 'General sightseeing'}
-- Special Requests: {sanitized_requests if sanitized_requests else 'None'}
+            Trip Details:
+            - Date: {date}
+            - Duration: {duration} days
+            - Interests: {', '.join(sanitized_interests) if sanitized_interests else 'General sightseeing'}
+            - Special Requests: {sanitized_requests if sanitized_requests else 'None'}
 
-Instructions:
-1. A detailed day-by-day itinerary with activities tailored to the interests
-2. Current weather information for the destination
-3. Local cuisine recommendations
-4. Best times to visit specific attractions
-5. Travel tips and budget estimates
-6. Current date and time reference
-"""
+            Instructions:
+            1. A detailed day-by-day itinerary with activities tailored to the interests
+            2. Current weather information for the destination
+            3. Local cuisine recommendations
+            4. Best times to visit specific attractions
+            5. Travel tips and budget estimates
+            6. Current date and time reference
+            """
 
         # ====== STEP 7: Run agent ======
 

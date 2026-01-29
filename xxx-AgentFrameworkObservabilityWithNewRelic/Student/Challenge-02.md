@@ -67,13 +67,21 @@ A starter code file `web_app.py` with TODO comments is provided in the Resources
 
 To complete this challenge successfully, you should be able to:
 
-- Verify that the Flask app runs without errors
-- Demonstrate that the web form loads at `http://localhost:5002`
-- Submit a travel request through the form
-- Verify that the AI agent returns a formatted travel plan
-- Show that the plan includes information from your tool functions (weather, date/time)
+- [ ] Verify that the Flask app runs without errors
+- [ ] Demonstrate that the web form loads at `http://localhost:5002`
+- [ ] Submit a travel request through the form
+- [ ] Verify that the AI agent returns a formatted travel plan
+- [ ] Show that the plan includes information from your tool functions (weather, date/time)
 
 Once you have met these criteria, you will have successfully built the MVP for WanderAI's Travel Planner service! Leverage the `run.sh` script to start your application. The first time you run it, it will install dependencies and set up the environment. Initially, no `.env` file will exist, so the script will create one and terminate. Add your API keys and other required environment variables listed above. Run the script again to start the Flask server.
+
+If everything is set up correctly, you should see output indicating the Flask app is running on `http://localhost:5002`. Open that URL in your web browser to access the travel planner form.
+
+![WanderAI MVP Homepage](../Images/wanderai-mvp-homepage.png)
+
+Once you enter your travel preferences and submit the form, the AI agent will process your request and generate a personalized travel itinerary. The results page will display the recommended destinations, activities, accommodations, and other details in a user-friendly format.
+
+![WanderAI MVP Travel Plan Result](../Images/wanderai-mvp-result.png)
 
 ## Learning Resources
 
@@ -81,7 +89,6 @@ Once you have met these criteria, you will have successfully built the MVP for W
 - [Flask Documentation](https://flask.palletsprojects.com/)
 - [Flask Quickstart](https://flask.palletsprojects.com/en/3.0.x/quickstart/)
 - [Python asyncio Documentation](https://docs.python.org/3/library/asyncio.html)
-- [GitHub Models](https://docs.github.com/en/github-models)
 
 ## Tips
 

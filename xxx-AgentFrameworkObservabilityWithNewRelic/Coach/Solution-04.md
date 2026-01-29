@@ -83,7 +83,7 @@ The [Example solution implementation](./Solutions/Challenge-04/) folder contains
 **Solution:**
 
 - Create separate OTLP exporters for traces, metrics, and logs
-- Verify all three are passed to `setup_observability()`
+- Verify all three are passed to `configure_otel_providers()`
 - Check New Relic for each signal type separately
 - Ensure BatchProcessors are configured for each
 

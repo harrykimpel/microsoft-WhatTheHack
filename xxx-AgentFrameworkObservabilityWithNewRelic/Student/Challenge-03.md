@@ -72,6 +72,14 @@ To complete this challenge successfully, you should be able to:
 - Verify that Flask route spans include request information
 - Demonstrate that logs include trace context for correlation
 
+If everything is set up correctly, when you run your Flask app and submit a travel request, you should see detailed traces in the console output showing the full journey of the request, including tool calls and route handling.
+
+![WanderAI OTel trace](../Images/wanderai-otlp-console-exporter-trace.png)
+
+After some time, you should also see some metrics appear in the console.
+
+![WanderAI OTel metric](../Images/wanderai-otlp-console-exporter-metric.png)
+
 ## Learning Resources
 
 - [Microsoft Agent Framework Observability](https://learn.microsoft.com/en-us/agent-framework/user-guide/observability?pivots=programming-language-python)

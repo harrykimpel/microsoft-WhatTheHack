@@ -52,7 +52,7 @@ The [Example solution implementation](./Solutions/Challenge-02/) folder contains
 **Cause:** Missing or incorrect API key in environment variables
 **Solution:**
 
-- Verify `GITHUB_TOKEN` or `OPENAI_API_KEY` is set in `.env`
+- Verify `MSFT_FOUNDRY_ENDPOINT` or `MSFT_FOUNDRY_API_KEY` is set in `.env`
 - Check for extra spaces or quotes around the key
 - Ensure `load_dotenv()` is called before accessing env vars
 - Test key with a simple API call outside Flask
