@@ -64,6 +64,25 @@ logger = logging.getLogger(__name__)
 # HINT: meter = ???
 # ============================================================================
 
+# ============================================================================
+# Challenge 05: TODO - Create Custom Metrics for Monitoring
+# ============================================================================
+# HINT: request_counter = meter.create_counter(name="???\", description="???\", unit="???")
+# HINT: error_counter = meter.create_counter(???)
+# HINT: response_time_histogram = meter.create_histogram(???)
+# HINT: tool_call_counter = meter.create_counter(???)
+
+#
+# Challenge 06: TODO - Add evaluation metrics
+# HINT: evaluation_passed_counter = meter.create_counter(???)
+
+#
+# Challenge 07: TODO - Add security metrics
+# HINT: security_detected_counter = meter.create_counter(???)
+# HINT: security_blocked_counter = meter.create_counter(???)
+# HINT: security_score_histogram = meter.create_histogram(???)
+# ============================================================================
+
 # 🌐 Initialize Flask Application
 app = Flask(__name__)
 
@@ -125,24 +144,6 @@ def get_datetime() -> str:
     logger.info("Fetching current date and time.")
     return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
-# ============================================================================
-# Challenge 05: TODO - Create Custom Metrics for Monitoring
-# ============================================================================
-# HINT: request_counter = meter.create_counter(name="???\", description="???\", unit="???")
-# HINT: error_counter = meter.create_counter(???)
-# HINT: response_time_histogram = meter.create_histogram(???)
-# HINT: tool_call_counter = meter.create_counter(???)
-
-#
-# Challenge 06: TODO - Add evaluation metrics
-# HINT: evaluation_passed_counter = meter.create_counter(???)
-
-#
-# Challenge 07: TODO - Add security metrics
-# HINT: security_detected_counter = meter.create_counter(???)
-# HINT: security_blocked_counter = meter.create_counter(???)
-# HINT: security_score_histogram = meter.create_histogram(???)
-# ============================================================================
 
 # ============================================================================
 # Challenge 02: TODO - Create the OpenAI Chat Client
