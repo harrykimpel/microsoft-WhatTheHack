@@ -18,6 +18,8 @@ logger = logging.getLogger(__name__)
 
 # TODO 1: Import Microsoft Agent Framework
 # HINT: from agent_framework import ???
+from agent_framework.openai import OpenAIChatClient
+from agent_framework import ChatAgent
 
 # 🌐 Initialize Flask Application
 app = Flask(__name__)
@@ -79,6 +81,11 @@ def get_datetime() -> str:
 model_id = os.environ.get("MODEL_ID", "gpt-5-mini")
 
 # HINT: openai_chat_client = ???
+openai_chat_client = OpenAIChatClient(
+    base_url=os.environ.get("MSFT_FOUNDRY_ENDPOINT"),
+    api_key=os.environ.get("MSFT_FOUNDRY_API_KEY"),
+    model_id=model_id
+)
 
 # ============================================================================
 # TODO 3: Create the Travel Planning ChatAgent
