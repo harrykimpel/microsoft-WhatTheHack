@@ -55,13 +55,14 @@ Implement deterministic checks against business rules:
 - Response length must be within reasonable bounds (not too short, not too long)
 - Response must include required sections (accommodation, transportation)
 
-### Layer 3: LLM-Based Quality Evaluation (Optional)
+### Layer 3: Integration into Your Application
 
-Use another LLM to evaluate responses for:
+Integrate the evaluation system into your Flask application:
 
-- **Safety** - Recommendations should avoid dangerous conditions
-- **Accuracy** - Plausible destinations and activities
-- **Completeness** - Addresses all user requirements
+- Run evaluation after generating each travel plan
+- Track evaluation metrics (passed/failed, scores)
+- Optionally block low-quality responses from reaching users
+- Capture and log user feedback with trace correlation
 
 ### Layer 4: User Feedback Collection
 
@@ -84,14 +85,13 @@ This feedback data will help you:
 - Track quality trends over time
 - Build a dataset for fine-tuning and improvement
 
-### Layer 5: Integration into Your Application
+### Layer 5: LLM-Based Quality Evaluation (Optional)
 
-Integrate the evaluation system into your Flask application:
+Use another LLM to evaluate responses for:
 
-- Run evaluation after generating each travel plan
-- Track evaluation metrics (passed/failed, scores)
-- Optionally block low-quality responses from reaching users
-- Capture and log user feedback with trace correlation
+- **Safety** - Recommendations should avoid dangerous conditions
+- **Accuracy** - Plausible destinations and activities
+- **Completeness** - Addresses all user requirements
 
 ### Accessing New Relic AI Monitoring
 

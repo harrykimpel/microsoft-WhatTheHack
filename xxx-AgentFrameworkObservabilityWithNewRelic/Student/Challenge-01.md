@@ -41,6 +41,13 @@ Your goal is to gain a solid understanding of the following concepts:
 - Latency can come from multiple sources (LLM, tools, network)
 - Debugging production AI failures requires understanding the full trace
 
+**Application Architecture:**
+
+- How does a Flask web application serve as the API layer for agent interactions?
+- Where does the Microsoft Agent Framework fit in the application stack?
+- How do HTTP requests flow through Flask routes to agent execution and back to the client?
+- What role does OpenTelemetry play in instrumenting the entire stack?
+
 ### Knowledge Check Questions
 
 Answer these questions to validate your learning:

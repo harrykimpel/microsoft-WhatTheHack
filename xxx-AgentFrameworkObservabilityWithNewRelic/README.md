@@ -1,4 +1,4 @@
-# What The Hack - 🚀 WanderAI: Your Travel Planning Startup
+# What The Hack - 🚀 WanderAI: Your Travel Planning Startup ![WanderAI Logo](Images/wanderai-logo.svg)
 
 ## Introduction
 
