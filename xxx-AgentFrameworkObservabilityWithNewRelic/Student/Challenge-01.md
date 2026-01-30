@@ -10,6 +10,45 @@ An AI agent is different from a simple LLM API call. While a direct API call jus
 
 In this challenge, you will study the Microsoft Agent Framework documentation and learn about tool calling, agent lifecycles, and why observability matters for AI systems.
 
+## Target Architecture
+
+The focus for this challenge is conceptual rather than code-based. You will focus on understanding how the components fit together in the overall architecture:
+
+```plaintext
++-------------------+
+|   User Request    |
++-------------------+
+          |
+          v
++-------------------+
+|   Flask Web App   |
++-------------------+
+          |
+          v
++-------------------+
+| Microsoft Agent   |
+|    Framework      |
++-------------------+
+          |
+          v
++-------------------+    +-------------------+
+|   AI Agent with   |    |   Microsoft       |
+|     Tools         |<-->|    Foundry        |
++-------------------+    +-------------------+
+          |
+          v
++-------------------+
+|  OpenTelemetry    |
+|   Instrumentation |
++-------------------+
+          |
+          v
++-------------------+
+|   New Relic       |
+|  Observability    |
++-------------------+
+```
+
 ## Description
 
 Your goal is to gain a solid understanding of the following concepts:
@@ -18,6 +57,8 @@ Your goal is to gain a solid understanding of the following concepts:
 - **Tool Calling** - Learn why agents need tools and how they decide when to call them
 - **Agent-Tool Lifecycle** - Understand the flow from user request through agent reasoning to tool execution and response
 - **OpenTelemetry Basics** - Learn about traces, metrics, and logs and why they matter for AI systems
+- **Observability for AI** - Grasp why observability is critical for debugging and monitoring AI agents in production
+- **New Relic Observability** - Understand how New Relic can help monitor AI applications
 - **Application Architecture** - Understand how a Flask web app integrates with the Microsoft Agent Framework
 
 ### Key Concepts to Study
@@ -61,6 +102,8 @@ Answer these questions to validate your learning:
 
 # **TODO: check whether we want to run some kind of quiz or knowledge check here**
 
+As part of this challenge we are not actually building any code. Instead, you are focusing on learning the foundational concepts needed for the rest of the challenges.
+
 To complete this challenge successfully, you should be able to:
 
 - [ ] Reflect on your understanding of what an AI agent is and how it differs from a simple LLM API call
@@ -69,7 +112,7 @@ To complete this challenge successfully, you should be able to:
 - [ ] Explain what OpenTelemetry is and why observability matters for AI
 - [ ] Identify the key components of the complete solution architecture
 
-# **TODO: what's next, how to apply this as part of the next challenge**
+In the subsequent challenges, you will apply this foundational knowledge by building a Flask web application that uses the Microsoft Agent Framework to create customized travel plans. You will also implement OpenTelemetry instrumentation to monitor and observe the application's behavior in production.
 
 ## Learning Resources
 
