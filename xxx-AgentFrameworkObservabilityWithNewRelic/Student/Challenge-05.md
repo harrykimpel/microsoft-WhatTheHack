@@ -48,7 +48,7 @@ Configure alerts in New Relic to notify your team when:
 For a travel planning agent, focus on:
 
 | Metric | Why It Matters | Target |
-|--------|----------------|--------|
+| -------- | ---------------- | -------- |
 | Response Time (p95) | Speed affects user experience | < 3 seconds |
 | Error Rate | Reliability | < 1% |
 | Token Usage (avg) | Cost per request | < 500 tokens |
