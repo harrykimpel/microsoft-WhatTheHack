@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✈️ Your Travel Plan - AI Travel Planner</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="icon" href="/static/wanderai-icon.svg" type="image/x-icon">
+</head>
+<body>
+    <div class="header-wrapper">
+        <div>
+            <h1 class="branding-title">New Relic</h1>
+            <p class="branding-subtitle">DevRel AI Samples</p>
+        </div>
+    </div>
+    <div class="header-title">✈️ Your Travel Plan</div>
+    <hr>
+    
+    <div class="trip-summary">
+        🌍 Destination: {{ destination }} | ⏱️ Duration: {{ duration }} days
+    </div>
+    
+    <div class="result-container">
+        <div class="travel-plan">{{ travel_plan }}</div>
+    </div>
+
+    <!-- Challenge 06: User Feedback Section -->
+    <div class="feedback-section" style="text-align: center; margin: 30px 0; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+        <p style="font-size: 1.1em; margin-bottom: 12px;">Was this travel plan helpful?</p>
+        <button id="thumbsUp" onclick="sendFeedback(1)" style="font-size: 1.5em; margin: 0 10px; background: none; border: 2px solid #ccc; border-radius: 8px; padding: 8px 16px; cursor: pointer;">👍</button>
+        <button id="thumbsDown" onclick="sendFeedback(-1)" style="font-size: 1.5em; margin: 0 10px; background: none; border: 2px solid #ccc; border-radius: 8px; padding: 8px 16px; cursor: pointer;">👎</button>
+        <p id="feedbackMessage" style="margin-top: 10px; color: gray; display: none;">Thank you for your feedback!</p>
+    </div>
+    
+    <a href="/" class="back-button">🔙 Plan Another Trip</a>
+    
+    <hr style="margin-top: 40px;">
+    <div style="text-align: center; color: gray; font-size: 0.9em; margin-top: 30px;">
+        Made with ❤️ using WanderAI Travel Planner | Powered by Microsoft Agent Framework
+    </div>
+
+    <script>
+        // Challenge 06: Send feedback to /feedback endpoint with trace_id
+        const traceId = "{{ trace_id }}";
+
+        function sendFeedback(rating) {
+            fetch('/feedback', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ rating: rating, trace_id: traceId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('feedbackMessage').style.display = 'block';
+                document.getElementById('thumbsUp').disabled = true;
+                document.getElementById('thumbsDown').disabled = true;
+                document.getElementById('thumbsUp').style.opacity = '0.5';
+                document.getElementById('thumbsDown').style.opacity = '0.5';
+            })
+            .catch(err => console.error('Feedback error:', err));
+        }
+    </script>
+</body>
+</html>
