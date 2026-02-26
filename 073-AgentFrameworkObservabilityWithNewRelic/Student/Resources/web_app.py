@@ -29,11 +29,7 @@ import re
 from typing import Dict, List, Tuple
 
 # Load environment variables
-load_dotenv()
-
-# 📝 Configure Logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+load_dotenv(override=True)
 
 # ============================================================================
 # Challenge 03 / 04: Setup OpenTelemetry Observability
@@ -59,6 +55,12 @@ else:
 # Challenge 03: Get tracer and meter instances
 tracer = get_tracer()
 meter = get_meter()
+
+# 📝 Configure Logging
+logger = logging.getLogger("agent_framework.web_app")
+logger.setLevel(logging.INFO)
+logger.propagate = True
+
 
 # ============================================================================
 # Challenge 05: Create Custom Metrics for Monitoring
