@@ -11,7 +11,7 @@ from flask import Flask, render_template, request, jsonify
 
 # Challenge 02: Import Microsoft Agent Framework
 from agent_framework.openai import OpenAIChatClient
-from agent_framework import ChatAgent
+from agent_framework import Agent as ChatAgent
 
 # Challenge 03: Import OpenTelemetry instrumentation
 from agent_framework.observability import configure_otel_providers, get_tracer, get_meter
@@ -114,6 +114,7 @@ app = Flask(__name__)
 # Challenge 02: Define Tool Functions
 # ============================================================================
 
+
 def get_random_destination() -> str:
     """
     Returns a random travel destination.
@@ -178,7 +179,8 @@ def get_weather(location: str) -> str:
                 pass
 
         # Fallback: simulated weather data
-        conditions = ["sunny", "partly cloudy", "overcast", "light rain", "clear skies"]
+        conditions = ["sunny", "partly cloudy",
+                      "overcast", "light rain", "clear skies"]
         temp_c = randint(5, 35)
         condition = conditions[randint(0, len(conditions) - 1)]
 
@@ -186,7 +188,8 @@ def get_weather(location: str) -> str:
         span.set_attribute("weather.description", condition)
         tool_call_counter.add(1, {"tool": "get_weather"})
 
-        logger.info(f"Weather for {location}: {condition}, {temp_c}°C (simulated)")
+        logger.info(
+            f"Weather for {location}: {condition}, {temp_c}°C (simulated)")
         return f"Current weather in {location}: {condition}, {temp_c}°C."
 
 
@@ -212,11 +215,18 @@ def get_datetime() -> str:
 # Challenge 02: Agent Setup
 # ============================================================================
 # Initialize the OpenAI client using Microsoft Foundry credentials
-_client = OpenAIChatClient(
-    endpoint=os.environ.get("MSFT_FOUNDRY_ENDPOINT", ""),
-    credential=os.environ.get("MSFT_FOUNDRY_API_KEY", ""),
-    model=os.environ.get("MODEL_ID", "gpt-5-mini"),
-)
+try:
+    _client = OpenAIChatClient(
+        endpoint=os.environ.get("MSFT_FOUNDRY_ENDPOINT", ""),
+        credential=os.environ.get("MSFT_FOUNDRY_API_KEY", ""),
+        model=os.environ.get("MODEL_ID", "gpt-5-mini"),
+    )
+except TypeError:
+    _client = OpenAIChatClient(
+        base_url=os.environ.get("MSFT_FOUNDRY_ENDPOINT", ""),
+        api_key=os.environ.get("MSFT_FOUNDRY_API_KEY", ""),
+        model_id=os.environ.get("MODEL_ID", "gpt-5-mini"),
+    )
 
 # Challenge 08: Hardened system instructions that resist prompt injection
 _system_instructions = """You are WanderAI, a specialized travel planning assistant.
@@ -313,7 +323,8 @@ def detect_prompt_injection(text: str) -> Dict:
         risk_score = max(risk_score, 0.75)
 
     # Heuristic: unusual punctuation density
-    special_char_ratio = sum(1 for c in text if c in "!@#$%^&*<>{}[]|\\") / max(len(text), 1)
+    special_char_ratio = sum(
+        1 for c in text if c in "!@#$%^&*<>{}[]|\\") / max(len(text), 1)
     if special_char_ratio > 0.1:
         patterns_detected.append("unusual_punctuation")
         risk_score = max(risk_score, 0.5)
@@ -401,7 +412,8 @@ def evaluate_travel_plan(plan_text: str) -> Dict:
         issues.append("Missing weather information")
 
     # Budget mention
-    has_budget = bool(re.search(r"\bbudget\b|\bcost\b|\bprice\b|\bestimate\b", plan_text, re.IGNORECASE))
+    has_budget = bool(re.search(
+        r"\bbudget\b|\bcost\b|\bprice\b|\bestimate\b", plan_text, re.IGNORECASE))
     if not has_budget:
         issues.append("Missing budget or cost information")
 
@@ -632,7 +644,8 @@ Instructions:
             )
 
             span.set_attribute("evaluation.score", evaluation_result["score"])
-            span.set_attribute("evaluation.passed", evaluation_result["passed"])
+            span.set_attribute("evaluation.passed",
+                               evaluation_result["passed"])
 
             # Challenge 05: Metric for request timing
             span.set_attribute("request.duration_ms", elapsed_ms)
